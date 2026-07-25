@@ -117,7 +117,7 @@
         </div>
         <div class="ticket-row" onclick="selectTicket(this,1)">
           <div class="tid">#HD-013</div>
-          <div><div class="ttitle">면접 시간을 변경하고 싶어요</div><div class="tmeta">신청자11@email.com · 07.25 08:47</div></div>
+          <div><div class="ttitle">인터뷰 시간을 변경하고 싶어요</div><div class="tmeta">신청자11@email.com · 07.25 08:47</div></div>
           <div><span class="type-tag">예약/일정 문의</span></div>
           <div><span class="badge b-new">신규</span></div>
         </div>
@@ -129,7 +129,7 @@
         </div>
         <div class="ticket-row" onclick="selectTicket(this,3)">
           <div class="tid">#HD-011</div>
-          <div><div class="ttitle">부부 동반 면접이 가능한가요</div><div class="tmeta">신청자05@email.com · 07.24 19:02</div></div>
+          <div><div class="ttitle">부부 동반 인터뷰가 가능한가요</div><div class="tmeta">신청자05@email.com · 07.24 19:02</div></div>
           <div><span class="type-tag">기타</span></div>
           <div><span class="badge b-done">완료</span></div>
         </div>
@@ -160,7 +160,7 @@
       </div>
       <div>
         <div class="field-label">문의 내용</div>
-        <div class="content-box">안내받은 Zoom 링크를 클릭했는데 "회의를 찾을 수 없습니다"라는 메시지가 뜹니다. 오늘 10시 30분 면접인데 어떻게 해야 할까요?</div>
+        <div class="content-box">안내받은 Zoom 링크를 클릭했는데 "회의를 찾을 수 없습니다"라는 메시지가 뜹니다. 오늘 10시 30분 인터뷰인데 어떻게 해야 할까요?</div>
       </div>
       <div>
         <div class="field-label">상태 변경</div>
@@ -181,10 +181,10 @@
 
 <script>
   const details = [
-    {id:"#HD-014", title:"Zoom 링크가 열리지 않습니다", who:"신청자02 · applicant02@email.com", type:"Zoom 접속 오류", body:"안내받은 Zoom 링크를 클릭했는데 \"회의를 찾을 수 없습니다\"라는 메시지가 뜹니다. 오늘 10시 30분 면접인데 어떻게 해야 할까요?", status:1, note:"신청자에게 정확한 Zoom 링크 재발송 완료. 회의 ID 오기재 확인함."},
-    {id:"#HD-013", title:"면접 시간을 변경하고 싶어요", who:"신청자11 · applicant11@email.com", type:"예약/일정 문의", body:"08.03(월) 10시로 신청했는데 개인 사정으로 시간을 옮기고 싶습니다. 08.04(화) 오전으로 변경 가능할까요?", status:0, note:""},
-    {id:"#HD-012", title:"배정된 인터뷰어를 알고 싶습니다", who:"신청자07 · applicant07@email.com", type:"인터뷰어 배정 문의", body:"면접 전에 어떤 분과 하게 되는지 미리 알 수 있을까요?", status:1, note:"인터뷰어 개별 안내는 원칙상 미제공, 표준 안내문 발송함."},
-    {id:"#HD-011", title:"부부 동반 면접이 가능한가요", who:"신청자05 · applicant05@email.com", type:"기타", body:"저희 부부가 함께 면접에 참여할 수 있는지 궁금합니다.", status:2, note:"부부 동반 슬롯 안내 완료, SLOT-0803-01로 재접수 처리."},
+    {id:"#HD-014", title:"Zoom 링크가 열리지 않습니다", who:"신청자02 · applicant02@email.com", type:"Zoom 접속 오류", body:"안내받은 Zoom 링크를 클릭했는데 \"회의를 찾을 수 없습니다\"라는 메시지가 뜹니다. 오늘 10시 30분 인터뷰인데 어떻게 해야 할까요?", status:1, note:"신청자에게 정확한 Zoom 링크 재발송 완료. 회의 ID 오기재 확인함."},
+    {id:"#HD-013", title:"인터뷰 시간을 변경하고 싶어요", who:"신청자11 · applicant11@email.com", type:"예약/일정 문의", body:"08.03(월) 10시로 신청했는데 개인 사정으로 시간을 옮기고 싶습니다. 08.04(화) 오전으로 변경 가능할까요?", status:0, note:""},
+    {id:"#HD-012", title:"배정된 인터뷰어를 알고 싶습니다", who:"신청자07 · applicant07@email.com", type:"인터뷰어 배정 문의", body:"인터뷰 전에 어떤 분과 하게 되는지 미리 알 수 있을까요?", status:1, note:"인터뷰어 개별 안내는 원칙상 미제공, 표준 안내문 발송함."},
+    {id:"#HD-011", title:"부부 동반 인터뷰가 가능한가요", who:"신청자05 · applicant05@email.com", type:"기타", body:"저희 부부가 함께 인터뷰에 참여할 수 있는지 궁금합니다.", status:2, note:"부부 동반 슬롯 안내 완료, SLOT-0803-01로 재접수 처리."},
     {id:"#HD-010", title:"신청 확인 메일을 못받았어요", who:"신청자03 · applicant03@email.com", type:"예약/일정 문의", body:"어제 신청했는데 확인 메일이 오지 않았습니다.", status:2, note:"스팸함 확인 안내, 재발송 완료."}
   ];
   function selectTicket(el, idx){

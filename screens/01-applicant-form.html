@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>면접 예약 · 헬프데스크 입력폼 (샘플 v2)</title>
+<title>인터뷰 예약 · 헬프데스크 입력폼 (샘플 v2)</title>
 <style>
   :root{
     --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
@@ -114,12 +114,12 @@
 <div class="wrap">
   <div class="top">
     <div class="badge">2027 서울 국제대회 · VM 자원봉사자관리부</div>
-    <h1>면접 · 문의 접수</h1>
+    <h1>인터뷰 · 문의 접수</h1>
   </div>
 
   <div class="card">
     <div class="tabs">
-      <div class="tab active" onclick="switchTab(0)">📅 면접 예약 신청</div>
+      <div class="tab active" onclick="switchTab(0)">📅 인터뷰 예약 신청</div>
       <div class="tab" onclick="switchTab(1)">💬 헬프데스크 문의</div>
     </div>
 
@@ -165,8 +165,8 @@
         <div class="field">
           <label>구분<span class="req">*</span></label>
           <div class="radio-group">
-            <div class="radio-opt selected" onclick="selRadio(this)">개인 면접</div>
-            <div class="radio-opt" onclick="selRadio(this)">부부 동반 면접</div>
+            <div class="radio-opt selected" onclick="selRadio(this)">개인 인터뷰</div>
+            <div class="radio-opt" onclick="selRadio(this)">부부 동반 인터뷰</div>
           </div>
         </div>
         <div class="field">
@@ -195,7 +195,7 @@
           <textarea placeholder="전달하고 싶은 내용이 있다면 적어주세요."></textarea>
         </div>
         <button class="btn-submit" onclick="submitForm('reserve')">신청 완료하기</button>
-        <div class="privacy">제출 정보는 면접 일정 안내 목적으로만 사용됩니다.</div>
+        <div class="privacy">제출 정보는 인터뷰 일정 안내 목적으로만 사용됩니다.</div>
       </div>
     </div>
 
@@ -406,7 +406,7 @@
     document.getElementById('successPanel').style.display = 'block';
     const ref = 'REF-' + Math.floor(100000 + Math.random()*899999);
     if(kind === 'reserve'){
-      document.getElementById('successTitle').textContent = '면접 예약 신청이 완료되었습니다';
+      document.getElementById('successTitle').textContent = '인터뷰 예약 신청이 완료되었습니다';
       document.getElementById('successBody').textContent = '신청 내용을 확인 후 확정 여부와 Zoom 링크를 이메일로 안내드립니다.';
     } else {
       document.getElementById('successTitle').textContent = '문의가 접수되었습니다';
