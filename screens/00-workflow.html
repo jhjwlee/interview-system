@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>전체 워크플로우 (샘플)</title>
+<style>
+  :root{
+    --deep-green:#003C33; --ink:#212121; --gray:#555; --gray-light:#9A9A9A;
+    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --purple:#5B5FC7;
+    --light-gray:#F7F7F8; --border:#E3E3E3;
+    --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4; --pale-purple:#EDEDF9;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; color:var(--ink);
+    background:linear-gradient(180deg,var(--deep-green) 0%,var(--deep-green) 150px,var(--light-gray) 150px);
+    line-height:1.55; min-height:100vh; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:960px; margin:0 auto; padding:30px 18px 70px;}
+  .top{color:#fff; text-align:center; margin-bottom:22px;}
+  .top .badge{display:inline-block; background:rgba(255,255,255,0.15); border-radius:20px; padding:5px 14px;
+    font-size:11.5px; font-weight:600; margin-bottom:9px;}
+  .top h1{font-size:21px; font-weight:800;}
+  .top p{font-size:12.5px; color:#B9D8CF; margin-top:7px;}
+
+  .card{background:#fff; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.09); padding:24px 22px 26px; margin-bottom:18px;}
+  .card h2{font-size:15px; font-weight:800; margin-bottom:4px; display:flex; align-items:center; gap:7px;}
+  .card .desc{font-size:12px; color:var(--gray); margin-bottom:18px;}
+
+  /* ---- 슬롯 상태 전이 ---- */
+  .states{display:flex; align-items:stretch; flex-wrap:wrap; gap:22px 22px;}
+  .state{flex:1; min-width:150px; border-radius:10px; padding:12px 13px; position:relative;}
+  .state::after{content:'▶'; position:absolute; right:-16px; top:50%; transform:translateY(-50%);
+    font-size:10px; color:var(--gray-light);}
+  .state:last-child::after{display:none;}
+  .state .nm{font-size:13px; font-weight:800; margin-bottom:4px;}
+  .state .tag{font-size:9.5px; font-weight:800; border-radius:4px; padding:1px 5px; margin-left:5px; vertical-align:1px;}
+  .state .cond{font-size:11px; line-height:1.5;}
+  .s-hide{background:#ECECEC;} .s-hide .nm{color:#4A4A4A;} .s-hide .cond{color:var(--gray);}
+  .s-hide .tag{background:#4A4A4A; color:#fff;}
+  .s-open{background:var(--pale-teal);} .s-open .nm{color:var(--teal);} .s-open .cond{color:#2A6B84;}
+  .s-open .tag{background:var(--teal); color:#fff;}
+  .s-warn{background:var(--pale-gold);} .s-warn .nm{color:var(--gold);} .s-warn .cond{color:#6B5500;}
+  .s-done{background:var(--pale-green);} .s-done .nm{color:var(--deep-green);} .s-done .cond{color:#0B5347;}
+  .keypoint{background:var(--pale-coral); border-radius:9px; padding:11px 13px; font-size:12px;
+    color:var(--coral); margin-top:15px; line-height:1.65;}
+  .keypoint b{font-weight:800;}
+  .revnote{background:var(--light-gray); border-radius:9px; padding:11px 13px; font-size:11.5px;
+    color:var(--gray); margin-top:11px; line-height:1.65;}
+  .revnote b{color:var(--ink);}
+
+  /* ---- 흐름 단계 ---- */
+  .flow{position:relative;}
+  .step{display:flex; gap:14px; padding-bottom:20px; position:relative;}
+  .step:last-child{padding-bottom:0;}
+  .step::before{content:''; position:absolute; left:15px; top:34px; bottom:0; width:2px; background:var(--border);}
+  .step:last-child::before{display:none;}
+  .step .num{width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center;
+    justify-content:center; font-size:12.5px; font-weight:800; color:#fff; background:var(--deep-green); z-index:1;}
+  .step.actor-sys .num{background:var(--purple);}
+  .step.actor-iv .num{background:var(--teal);}
+  .step.actor-adm .num{background:#4A4A4A;}
+  .step .body{flex:1; min-width:0; padding-top:2px;}
+  .step .who{display:inline-block; font-size:10.5px; font-weight:800; border-radius:5px; padding:2px 7px; margin-bottom:6px;}
+  .w-app{background:var(--pale-green); color:var(--deep-green);}
+  .w-sys{background:var(--pale-purple); color:var(--purple);}
+  .w-iv{background:var(--pale-teal); color:var(--teal);}
+  .w-adm{background:#EEE; color:#4A4A4A;}
+  .step .t{font-size:13.5px; font-weight:800; margin-bottom:4px;}
+  .step .t .st{font-size:10px; font-weight:800; border-radius:4px; padding:2px 6px; margin-left:6px; vertical-align:1.5px;}
+  .st-hide{background:#ECECEC; color:#4A4A4A;}
+  .st-open{background:var(--pale-teal); color:var(--teal);}
+  .st-full{background:var(--pale-green); color:var(--deep-green);}
+  .step .d{font-size:12.5px; color:var(--gray); line-height:1.65;}
+  .step .links{display:flex; flex-wrap:wrap; gap:7px; margin-top:9px;}
+  .step .links a{
+    display:inline-flex; align-items:center; gap:5px; border:1.5px solid var(--border); border-radius:8px;
+    padding:6px 11px; font-size:11.5px; font-weight:700; color:var(--ink); text-decoration:none;
+    background:#fff; transition:0.12s; cursor:pointer;
+  }
+  .step .links a:hover{border-color:var(--deep-green); background:var(--pale-green); color:var(--deep-green);}
+  .branch{
+    margin-top:10px; border-left:3px solid var(--coral); background:#FDF6F4; border-radius:0 9px 9px 0;
+    padding:10px 13px; font-size:12px; color:var(--coral); line-height:1.65;
+  }
+  .branch b{font-weight:800;}
+  .branch .links a{border-color:#E7C4BB; color:var(--coral);}
+  .branch .links a:hover{background:var(--pale-coral); border-color:var(--coral);}
+  .check{
+    display:inline-block; background:var(--pale-gold); color:#6B5500; border-radius:4px;
+    font-size:10px; font-weight:800; padding:2px 6px; margin-left:6px; vertical-align:1.5px;
+  }
+
+  /* ---- 데이터 구조 ---- */
+  .lists{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:11px;}
+  .lst{border:1.5px solid var(--border); border-radius:10px; padding:13px;}
+  .lst .n{font-size:12.5px; font-weight:800; margin-bottom:5px;}
+  .lst .c{font-size:11.5px; color:var(--gray); line-height:1.6;}
+  .lst.new{border-color:var(--coral); background:#FDF9F8;}
+  .lst.new .n{color:var(--coral);}
+  .stack{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px;}
+  .stack span{background:var(--light-gray); border:1px solid var(--border); border-radius:7px;
+    padding:6px 11px; font-size:11.5px; font-weight:700; color:var(--gray);}
+  .foot{text-align:center; font-size:10.5px; color:var(--gray-light); margin-top:6px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="badge">2027 서울 국제대회 · 자원봉사자관리부(VM)</div>
+    <h1>면접 예약 · 헬프데스크 전체 워크플로우</h1>
+    <p>SharePoint + Forms + Power Automate + Teams 구성 · 화면 9종을 하나의 흐름으로 (2026.07.25 개정)</p>
+  </div>
+
+  <!-- 1. 슬롯 상태 전이 -->
+  <div class="card">
+    <h2>🔄 슬롯 상태 전이</h2>
+    <div class="desc">인터뷰어 확인이 끝난 슬롯만 신청자 달력에 나타납니다.</div>
+    <div class="states">
+      <div class="state s-hide">
+        <div class="nm">배정검토중<span class="tag">비공개</span></div>
+        <div class="cond">슬롯 생성 + 인터뷰어 배정 완료<br>인터뷰어가 확인하면 모집중</div>
+      </div>
+      <div class="state s-open">
+        <div class="nm">모집중<span class="tag">공개</span></div>
+        <div class="cond">신청자 달력에 노출·접수 시작<br>잔여 ≤ 34% → 마감임박</div>
+      </div>
+      <div class="state s-warn">
+        <div class="nm">마감임박</div>
+        <div class="cond">좌석 얼마 남지 않음<br>잔여 0 → 마감</div>
+      </div>
+      <div class="state s-done">
+        <div class="nm">마감</div>
+        <div class="cond">정원 충족 · 인터뷰어 이미 확정<br>별도 사후 승인 절차 없음</div>
+      </div>
+    </div>
+    <div class="keypoint">
+      <b>2026.07.25 개정 — 순서를 뒤집었습니다.</b><br>
+      이전: 예약 마감 → 인터뷰어 승인 → 확정 (인터뷰어 없이 확정 메일이 나갈 공백, 승인 지연 시 신청자 대기)<br>
+      이후: <b>인터뷰어 확인 → 예약 개방</b> → 마감. 인터뷰어가 확정된 시간대만 열리므로,
+      신청자가 예약한 슬롯이 나중에 취소·재배정될 일이 구조적으로 없습니다.
+    </div>
+    <div class="revnote">
+      <b>신청자 화면에서 보이는 차이</b> — 달력에 점이 없는 날짜는 아직 인터뷰어 배정이 확인되지 않은 날짜입니다.
+      배정검토중 슬롯은 신청자에게 아예 표시되지 않습니다.
+    </div>
+  </div>
+
+  <!-- 2. 단계별 흐름 -->
+  <div class="card">
+    <h2>🧭 단계별 흐름</h2>
+    <div class="desc">각 단계의 버튼을 누르면 해당 화면으로 이동합니다.</div>
+    <div class="flow">
+
+      <div class="step actor-iv">
+        <div class="num">1</div>
+        <div class="body">
+          <span class="who w-iv">인터뷰어</span>
+          <div class="t">가용시간 사전 등록</div>
+          <div class="d">면접 진행이 가능한 날짜·시간과 1일 최대 소화 건수를 미리 등록합니다.
+            이 데이터(목록 C)가 슬롯 개설의 기초 자료입니다.</div>
+          <div class="links"><a data-go="03-interviewer-availability">🕐 가용시간 입력폼</a></div>
+        </div>
+      </div>
+
+      <div class="step actor-adm">
+        <div class="num">2</div>
+        <div class="body">
+          <span class="who w-adm">VM 관리자</span>
+          <div class="t">수급 현황 확인 → 슬롯 개설·인터뷰어 배정<span class="st st-hide">배정검토중 · 비공개</span></div>
+          <div class="d">주간 수급 현황에서 확보 슬롯과 지원자 신청을 시간대별로 비교해 부족한 시간대를 먼저 파악하고,
+            등록된 가용시간을 바탕으로 슬롯을 만들어 인터뷰어를 배정합니다.
+            이 단계의 슬롯은 <b>비공개</b>이며 신청자에게 보이지 않습니다.</div>
+          <div class="links">
+            <a data-go="09-weekly-dashboard">📊 주간 수급 현황</a>
+            <a data-go="02-admin-booking">📅 예약시스템 (관리자)</a>
+            <a data-go="08-teams-tab">👥 Teams 탭에서 열기</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step actor-sys">
+        <div class="num">3</div>
+        <div class="body">
+          <span class="who w-sys">Teams 알림</span>
+          <div class="t">배정된 인터뷰어에게 확인 요청 카드 발송</div>
+          <div class="d">Power Automate 승인 커넥터가 배정 확인 카드를 Teams 채팅으로 보냅니다.
+            인터뷰어는 웹 화면을 열지 않고 카드에서 바로 응답할 수 있습니다.</div>
+          <div class="links">
+            <a data-go="06-teams-approval">💬 Teams 배정 확인 카드</a>
+            <a data-go="04-interviewer-approval">✅ 배정 확인 화면 (웹)</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step actor-iv">
+        <div class="num">4</div>
+        <div class="body">
+          <span class="who w-iv">인터뷰어</span>
+          <div class="t">배정 확인 → 슬롯 공개<span class="st st-open">모집중 · 공개</span></div>
+          <div class="d"><b>확인</b>을 누르는 즉시 슬롯이 모집중으로 바뀌어 신청자 달력에 나타나고 접수가 시작됩니다.</div>
+          <div class="branch">
+            <b>배정 어려움 / 무응답인 경우</b> — 슬롯은 배정검토중(비공개)에 머물러 신청자에게 공개되지 않습니다.
+            관리자 채널에 재배정 요청이 도착하고, 대체 인터뷰어가 확인하면 그때 공개됩니다.
+            <b>이 동안 신청자는 이 슬롯을 볼 수도, 예약할 수도 없습니다.</b>
+            <div class="links" style="margin-top:8px;">
+              <a data-go="07-teams-reassign">💬 Teams 재배정 알림</a>
+              <a data-go="09-weekly-dashboard">📊 부족 시간대 확인</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="num">5</div>
+        <div class="body">
+          <span class="who w-app">신청자</span>
+          <div class="t">면접 예약 신청</div>
+          <div class="d">달력에서 날짜 → 시간 → 개인정보 순서로 입력합니다(3단계 점진 노출).
+            여유·마감임박·마감은 점 색깔로 구분되고, 인터뷰어 확인이 끝난 시간대만 표시됩니다.</div>
+          <div class="links"><a data-go="01-applicant-form">📝 입력폼 (신청자)</a></div>
+        </div>
+      </div>
+
+      <div class="step actor-sys">
+        <div class="num">6</div>
+        <div class="body">
+          <span class="who w-sys">Power Automate</span>
+          <div class="t">접수 저장 · 마감 자동 전환<span class="st st-full">마감</span></div>
+          <div class="d">신청 내용이 목록 B(예약 접수대장)에 저장되고 목록 A의 잔여 좌석이 갱신됩니다.
+            잔여가 0이 되면 <b>마감</b>으로 자동 전환됩니다. 인터뷰어가 이미 확정되어 있으므로 사후 승인 단계는 없습니다.</div>
+          <div class="links"><a data-go="02-admin-booking">📅 목록 A·B 확인</a></div>
+        </div>
+      </div>
+
+      <div class="step actor-sys">
+        <div class="num">7</div>
+        <div class="body">
+          <span class="who w-sys">Power Automate</span>
+          <div class="t">확정 안내 · Zoom 링크 발송<span class="check">발송 시점 확인 필요</span></div>
+          <div class="d">신청자에게 확정 여부와 Zoom 링크를 이메일로 안내합니다.
+            접수 즉시 발송할지, 슬롯 마감 후 일괄 발송할지는 테크팀 재질의 회신과 함께 확정할 항목입니다.</div>
+          <div class="links"><a data-go="02-admin-booking">📅 Zoom 링크 발송 여부 열</a></div>
+        </div>
+      </div>
+
+      <div class="step actor-adm">
+        <div class="num">8</div>
+        <div class="body">
+          <span class="who w-adm">VM 관리자</span>
+          <div class="t">문의 대응 (헬프데스크)</div>
+          <div class="d">예약/일정, Zoom 접속 오류, 인터뷰어 배정 문의 등이 티켓으로 접수됩니다.
+            유형·상태로 필터링해 배정·처리하고 상태를 관리합니다.</div>
+          <div class="links">
+            <a data-go="01-applicant-form">📝 문의 접수 (신청자 탭)</a>
+            <a data-go="05-admin-helpdesk">🎧 헬프데스크 (관리자)</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. 데이터·기술 구성 -->
+  <div class="card">
+    <h2>🗂 데이터 구조 및 기술 구성</h2>
+    <div class="desc">화면 9종은 개별 페이지가 아니라 아래 목록 3개를 공유합니다.</div>
+    <div class="lists">
+      <div class="lst">
+        <div class="n">목록 A · 타임슬롯 마스터</div>
+        <div class="c">날짜·시간, 정원, 현재예약, 잔여, 배정 인터뷰어, 인터뷰어 확인, 상태(배정검토중·모집중·마감임박·마감), Zoom 링크</div>
+      </div>
+      <div class="lst">
+        <div class="n">목록 B · 예약 접수대장</div>
+        <div class="c">신청자 정보, 예약 슬롯, 구분(개인/부부), 확정·대기·취소, Zoom 링크 발송 여부</div>
+      </div>
+      <div class="lst new">
+        <div class="n">목록 C · 인터뷰어 가용시간 <span style="font-weight:700;">(신규 필요)</span></div>
+        <div class="c">인터뷰어, 가능 날짜·시간, 1일 최대 건수 — 컬럼 설계 문서화 필요</div>
+      </div>
+    </div>
+    <div class="stack">
+      <span>SharePoint 목록</span><span>Forms</span><span>Power Automate 흐름</span>
+      <span>Power Automate 승인 커넥터</span><span>Teams 알림·탭</span><span>Zoom</span>
+    </div>
+    <div class="keypoint" style="background:var(--pale-gold); color:#6B5500;">
+      추가 라이선스 비용 없음 · 팀즈 내 통합성 · 지원자 접근성 · 구현 속도 · JW 허브 연동 여지
+      5개 기준 가중치 비교에서 92%로 최고점을 받은 조합입니다.
+    </div>
+    <div class="revnote" style="margin-top:11px;">
+      <b>테크팀 확인 필요 항목</b> — ① 인터뷰어 확인 → 슬롯 공개 전환을 Power Automate 승인 커넥터로 처리하는 방식,
+      ② 동시 접수 시 잔여석 동시성 처리, ③ 확정 안내·Zoom 링크 발송 시점,
+      ④ 목록 C 컬럼 설계. (테크팀 재질의서 2026.07.23 항목과 연계)
+    </div>
+  </div>
+
+  <div class="foot">샘플 목업 · 실제 데이터는 저장되지 않습니다 (2026.07.25 개정 기준)</div>
+</div>
+
+<script>
+document.querySelectorAll('[data-go]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    var id = a.dataset.go;
+    if(window.parent && window.parent !== window){
+      window.parent.postMessage({type:'go', screen:id}, '*');
+    } else {
+      location.href = id + '.html';
+    }
+  });
+});
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

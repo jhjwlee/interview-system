@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>인터뷰어 슬롯 승인 (샘플)</title>
+<style>
+  :root{
+    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
+    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
+    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+    --teams-purple:#464775;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
+  svg{display:block;}
+  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .topbar .brand{display:flex; align-items:center; gap:12px;}
+  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600;}
+  .topbar h1{font-size:18px; font-weight:700;}
+  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
+  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  .wrap{max-width:820px; margin:0 auto; padding:26px 20px 60px;}
+
+  /* ---- Teams 미리보기 카드 ---- */
+  .teams-preview{margin-bottom:28px;}
+  .teams-preview .cap{font-size:12px; font-weight:700; color:var(--gray); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+  .teams-card{background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; max-width:420px; box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+  .teams-card .thead{background:var(--teams-purple); color:#fff; padding:9px 14px; font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .teams-card .tbody{padding:14px;}
+  .teams-card .tbody .ttitle{font-size:13.5px; font-weight:800; margin-bottom:6px;}
+  .teams-card .tbody .tline{font-size:12.5px; color:var(--gray); margin-bottom:3px;}
+  .teams-card .tactions{display:flex; gap:8px; padding:0 14px 14px;}
+  .teams-card .tactions button{flex:1; border:none; border-radius:6px; padding:9px; font-size:12.5px; font-weight:700; cursor:pointer;}
+  .ta-approve{background:var(--deep-green); color:#fff;}
+  .ta-reject{background:#fff; color:var(--coral); border:1px solid var(--coral) !important;}
+
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px;}
+  .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
+  .stat-card .value{font-size:24px; font-weight:800; color:var(--deep-green);}
+  .stat-card .value.coral{color:var(--coral);}
+  .stat-card .value.gray{color:var(--gray-light);}
+
+  .sec-title{font-size:14.5px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:7px;}
+  .sec-title .cnt{background:var(--pale-coral); color:var(--coral); font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px;}
+
+  .slot-card{background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .slot-card .dt{min-width:96px;}
+  .slot-card .dt .d{font-size:11.5px; color:var(--gray); font-weight:700;}
+  .slot-card .dt .t{font-size:17px; font-weight:800; color:var(--ink);}
+  .slot-card .mid{flex:1; min-width:180px;}
+  .slot-card .mid .cap{font-size:12.5px; font-weight:700; color:var(--gold); display:flex; align-items:center; gap:5px; margin-bottom:6px;}
+  .avatars{display:flex; gap:-6px;}
+  .avatar{width:26px; height:26px; border-radius:50%; background:var(--pale-teal); color:var(--teal); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid #fff; margin-left:-7px;}
+  .avatar:first-child{margin-left:0;}
+  .avatar-row{display:flex; align-items:center;}
+  .applicant-names{font-size:11.5px; color:var(--gray-light); margin-top:5px;}
+  .actions{display:flex; gap:8px;}
+  .actions button{border:none; border-radius:7px; padding:9px 16px; font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap;}
+  .btn-approve{background:var(--deep-green); color:#fff;}
+  .btn-approve:hover{background:#00594c;}
+  .btn-reject{background:#fff; color:var(--coral); border:1px solid var(--coral) !important;}
+  .btn-reject:hover{background:var(--pale-coral);}
+  .status-badge{font-size:11.5px; font-weight:800; padding:6px 12px; border-radius:20px;}
+  .status-badge.approved{background:var(--pale-green); color:var(--deep-green);}
+  .status-badge.rejected{background:var(--pale-coral); color:var(--coral);}
+
+  .empty-note{font-size:12.5px; color:var(--gray-light); background:#fff; border:1px dashed var(--border); border-radius:10px; padding:22px; text-align:center; margin-bottom:24px;}
+
+  .history{margin-top:28px;}
+  .history table{width:100%; border-collapse:collapse; font-size:12.5px; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden;}
+  .history thead th{text-align:left; background:var(--pale-blue); color:var(--gray); font-weight:700; font-size:11px; padding:10px 14px;}
+  .history tbody td{padding:11px 14px; border-top:1px solid #EFEFEF;}
+
+  .toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:12px 20px; border-radius:9px; font-size:13px; font-weight:600; opacity:0; transition:0.25s; pointer-events:none; box-shadow:0 6px 20px rgba(0,0,0,0.25); max-width:90%; text-align:center;}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="badge">VM · 자원봉사자관리부</div>
+    <div>
+      <h1>인터뷰어 슬롯 배정 확인</h1>
+      <div class="sub">신청자 접수를 열기 전, 배정받은 시간대를 인터뷰어가 먼저 확인 · Teams 탭 목업</div>
+    </div>
+  </div>
+  <div class="tag">샘플 · SAMPLE</div>
+</div>
+
+<div class="wrap">
+
+  <div class="teams-preview">
+    <div class="cap">💬 Teams로 이렇게 알림이 도착합니다 (Power Automate 승인 커넥터 · 슬롯 개설 전 발송)</div>
+    <div class="teams-card">
+      <div class="thead">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="4"/></svg>
+        면접 슬롯 배정 확인 요청
+      </div>
+      <div class="tbody">
+        <div class="ttitle">08.03(월) 10:30 슬롯 · 정원 3명(예정)</div>
+        <div class="tline">등록해주신 가용시간을 바탕으로 이 시간대에 배정되었습니다.</div>
+        <div class="tline">진행 가능하시면 [확인]을 눌러주세요. 확인 즉시 이 슬롯이 신청자 화면에 공개되어 접수가 시작됩니다.</div>
+      </div>
+      <div class="tactions">
+        <button class="ta-approve" onclick="showToast('Teams 카드에서 확인 시 목록A 상태가 곧바로 \'모집중\'으로 바뀌며 신청자 화면에 공개됩니다.')">확인</button>
+        <button class="ta-reject" onclick="showToast('Teams 카드에서 거절 시 관리자에게 재배정 알림이 전달되고, 이 슬롯은 신청자에게 공개되지 않습니다.')">배정 어려움</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="label">확인 대기 (미공개)</div><div class="value coral" id="pendingCount">3</div></div>
+    <div class="stat-card"><div class="label">이번 주 확인 완료</div><div class="value">11</div></div>
+    <div class="stat-card"><div class="label">배정 어려움 · 재배정 필요</div><div class="value gray">1</div></div>
+  </div>
+
+  <div class="sec-title">⏳ 신청 접수 전 · 내 배정 확인 대기 <span class="cnt" id="pendingTag">3건</span></div>
+  <div class="empty-note" style="margin-bottom:16px; text-align:left; padding:14px 16px; border-style:solid; border-color:var(--border);">이 목록의 슬롯은 아직 신청자에게 공개되지 않았습니다. 확인을 눌러야 신청자 화면(달력)에 노출되고 접수가 시작됩니다.</div>
+  <div id="pendingList"></div>
+  <div class="empty-note" id="emptyNote" style="display:none;">현재 확인 대기 중인 배정이 없습니다.</div>
+
+  <div class="history">
+    <div class="sec-title">📋 최근 처리 내역</div>
+    <table>
+      <thead><tr><th>슬롯 일시</th><th>예정 정원</th><th>처리 결과</th></tr></thead>
+      <tbody>
+        <tr><td>08.02(일) 11:00</td><td>3명</td><td><span class="status-badge approved">확인완료</span></td></tr>
+        <tr><td>08.02(일) 10:30</td><td>3명</td><td><span class="status-badge approved">확인완료</span></td></tr>
+        <tr><td>08.01(토) 14:00</td><td>2명</td><td><span class="status-badge rejected">배정어려움</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const slots = [
+    {id:1, date:"08.03(월)", time:"10:30", cap:3, source:"등록한 가용시간 기준 배정"},
+    {id:2, date:"08.03(월)", time:"11:00", cap:3, source:"등록한 가용시간 기준 배정"},
+    {id:3, date:"08.04(화)", time:"10:00", cap:3, source:"등록한 가용시간 기준 배정"},
+  ];
+
+  function renderSlots(){
+    const el = document.getElementById('pendingList');
+    const active = slots.filter(s=>!s.done);
+    document.getElementById('pendingTag').textContent = active.length + '건';
+    document.getElementById('pendingCount').textContent = active.length;
+    document.getElementById('emptyNote').style.display = active.length===0 ? 'block' : 'none';
+
+    el.innerHTML = active.map(s=>{
+      return '<div class="slot-card" id="slot-'+s.id+'">'+
+        '<div class="dt"><div class="d">'+s.date+'</div><div class="t">'+s.time+'</div></div>'+
+        '<div class="mid">'+
+          '<div class="cap">🔒 예정 정원 '+s.cap+'명 · 신청 접수 시작 전(미공개)</div>'+
+          '<div class="applicant-names">'+s.source+'</div>'+
+        '</div>'+
+        '<div class="actions">'+
+          '<button class="btn-approve" onclick="decide('+s.id+', true)">확인</button>'+
+          '<button class="btn-reject" onclick="decide('+s.id+', false)">배정 어려움</button>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function decide(id, approve){
+    const s = slots.find(x=>x.id===id);
+    s.done = true;
+    renderSlots();
+    if(approve){
+      showToast('확인 완료 — '+s.date+' '+s.time+' 슬롯이 "모집중"으로 바뀌며 신청자 화면(달력)에 즉시 공개됩니다.');
+    } else {
+      showToast('배정 어려움 처리 — 관리자에게 재배정 요청 알림이 전달됩니다. 이 슬롯은 신청자에게 공개되지 않습니다.');
+    }
+  }
+
+  let toastTimer;
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 3800);
+  }
+
+  renderSlots();
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

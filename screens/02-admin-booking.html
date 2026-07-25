@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>면접 예약 시스템 · 관리자 화면 (샘플)</title>
+<style>
+  :root{
+    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555;
+    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
+    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
+  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .topbar .brand{display:flex; align-items:center; gap:12px;}
+  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600; letter-spacing:0.3px;}
+  .topbar h1{font-size:18px; font-weight:700;}
+  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
+  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  .wrap{max-width:1180px; margin:0 auto; padding:28px 24px 60px;}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:18px 20px;}
+  .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
+  .stat-card .value{font-size:26px; font-weight:800; color:var(--deep-green);}
+  .stat-card .value.coral{color:var(--coral);}
+  .stat-card .value.teal{color:var(--teal);}
+  .stat-card .note{font-size:11px; color:var(--gray); margin-top:4px;}
+  .panel{background:#fff; border:1px solid var(--border); border-radius:12px; margin-bottom:24px; overflow:hidden;}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:10px;}
+  .panel-head h2{font-size:16px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:8px;}
+  .panel-head h2 .dot{width:8px; height:8px; border-radius:50%; background:var(--teal); display:inline-block;}
+  .panel-head .tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .btn{border:none; border-radius:7px; padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer; transition:0.15s;}
+  .btn-primary{background:var(--deep-green); color:#fff;}
+  .btn-primary:hover{background:#00594c;}
+  .btn-ghost{background:#fff; color:var(--ink); border:1px solid var(--border);}
+  .btn-ghost:hover{background:var(--light-gray);}
+  select, input[type=text]{border:1px solid var(--border); border-radius:7px; padding:8px 10px; font-size:13px; font-family:inherit; color:var(--ink);}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{text-align:left; background:var(--pale-blue); color:var(--gray); font-weight:700; font-size:11.5px; padding:11px 16px; border-bottom:1px solid var(--border); white-space:nowrap;}
+  tbody td{padding:12px 16px; border-bottom:1px solid #EFEFEF; vertical-align:middle;}
+  tbody tr:hover{background:#FAFCFF;}
+  tbody tr:last-child td{border-bottom:none;}
+  .badge{display:inline-block; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px;}
+  .b-open{background:var(--pale-green); color:var(--deep-green);}
+  .b-warn{background:var(--pale-gold); color:var(--gold);}
+  .b-full{background:#F0F0F0; color:var(--gray);}
+  .b-waitapprove{background:var(--pale-coral); color:var(--coral);}
+  .b-confirm{background:var(--pale-teal); color:var(--teal);}
+  .b-review{background:#ECECEC; color:var(--gray);}
+  .interviewer-cell{font-size:12.5px;}
+  .interviewer-cell .unassigned{color:var(--coral); font-weight:700; font-size:11.5px;}
+  .approve-badge{font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:12px;}
+  .approve-badge.wait{background:var(--pale-coral); color:var(--coral);}
+  .approve-badge.done{background:var(--pale-teal); color:var(--teal);}
+  .approve-badge.na{background:#F0F0F0; color:var(--gray-light, var(--gray));}
+  .b-confirmed{background:var(--pale-green); color:var(--deep-green);}
+  .b-pending{background:var(--pale-gold); color:var(--gold);}
+  .b-cancel{background:var(--pale-coral); color:var(--coral);}
+  .capacity-bar{width:70px; height:6px; background:#EDEDED; border-radius:4px; overflow:hidden; display:inline-block; vertical-align:middle; margin-right:8px;}
+  .capacity-fill{height:100%; background:var(--teal); border-radius:4px;}
+  .capacity-fill.full{background:var(--gray);}
+  .capacity-fill.warn{background:var(--gold);}
+  .zoom-link{color:var(--teal); font-size:12px; font-weight:600; text-decoration:none; border:1px solid var(--teal); border-radius:6px; padding:5px 10px; display:inline-block;}
+  .zoom-link:hover{background:var(--pale-teal);}
+  .name-cell{font-weight:700;}
+  .sub-text{font-size:11.5px; color:var(--gray); margin-top:2px;}
+  .foot-note{padding:14px 22px; background:var(--pale-blue); font-size:12px; color:var(--gray); border-top:1px solid var(--border);}
+  .foot-note b{color:var(--deep-green);}
+  .empty-tag{color:var(--gray); font-size:12px;}
+  .flag{font-size:11px; background:var(--pale-coral); color:var(--coral); padding:2px 7px; border-radius:5px; font-weight:700; margin-left:6px;}
+  @media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="badge">VM · 자원봉사자관리부</div>
+    <div>
+      <h1>면접 예약 시스템</h1>
+      <div class="sub">관리자 화면 · SharePoint 목록 A(타임슬롯 마스터) + 목록 B(예약접수대장) 기반 목업</div>
+    </div>
+  </div>
+  <div class="tag">샘플 · SAMPLE</div>
+</div>
+
+<div class="wrap">
+
+  <div class="foot-note" style="border-radius:10px; margin-bottom:22px; border:1px solid var(--border);">
+    <b>연관 화면 안내</b> — 이 화면은 관리자용입니다. 인터뷰어가 직접 사용하는 화면은 별도 파일로 제공됩니다: <b>인터뷰어 가용시간 입력폼</b>(가능한 날짜·시간 등록), <b>인터뷰어 슬롯 승인 화면</b>(정원 마감 슬롯 승인/거절).
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="label">이번 주 개설 슬롯</div>
+      <div class="value">24</div>
+      <div class="note">1타임 3명 기준 최대 72명</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">예약 완료</div>
+      <div class="value teal">58</div>
+      <div class="note">전체 대비 80.6%</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">잔여 슬롯</div>
+      <div class="value coral">14</div>
+      <div class="note">마감 임박 슬롯 3건</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">오늘 신규 접수</div>
+      <div class="value">7</div>
+      <div class="note">최근 갱신 09:41</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2><span class="dot"></span> 목록 A · 타임슬롯 마스터</h2>
+      <div class="tools">
+        <select>
+          <option>전체 날짜</option>
+          <option>08.03 (월)</option>
+          <option>08.04 (화)</option>
+        </select>
+        <select>
+          <option>전체 상태</option>
+          <option>배정검토중(비공개)</option>
+          <option>모집중</option>
+          <option>마감임박</option>
+          <option>마감</option>
+        </select>
+        <button class="btn btn-primary" onclick="alert('실제 구현 시 SharePoint 목록 A에 새 슬롯 항목이 생성됩니다.')">+ 슬롯 추가</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>슬롯 ID</th><th>날짜</th><th>시작시간</th><th>정원</th><th>현재예약</th><th>잔여</th><th>배정 인터뷰어</th><th>인터뷰어 확인</th><th>상태</th><th>Zoom 링크</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="opacity:0.75;">
+          <td class="name-cell">SLOT-0804-01</td><td>08.04 (화)</td><td>10:00</td><td>3</td><td>-</td><td>-</td>
+          <td class="interviewer-cell"><span class="unassigned">미배정</span></td>
+          <td><span class="approve-badge wait">확인 대기</span></td>
+          <td><span class="badge b-review">배정검토중</span></td>
+          <td><span style="color:var(--gray-light,var(--gray)); font-size:12px;">비공개</span></td>
+        </tr>
+        <tr>
+          <td class="name-cell">SLOT-0803-01</td><td>08.03 (월)</td><td>10:00</td><td>3</td><td>3</td><td>0</td>
+          <td class="interviewer-cell">김민수</td>
+          <td><span class="approve-badge done">확인완료</span></td>
+          <td><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge b-full">마감</span></td>
+          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+        </tr>
+        <tr>
+          <td class="name-cell">SLOT-0803-02</td><td>08.03 (월)</td><td>10:30</td><td>3</td><td>2</td><td>1</td>
+          <td class="interviewer-cell">이수진</td>
+          <td><span class="approve-badge done">확인완료</span></td>
+          <td><span class="capacity-bar"><span class="capacity-fill warn" style="width:66%"></span></span><span class="badge b-warn">마감임박</span></td>
+          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+        </tr>
+        <tr>
+          <td class="name-cell">SLOT-0803-03</td><td>08.03 (월)</td><td>11:00</td><td>3</td><td>1</td><td>2</td>
+          <td class="interviewer-cell">이수진</td>
+          <td><span class="approve-badge done">확인완료</span></td>
+          <td><span class="capacity-bar"><span class="capacity-fill" style="width:33%"></span></span><span class="badge b-open">모집중</span></td>
+          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+        </tr>
+        <tr>
+          <td class="name-cell">SLOT-0804-02</td><td>08.04 (화)</td><td>10:30</td><td>3</td><td>3</td><td>0</td>
+          <td class="interviewer-cell">박지훈</td>
+          <td><span class="approve-badge done">확인완료</span></td>
+          <td><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge b-full">마감</span></td>
+          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="foot-note"><b>흐름 변경 안내(2026.07.25 개정)</b> — 순서를 "예약 마감 후 인터뷰어 승인"에서 <b>"인터뷰어 확인 후 예약 개방"</b>으로 바꾸었습니다. ① 인터뷰어 가용시간 목록을 바탕으로 슬롯에 인터뷰어를 배정하면 <b>배정검토중(비공개)</b> 상태로 생성됩니다 → ② 인터뷰어가 슬롯 배정 확인 화면(Teams 카드)에서 <b>확인</b>을 누르면 그 즉시 <b>모집중</b>으로 바뀌며 신청자 화면에 공개됩니다 → ③ 잔여석이 0이 되면 <b>마감</b>으로 자동 전환됩니다(인터뷰어가 이미 확정되어 있으므로 별도 사후 승인 절차가 필요 없습니다). 신청자는 배정검토중 상태의 슬롯을 볼 수 없습니다.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2><span class="dot" style="background:var(--coral);"></span> 목록 B · 예약 접수대장</h2>
+      <div class="tools">
+        <input type="text" placeholder="이름·이메일 검색" style="width:180px;">
+        <select>
+          <option>전체 상태</option>
+          <option>확정</option>
+          <option>대기</option>
+          <option>취소</option>
+        </select>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>신청자</th><th>구분</th><th>신청 슬롯</th><th>상태</th><th>Zoom 발송</th><th>접수일시</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="name-cell">김OO</div><div class="sub-text">applicant01@email.com</div></td>
+          <td>개인</td><td>SLOT-0803-02 · 10:30</td>
+          <td><span class="badge b-confirmed">확정</span></td>
+          <td>발송완료</td><td>07.24 21:12</td>
+          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
+        </tr>
+        <tr>
+          <td><div class="name-cell">이OO · 박OO</div><div class="sub-text">couple02@email.com</div></td>
+          <td>부부</td><td>SLOT-0803-01 · 10:00</td>
+          <td><span class="badge b-confirmed">확정</span></td>
+          <td>발송완료</td><td>07.24 20:55</td>
+          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
+        </tr>
+        <tr>
+          <td><div class="name-cell">최OO</div><div class="sub-text">applicant03@email.com</div></td>
+          <td>개인</td><td>SLOT-0804-01 · 10:00<span class="flag">중복접수</span></td>
+          <td><span class="badge b-pending">대기</span></td>
+          <td>-</td><td>07.25 09:03</td>
+          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
+        </tr>
+        <tr>
+          <td><div class="name-cell">정OO</div><div class="sub-text">applicant04@email.com</div></td>
+          <td>개인</td><td>SLOT-0803-03 · 11:00</td>
+          <td><span class="badge b-cancel">취소</span></td>
+          <td>-</td><td>07.23 14:20</td>
+          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="foot-note">Power Automate 플로우가 Forms 제출을 감지하면 이 대장에 신규 행이 자동 생성되고, "확정" 처리 시 Zoom 링크가 담긴 안내 메일이 자동 발송되도록 구성됩니다.</div>
+  </div>
+
+</div>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Teams · 관리자 재배정 알림 (샘플)</title>
+<link rel="stylesheet" href="../assets/teams.css">
+</head>
+<body>
+<div class="page">
+  <div class="page-note">
+    <b>VM 관리자가 보는 Teams 화면입니다.</b> 인터뷰어가 배정 확인 요청에 <b>배정 어려움</b>으로 응답하거나
+    정해진 시간 안에 응답하지 않으면 관리자 채널로 재배정 요청이 도착합니다.
+    해당 슬롯은 아직 신청자에게 공개되지 않은 상태이므로, 재배정 과정에서 신청자에게 미치는 영향이 없습니다.
+  </div>
+
+  <div class="tm-window">
+    <div class="tm-titlebar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="tm-search">🔍 검색</div>
+      <div class="tm-me"><div class="av">박</div> 박형제 (VM)</div>
+    </div>
+
+    <div class="tm-body">
+      <div class="tm-rail">
+        <div class="item"><span class="ic">💬</span>채팅</div>
+        <div class="item active"><span class="ic">👥</span>팀<span class="badge">3</span></div>
+        <div class="item"><span class="ic">🔔</span>활동</div>
+        <div class="item"><span class="ic">📅</span>일정</div>
+        <div class="item"><span class="ic">⚡</span>승인</div>
+      </div>
+
+      <div class="tm-list">
+        <div class="lhead">팀</div>
+        <div class="grp">자원봉사자관리부(VM)</div>
+        <div class="row active">
+          <div class="av vm">#</div>
+          <div>
+            <div class="nm"># 면접-운영-알림</div>
+            <div class="pv">재배정 요청: 8/3 10:30</div>
+          </div>
+          <div class="tmstamp">09:35</div>
+        </div>
+        <div class="row">
+          <div class="av vm">#</div>
+          <div>
+            <div class="nm"># 헬프데스크-접수</div>
+            <div class="pv">신규 문의 2건</div>
+          </div>
+          <div class="tmstamp">08:40</div>
+        </div>
+        <div class="row">
+          <div class="av vm">#</div>
+          <div>
+            <div class="nm"># 일반</div>
+            <div class="pv">TFT 회의록 공유</div>
+          </div>
+          <div class="tmstamp">어제</div>
+        </div>
+      </div>
+
+      <div class="tm-main">
+        <div class="tm-chathead">
+          <div class="av vm">#</div>
+          <div>
+            <div class="t"># 면접-운영-알림</div>
+            <div class="s">자원봉사자관리부(VM) · 멤버 6명</div>
+          </div>
+        </div>
+
+        <div class="tm-stream">
+          <div class="tm-daydiv"><span>오늘</span></div>
+
+          <!-- 재배정 요청 -->
+          <div class="tm-msg">
+            <div class="av">PA</div>
+            <div style="min-width:0;">
+              <div class="who">면접 예약 알림 <span class="bot">봇</span> <span>09:35</span></div>
+              <div class="text">인터뷰어가 <b>배정 어려움</b>으로 응답했습니다. 재배정이 필요합니다.</div>
+
+              <div class="ac" id="card1">
+                <div class="achead" style="border-top-color:var(--coral);">
+                  <div class="brand">2027 서울 국제대회 · 자원봉사자관리부(VM)</div>
+                  <div class="t">인터뷰어 재배정 요청</div>
+                </div>
+                <div class="acbody">
+                  <div class="kv"><div class="k">일시</div><div class="v">2026년 8월 3일(월) 10:30 ~ 11:00</div></div>
+                  <div class="kv"><div class="k">슬롯 상태</div><div class="v" style="color:#4A4A4A;">배정검토중 · 비공개 유지</div></div>
+                  <div class="kv"><div class="k">응답한 인터뷰어</div><div class="v">김인터뷰어</div></div>
+                  <div class="kv"><div class="k">사유</div><div class="v">당일 다른 봉사 일정과 겹침</div></div>
+                  <div class="kv"><div class="k">대체 후보</div>
+                    <div class="v" style="min-width:0;">
+                      <div class="names"><i>이인터뷰어 · 해당 시간 가용</i><i>정인터뷰어 · 해당 시간 가용</i></div>
+                    </div>
+                  </div>
+                  <div class="warn">
+                    이 슬롯은 아직 신청자 달력에 공개되지 않았습니다.
+                    재배정된 인터뷰어가 확인을 누르는 시점에 <b>모집중</b>으로 바뀌며 접수가 시작됩니다.
+                  </div>
+                </div>
+                <div class="acfoot">
+                  <button class="primary" onclick="resolve('card1','이인터뷰어')">이인터뷰어에게 재배정</button>
+                  <button class="ghost" onclick="resolve('card1','정인터뷰어')">정인터뷰어</button>
+                  <button class="ghost" onclick="toast('예약시스템 관리자 화면에서 슬롯 시간을 옮기거나 정원을 조정할 수도 있습니다.')">슬롯 조정</button>
+                </div>
+                <div class="acresult"><div class="r" id="card1-r"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 무응답 리마인드 -->
+          <div class="tm-msg">
+            <div class="av">PA</div>
+            <div style="min-width:0;">
+              <div class="who">면접 예약 알림 <span class="bot">봇</span> <span>10:00</span></div>
+              <div class="text">배정 확인 요청 후 <b>24시간 무응답</b>인 슬롯이 있습니다. 접수가 열리지 못하고 있습니다.</div>
+
+              <div class="ac" id="card2">
+                <div class="achead" style="border-top-color:var(--gold);">
+                  <div class="brand">2027 서울 국제대회 · 자원봉사자관리부(VM)</div>
+                  <div class="t">배정 확인 무응답 알림</div>
+                </div>
+                <div class="acbody">
+                  <div class="kv"><div class="k">일시</div><div class="v">2026년 8월 4일(화) 10:00 ~ 10:30</div></div>
+                  <div class="kv"><div class="k">배정 인터뷰어</div><div class="v">최인터뷰어</div></div>
+                  <div class="kv"><div class="k">요청 발송</div><div class="v">7월 24일 10:00 (24시간 경과)</div></div>
+                  <div class="kv"><div class="k">영향</div><div class="v" style="color:var(--gold);">해당 시간대 접수 미개방</div></div>
+                </div>
+                <div class="acfoot">
+                  <button class="primary" onclick="resolve('card2','리마인드')">리마인드 재발송</button>
+                  <button class="ghost" onclick="resolve('card2','직접배정')">관리자가 직접 재배정</button>
+                </div>
+                <div class="acresult"><div class="r" id="card2-r"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 수급 부족 알림 -->
+          <div class="tm-msg">
+            <div class="av">PA</div>
+            <div style="min-width:0;">
+              <div class="who">면접 예약 알림 <span class="bot">봇</span> <span>08:55</span></div>
+              <div class="text">
+                📊 <b>차주(08.02~08.08) 수급 점검</b> — 화 19:00, 목 19:00 시간대는 지원자 신청이 확보 슬롯을 초과할 전망입니다.
+                인터뷰어 가용시간 추가 등록을 요청해 주세요.
+              </div>
+              <div class="ac" style="max-width:420px;">
+                <div class="achead" style="border-top-color:var(--tm-purple);">
+                  <div class="brand">주간 인터뷰어·지원자 수급 현황</div>
+                  <div class="t">우선 보완 필요 시간대 3건</div>
+                </div>
+                <div class="acbody">
+                  <div class="kv"><div class="k">화 19:00</div><div class="v" style="color:var(--coral);">확보 8 / 신청 예상 16</div></div>
+                  <div class="kv"><div class="k">목 19:00</div><div class="v" style="color:var(--coral);">확보 5 / 신청 예상 10</div></div>
+                  <div class="kv"><div class="k">화 18:00</div><div class="v" style="color:var(--gold);">확보 2 / 신청 예상 5</div></div>
+                </div>
+                <div class="acfoot">
+                  <button class="primary" onclick="goto('09-weekly-dashboard')">수급 현황 열기</button>
+                  <button class="ghost" onclick="toast('인터뷰어 채널에 가용시간 추가 등록 요청 메시지를 보냅니다.')">등록 요청 보내기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 정상 흐름: 공개 · 마감 -->
+          <div class="tm-msg">
+            <div class="av">PA</div>
+            <div style="min-width:0;">
+              <div class="who">면접 예약 알림 <span class="bot">봇</span> <span>09:22</span></div>
+              <div class="text">
+                ✅ <b>8월 3일(월) 11:00</b> 슬롯 확인 완료 (김인터뷰어) · 상태 <b>모집중</b>으로 전환, 신청자 달력에 공개되었습니다.<br>
+                🔒 <b>8월 2일(일) 11:00</b> 슬롯은 정원 3명 충족으로 <b>마감</b>되었습니다.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tm-compose">
+          <div class="box">메시지 입력</div>
+          <div class="send">➤</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var toastTimer;
+function toast(msg){
+  var el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 4200);
+}
+function goto(screen){
+  if(window.parent && window.parent !== window){
+    window.parent.postMessage({type:'go', screen:screen}, '*');
+  } else {
+    location.href = screen + '.html';
+  }
+}
+function resolve(id, who){
+  var card = document.getElementById(id);
+  var r = document.getElementById(id + '-r');
+  card.classList.add('resolved');
+  if(id === 'card1'){
+    r.className = 'r ok';
+    r.innerHTML = '✓ <b>' + who + '</b>님에게 재배정되었습니다. 배정 확인 카드가 전송되었고, 확인 시 이 슬롯이 모집중으로 공개됩니다.';
+    toast(who + ' 재배정 → 배정 확인 카드 재발송 · 슬롯은 "배정검토중(비공개)" 유지');
+  } else if(who === '리마인드'){
+    r.className = 'r ok';
+    r.innerHTML = '✓ 최인터뷰어에게 리마인드를 다시 보냈습니다. 48시간 내 무응답이면 자동으로 재배정 후보가 제시됩니다.';
+    toast('리마인드 재발송 완료 · 해당 시간대는 아직 미개방 상태');
+  } else {
+    r.className = 'r ok';
+    r.innerHTML = '✓ 관리자 직접 재배정 모드로 전환했습니다. 예약시스템 관리자 화면에서 가용 인터뷰어를 선택하세요.';
+    toast('관리자 직접 재배정 → 예약시스템 관리자 화면의 "배정 인터뷰어" 열에서 변경');
+  }
+}
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

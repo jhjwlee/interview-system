@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>주간 인터뷰어·지원자 수급 현황 (샘플)</title>
+<style>
+  :root{
+    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
+    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
+    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
+  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .topbar .brand{display:flex; align-items:center; gap:12px;}
+  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600;}
+  .topbar h1{font-size:18px; font-weight:700;}
+  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
+  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  .wrap{max-width:1180px; margin:0 auto; padding:24px 22px 60px;}
+
+  .week-tabs{display:flex; gap:8px; margin-bottom:20px;}
+  .week-tab{flex:1; text-align:center; padding:12px; border-radius:10px; border:1.5px solid var(--border); background:#fff; font-size:13.5px; font-weight:700; color:var(--gray); cursor:pointer; transition:0.12s;}
+  .week-tab .wt-sub{display:block; font-size:10.5px; font-weight:600; color:var(--gray-light); margin-top:2px;}
+  .week-tab.active{border-color:var(--deep-green); background:var(--pale-green); color:var(--deep-green);}
+  .week-tab.active .wt-sub{color:var(--deep-green);}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px;}
+  .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
+  .stat-card .value{font-size:24px; font-weight:800; color:var(--deep-green);}
+  .stat-card .value.coral{color:var(--coral);}
+  .stat-card .value.gold{color:var(--gold);}
+
+  .panel{background:#fff; border:1px solid var(--border); border-radius:12px; margin-bottom:22px; overflow:hidden;}
+  .panel-head{padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  .panel-head h2{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .panel-head h2 .dot{width:8px; height:8px; border-radius:50%; background:var(--teal); display:inline-block;}
+  .legend{display:flex; gap:12px; font-size:11px; color:var(--gray); flex-wrap:wrap;}
+  .legend span{display:inline-flex; align-items:center; gap:5px;}
+  .legend .sw{width:10px; height:10px; border-radius:3px;}
+
+  .matrix-wrap{overflow-x:auto; padding:18px 20px;}
+  table.matrix{border-collapse:collapse; width:100%; min-width:760px;}
+  table.matrix th{font-size:11px; color:var(--gray); font-weight:700; padding:8px 4px; text-align:center; border-bottom:2px solid var(--border);}
+  table.matrix th.timecol{text-align:left; padding-left:8px;}
+  table.matrix td.timecell{font-size:12px; font-weight:700; color:var(--ink); padding:6px 8px; white-space:nowrap; border-bottom:1px solid #F0F0F0;}
+  table.matrix td.timecell .per{display:block; font-size:9.5px; color:var(--gray-light); font-weight:600;}
+  table.matrix td.datacell{text-align:center; padding:4px; border-bottom:1px solid #F0F0F0;}
+  .cellbox{border-radius:7px; padding:5px 2px; font-size:11px; font-weight:700; line-height:1.35;}
+  .cellbox .cap{display:block; font-size:10.5px;}
+  .cellbox .app{display:block; font-size:10px; font-weight:600; opacity:0.85;}
+  .cellbox.ok{background:var(--pale-green); color:var(--deep-green);}
+  .cellbox.warn{background:var(--pale-gold); color:var(--gold);}
+  .cellbox.short{background:var(--pale-coral); color:var(--coral);}
+  .cellbox.blank{background:#FAFAFA; color:#D0D0D0; font-weight:600;}
+
+  .trend-wrap{padding:18px 20px;}
+  .trend-row{display:flex; align-items:flex-end; gap:26px; height:150px; padding:0 6px 4px; border-bottom:1px solid var(--border);}
+  .trend-col{display:flex; flex-direction:column; align-items:center; gap:6px; flex:1;}
+  .trend-bars{display:flex; align-items:flex-end; gap:6px; height:120px;}
+  .trend-bar{width:26px; border-radius:5px 5px 0 0; position:relative;}
+  .trend-bar.cap{background:var(--teal);}
+  .trend-bar.app{background:var(--coral);}
+  .trend-bar .num{position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; color:var(--ink); white-space:nowrap;}
+  .trend-label{font-size:11.5px; font-weight:700; color:var(--gray); margin-top:4px;}
+  .trend-legend{display:flex; justify-content:center; gap:18px; margin-top:12px; font-size:11.5px; color:var(--gray);}
+  .trend-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .trend-legend .sw{width:11px; height:11px; border-radius:3px;}
+
+  .gap-list{padding:6px 20px 18px;}
+  .gap-item{display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:9px; background:var(--pale-coral); margin-bottom:8px;}
+  .gap-item .rank{width:22px; height:22px; border-radius:50%; background:var(--coral); color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .gap-item .info{flex:1; font-size:13px; font-weight:700; color:var(--ink);}
+  .gap-item .info .detail{font-size:11.5px; font-weight:600; color:var(--gray); margin-top:2px;}
+  .gap-item .action{font-size:11px; font-weight:700; color:var(--coral); background:#fff; border-radius:6px; padding:5px 10px; white-space:nowrap;}
+  .gap-empty{font-size:12.5px; color:var(--gray-light); text-align:center; padding:20px; background:var(--pale-green); border-radius:9px; color:var(--deep-green); font-weight:700;}
+
+  .foot-note{padding:14px 20px; background:var(--pale-blue); font-size:12px; color:var(--gray); border-top:1px solid var(--border);}
+  .foot-note b{color:var(--deep-green);}
+  @media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="badge">VM · 자원봉사자관리부</div>
+    <div>
+      <h1>주간 인터뷰어·지원자 수급 현황</h1>
+      <div class="sub">전주·이번주·차주 비교로 부족 시간대를 미리 파악 · 관리자 화면 목업</div>
+    </div>
+  </div>
+  <div class="tag">샘플 · SAMPLE</div>
+</div>
+
+<div class="wrap">
+
+  <div class="week-tabs" id="weekTabs"></div>
+
+  <div class="stats" id="statCards"></div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2><span class="dot"></span> 시간대별 확보·신청 매트릭스</h2>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--pale-green);"></span>여유</span>
+        <span><span class="sw" style="background:var(--pale-gold);"></span>근접(80%↑)</span>
+        <span><span class="sw" style="background:var(--pale-coral);"></span>부족(초과)</span>
+        <span><span class="sw" style="background:#FAFAFA; border:1px solid var(--border);"></span>미배정</span>
+      </div>
+    </div>
+    <div class="matrix-wrap">
+      <table class="matrix" id="matrixTable"></table>
+    </div>
+    <div class="foot-note">셀 상단 숫자는 <b>확보 슬롯(인터뷰어 확정 기준)</b>, 하단 숫자는 <b>지원자 신청 건수</b>입니다. 07.20 정기모임 계획표(TS 체계)의 요일·시간 구조를 그대로 사용했습니다.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2><span class="dot" style="background:var(--coral);"></span> 3주 추세 비교</h2></div>
+    <div class="trend-wrap">
+      <div class="trend-row" id="trendRow"></div>
+      <div class="trend-legend">
+        <span><span class="sw" style="background:var(--teal);"></span>확보 슬롯 합계</span>
+        <span><span class="sw" style="background:var(--coral);"></span>지원자 신청 합계</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h2><span class="dot" style="background:var(--gold);"></span> 빈틈 요약 · 우선 보완 필요 시간대</h2></div>
+    <div class="gap-list" id="gapList"></div>
+  </div>
+
+</div>
+
+<script>
+  const DAYS = ['일','월','화','수','목','금','토'];
+  const ROWS = [
+    {t:'9:00',  per:'오전'}, {t:'10:00', per:'오전'}, {t:'11:00', per:'오전'},
+    {t:'14:00', per:'오후'}, {t:'15:00', per:'오후'}, {t:'16:00', per:'오후'}, {t:'17:00', per:'오후'},
+    {t:'18:00', per:'오후'}, {t:'19:00', per:'오후'}, {t:'20:00', per:'오후'},
+  ];
+  // 확보 슬롯(팀 단위) — 07.20 정기모임 계획표 기준
+  const BASE_CAP = [
+    [5,0,0,0,0,0,10],
+    [5,0,0,0,0,0,10],
+    [5,0,0,0,0,0,10],
+    [5,0,0,0,0,0,5],
+    [5,0,0,0,0,0,5],
+    [10,0,0,0,0,0,10],
+    [10,0,0,0,0,0,10],
+    [10,5,5,5,5,5,10],
+    [20,15,15,15,10,10,20],
+    [20,15,15,15,10,10,20],
+  ];
+  // 이번주 지원자 신청(실측 접수 기준, 샘플)
+  const APPLIED_THIS = [
+    [4,0,0,0,0,0,9],
+    [5,0,0,0,0,0,8],
+    [3,0,0,0,0,0,9],
+    [4,0,0,0,0,0,5],
+    [4,0,0,0,0,0,4],
+    [9,0,0,0,0,0,9],
+    [8,0,0,0,0,0,11],
+    [9,6,7,5,4,4,9],
+    [17,14,22,13,9,8,18],
+    [16,13,17,17,8,11,19],
+  ];
+
+  // 차주: 특정 시간대 확보 슬롯이 아직 덜 채워짐(인터뷰어 등록 저조) — 부족 시연용
+  const NEXT_CAP_ADJUST = { '화-18:00':2, '화-19:00':8, '목-18:00':2, '목-19:00':5, '수-19:00':10 };
+
+  function buildWeek(name, subLabel, capMul, appMul, capAdjustMap){
+    const cap = BASE_CAP.map((row,ri)=>row.map((v,di)=>{
+      const key = DAYS[di]+'-'+ROWS[ri].t;
+      if(capAdjustMap && capAdjustMap[key] !== undefined) return capAdjustMap[key];
+      return Math.round(v*capMul);
+    }));
+    const app = APPLIED_THIS.map((row,ri)=>row.map((v,di)=>{
+      if(BASE_CAP[ri][di]===0 && cap[ri][di]===0) return 0;
+      return Math.round(v*appMul);
+    }));
+    return { name, subLabel, cap, app };
+  }
+
+  const WEEKS = [
+    buildWeek('전주', '07.19~07.25 · 마감', 1.0, 0.90),
+    buildWeek('이번주', '07.26~08.01 · 진행중', 1.0, 1.0),
+    buildWeek('차주', '08.02~08.08 · 예정', 1.0, 1.12, NEXT_CAP_ADJUST),
+  ];
+
+  let activeWeek = 1;
+
+  function renderTabs(){
+    const el = document.getElementById('weekTabs');
+    el.innerHTML = WEEKS.map((w,i)=>
+      '<div class="week-tab'+(i===activeWeek?' active':'')+'" onclick="selectWeek('+i+')">'+w.name+'<span class="wt-sub">'+w.subLabel+'</span></div>'
+    ).join('');
+  }
+
+  function selectWeek(i){
+    activeWeek = i;
+    renderAll();
+  }
+
+  function sum2d(arr){ return arr.reduce((s,row)=>s+row.reduce((a,b)=>a+b,0),0); }
+
+  function renderStats(){
+    const w = WEEKS[activeWeek];
+    const totalCap = sum2d(w.cap);
+    const totalApp = sum2d(w.app);
+    let gapCells = 0, gapSum = 0;
+    w.cap.forEach((row,ri)=>row.forEach((c,di)=>{
+      const a = w.app[ri][di];
+      if(c===0 && a===0) return;
+      const gap = a - c;
+      if(gap>0){ gapCells++; gapSum += gap; }
+    }));
+    const el = document.getElementById('statCards');
+    el.innerHTML =
+      '<div class="stat-card"><div class="label">확보 슬롯 합계</div><div class="value">'+totalCap+'</div></div>'+
+      '<div class="stat-card"><div class="label">지원자 신청 합계</div><div class="value">'+totalApp+'</div></div>'+
+      '<div class="stat-card"><div class="label">부족 시간대 수</div><div class="value coral">'+gapCells+'</div></div>'+
+      '<div class="stat-card"><div class="label">부족 인원 합계</div><div class="value gold">'+gapSum+'</div></div>';
+  }
+
+  function cellClass(cap, app){
+    if(cap===0 && app===0) return 'blank';
+    if(app > cap) return 'short';
+    if(cap>0 && app/cap >= 0.8) return 'warn';
+    return 'ok';
+  }
+
+  function renderMatrix(){
+    const w = WEEKS[activeWeek];
+    let html = '<thead><tr><th class="timecol">시간</th>' + DAYS.map(d=>'<th>'+d+'</th>').join('') + '</tr></thead><tbody>';
+    ROWS.forEach((r,ri)=>{
+      html += '<tr><td class="timecell">'+r.t+'<span class="per">'+r.per+'</span></td>';
+      DAYS.forEach((d,di)=>{
+        const cap = w.cap[ri][di], app = w.app[ri][di];
+        const cls = cellClass(cap, app);
+        if(cls==='blank'){
+          html += '<td class="datacell"><div class="cellbox blank">-</div></td>';
+        } else {
+          html += '<td class="datacell"><div class="cellbox '+cls+'"><span class="cap">'+cap+'</span><span class="app">신청'+app+'</span></div></td>';
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    document.getElementById('matrixTable').innerHTML = html;
+  }
+
+  function renderTrend(){
+    const maxVal = Math.max(...WEEKS.map(w=>Math.max(sum2d(w.cap), sum2d(w.app)))) * 1.15;
+    const el = document.getElementById('trendRow');
+    el.innerHTML = WEEKS.map((w,i)=>{
+      const cap = sum2d(w.cap), app = sum2d(w.app);
+      const capH = Math.round(cap/maxVal*120), appH = Math.round(app/maxVal*120);
+      const active = i===activeWeek ? ' style="opacity:1;"' : ' style="opacity:0.55;"';
+      return '<div class="trend-col"'+active+'>'+
+        '<div class="trend-bars">'+
+          '<div class="trend-bar cap" style="height:'+capH+'px;"><span class="num">'+cap+'</span></div>'+
+          '<div class="trend-bar app" style="height:'+appH+'px;"><span class="num">'+app+'</span></div>'+
+        '</div>'+
+        '<div class="trend-label">'+w.name+'</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function renderGaps(){
+    const w = WEEKS[activeWeek];
+    let gaps = [];
+    w.cap.forEach((row,ri)=>row.forEach((c,di)=>{
+      const a = w.app[ri][di];
+      const gap = a - c;
+      if(gap>0 || (c===0 && a>0)){
+        gaps.push({ day:DAYS[di], time:ROWS[ri].t, cap:c, app:a, gap: c===0? a : gap });
+      }
+    }));
+    gaps.sort((x,y)=>y.gap-x.gap);
+    gaps = gaps.slice(0,6);
+    const el = document.getElementById('gapList');
+    if(gaps.length===0){
+      el.innerHTML = '<div class="gap-empty">이번 주는 모든 시간대에서 확보 슬롯이 신청 건수를 충족합니다.</div>';
+      return;
+    }
+    el.innerHTML = gaps.map((g,i)=>{
+      const action = g.cap===0 ? '인터뷰어 신규 배정 필요' : '인터뷰어 추가 확보 필요';
+      return '<div class="gap-item">'+
+        '<div class="rank">'+(i+1)+'</div>'+
+        '<div class="info">'+g.day+'요일 '+g.time+
+          '<div class="detail">확보 '+g.cap+' · 신청 '+g.app+' · '+g.gap+'명 부족</div></div>'+
+        '<div class="action">'+action+'</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function renderAll(){
+    renderTabs();
+    renderStats();
+    renderMatrix();
+    renderTrend();
+    renderGaps();
+  }
+
+  renderAll();
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

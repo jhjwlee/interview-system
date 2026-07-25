@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>헬프데스크 · 관리자 화면 (샘플)</title>
+<style>
+  :root{
+    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555;
+    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
+    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
+  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .topbar .brand{display:flex; align-items:center; gap:12px;}
+  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600;}
+  .topbar h1{font-size:18px; font-weight:700;}
+  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
+  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  .wrap{max-width:1220px; margin:0 auto; padding:28px 24px 60px; display:grid; grid-template-columns:1fr 360px; gap:22px;}
+  .main-col{min-width:0;}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px;}
+  .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
+  .stat-card .value{font-size:24px; font-weight:800; color:var(--deep-green);}
+  .stat-card .value.coral{color:var(--coral);}
+  .stat-card .value.gold{color:var(--gold);}
+  .stat-card .value.teal{color:var(--teal);}
+  .panel{background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden;}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:10px;}
+  .panel-head h2{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .panel-head h2 .dot{width:8px; height:8px; border-radius:50%; background:var(--teal); display:inline-block;}
+  .tools{display:flex; gap:8px; flex-wrap:wrap;}
+  select, input[type=text]{border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit;}
+  .ticket-list{display:flex; flex-direction:column;}
+  .ticket-row{display:grid; grid-template-columns:90px 1fr 110px 90px; align-items:center; gap:10px; padding:14px 20px; border-bottom:1px solid #EFEFEF; cursor:pointer; transition:0.12s;}
+  .ticket-row:hover{background:#FAFCFF;}
+  .ticket-row.active{background:var(--pale-blue); border-left:3px solid var(--deep-green);}
+  .ticket-row:last-child{border-bottom:none;}
+  .tid{font-size:11.5px; color:var(--gray); font-weight:700;}
+  .ttitle{font-size:13.5px; font-weight:700; color:var(--ink); margin-bottom:3px;}
+  .tmeta{font-size:11.5px; color:var(--gray);}
+  .badge{display:inline-block; font-size:11px; font-weight:700; padding:4px 9px; border-radius:20px; white-space:nowrap;}
+  .b-new{background:var(--pale-coral); color:var(--coral);}
+  .b-progress{background:var(--pale-gold); color:var(--gold);}
+  .b-done{background:var(--pale-green); color:var(--deep-green);}
+  .type-tag{font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:5px; background:var(--pale-teal); color:var(--teal); white-space:nowrap;}
+  .detail-panel{position:sticky; top:24px; align-self:flex-start;}
+  .detail-head{padding:18px 20px; border-bottom:1px solid var(--border);}
+  .detail-head .did{font-size:11.5px; color:var(--gray); font-weight:700; margin-bottom:4px;}
+  .detail-head .dtitle{font-size:16px; font-weight:800; color:var(--ink);}
+  .detail-body{padding:18px 20px; display:flex; flex-direction:column; gap:16px;}
+  .field-label{font-size:11.5px; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.3px;}
+  .field-value{font-size:13.5px; color:var(--ink); line-height:1.6;}
+  .content-box{background:var(--light-gray); border-radius:8px; padding:12px 14px; font-size:13px; color:var(--ink); line-height:1.6;}
+  textarea{width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:inherit; font-size:13px; resize:vertical; min-height:80px;}
+  .status-row{display:flex; gap:8px; align-items:center;}
+  .btn{border:none; border-radius:7px; padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer;}
+  .btn-primary{background:var(--deep-green); color:#fff; width:100%;}
+  .btn-primary:hover{background:#00594c;}
+  .foot-note{padding:12px 20px; background:var(--pale-blue); font-size:11.5px; color:var(--gray); border-top:1px solid var(--border);}
+  .foot-note b{color:var(--deep-green);}
+  @media (max-width:920px){.wrap{grid-template-columns:1fr;} .stats{grid-template-columns:repeat(2,1fr);} .ticket-row{grid-template-columns:70px 1fr auto auto;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="badge">VM · 자원봉사자관리부</div>
+    <div>
+      <h1>헬프데스크</h1>
+      <div class="sub">관리자 화면 · SharePoint 목록(문의접수대장) + Teams 탭 목업</div>
+    </div>
+  </div>
+  <div class="tag">샘플 · SAMPLE</div>
+</div>
+
+<div class="wrap">
+  <div class="main-col">
+
+    <div class="stats">
+      <div class="stat-card"><div class="label">신규 문의</div><div class="value coral">5</div></div>
+      <div class="stat-card"><div class="label">처리중</div><div class="value gold">8</div></div>
+      <div class="stat-card"><div class="label">처리완료</div><div class="value teal">42</div></div>
+      <div class="stat-card"><div class="label">오늘 접수</div><div class="value">6</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span class="dot"></span> 문의 접수대장</h2>
+        <div class="tools">
+          <select>
+            <option>전체 유형</option>
+            <option>예약/일정 문의</option>
+            <option>Zoom 접속 오류</option>
+            <option>인터뷰어 배정 문의</option>
+            <option>기타</option>
+          </select>
+          <select>
+            <option>전체 상태</option>
+            <option>신규</option>
+            <option>처리중</option>
+            <option>완료</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ticket-list" id="ticketList">
+        <div class="ticket-row active" onclick="selectTicket(this,0)">
+          <div class="tid">#HD-014</div>
+          <div><div class="ttitle">Zoom 링크가 열리지 않습니다</div><div class="tmeta">신청자02@email.com · 07.25 09:12</div></div>
+          <div><span class="type-tag">Zoom 접속 오류</span></div>
+          <div><span class="badge b-new">신규</span></div>
+        </div>
+        <div class="ticket-row" onclick="selectTicket(this,1)">
+          <div class="tid">#HD-013</div>
+          <div><div class="ttitle">면접 시간을 변경하고 싶어요</div><div class="tmeta">신청자11@email.com · 07.25 08:47</div></div>
+          <div><span class="type-tag">예약/일정 문의</span></div>
+          <div><span class="badge b-new">신규</span></div>
+        </div>
+        <div class="ticket-row" onclick="selectTicket(this,2)">
+          <div class="tid">#HD-012</div>
+          <div><div class="ttitle">배정된 인터뷰어를 알고 싶습니다</div><div class="tmeta">신청자07@email.com · 07.24 21:30</div></div>
+          <div><span class="type-tag">인터뷰어 배정 문의</span></div>
+          <div><span class="badge b-progress">처리중</span></div>
+        </div>
+        <div class="ticket-row" onclick="selectTicket(this,3)">
+          <div class="tid">#HD-011</div>
+          <div><div class="ttitle">부부 동반 면접이 가능한가요</div><div class="tmeta">신청자05@email.com · 07.24 19:02</div></div>
+          <div><span class="type-tag">기타</span></div>
+          <div><span class="badge b-done">완료</span></div>
+        </div>
+        <div class="ticket-row" onclick="selectTicket(this,4)">
+          <div class="tid">#HD-010</div>
+          <div><div class="ttitle">신청 확인 메일을 못받았어요</div><div class="tmeta">신청자03@email.com · 07.24 15:44</div></div>
+          <div><span class="type-tag">예약/일정 문의</span></div>
+          <div><span class="badge b-done">완료</span></div>
+        </div>
+      </div>
+      <div class="foot-note"><b>흐름</b> — Forms 제출 → Power Automate가 이 목록에 신규 행 생성 → Teams 채널로 자동 알림 → 담당자가 이 화면(Teams 탭)에서 바로 처리.</div>
+    </div>
+  </div>
+
+  <div class="panel detail-panel">
+    <div class="detail-head">
+      <div class="did">#HD-014</div>
+      <div class="dtitle">Zoom 링크가 열리지 않습니다</div>
+    </div>
+    <div class="detail-body">
+      <div>
+        <div class="field-label">신청자</div>
+        <div class="field-value">신청자02 · applicant02@email.com</div>
+      </div>
+      <div>
+        <div class="field-label">문의 유형</div>
+        <div class="field-value"><span class="type-tag">Zoom 접속 오류</span></div>
+      </div>
+      <div>
+        <div class="field-label">문의 내용</div>
+        <div class="content-box">안내받은 Zoom 링크를 클릭했는데 "회의를 찾을 수 없습니다"라는 메시지가 뜹니다. 오늘 10시 30분 면접인데 어떻게 해야 할까요?</div>
+      </div>
+      <div>
+        <div class="field-label">상태 변경</div>
+        <select style="width:100%; padding:9px 10px;">
+          <option>신규</option>
+          <option selected>처리중</option>
+          <option>완료</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">처리 내용</div>
+        <textarea placeholder="처리 내용을 입력하세요...">신청자에게 정확한 Zoom 링크 재발송 완료. 회의 ID 오기재 확인함.</textarea>
+      </div>
+      <button class="btn btn-primary" onclick="alert('실제 구현 시 SharePoint 목록의 상태·처리내용 열이 갱신됩니다.')">저장</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const details = [
+    {id:"#HD-014", title:"Zoom 링크가 열리지 않습니다", who:"신청자02 · applicant02@email.com", type:"Zoom 접속 오류", body:"안내받은 Zoom 링크를 클릭했는데 \"회의를 찾을 수 없습니다\"라는 메시지가 뜹니다. 오늘 10시 30분 면접인데 어떻게 해야 할까요?", status:1, note:"신청자에게 정확한 Zoom 링크 재발송 완료. 회의 ID 오기재 확인함."},
+    {id:"#HD-013", title:"면접 시간을 변경하고 싶어요", who:"신청자11 · applicant11@email.com", type:"예약/일정 문의", body:"08.03(월) 10시로 신청했는데 개인 사정으로 시간을 옮기고 싶습니다. 08.04(화) 오전으로 변경 가능할까요?", status:0, note:""},
+    {id:"#HD-012", title:"배정된 인터뷰어를 알고 싶습니다", who:"신청자07 · applicant07@email.com", type:"인터뷰어 배정 문의", body:"면접 전에 어떤 분과 하게 되는지 미리 알 수 있을까요?", status:1, note:"인터뷰어 개별 안내는 원칙상 미제공, 표준 안내문 발송함."},
+    {id:"#HD-011", title:"부부 동반 면접이 가능한가요", who:"신청자05 · applicant05@email.com", type:"기타", body:"저희 부부가 함께 면접에 참여할 수 있는지 궁금합니다.", status:2, note:"부부 동반 슬롯 안내 완료, SLOT-0803-01로 재접수 처리."},
+    {id:"#HD-010", title:"신청 확인 메일을 못받았어요", who:"신청자03 · applicant03@email.com", type:"예약/일정 문의", body:"어제 신청했는데 확인 메일이 오지 않았습니다.", status:2, note:"스팸함 확인 안내, 재발송 완료."}
+  ];
+  function selectTicket(el, idx){
+    document.querySelectorAll('.ticket-row').forEach(r=>r.classList.remove('active'));
+    el.classList.add('active');
+    const d = details[idx];
+    document.querySelector('.did').textContent = d.id;
+    document.querySelector('.dtitle').textContent = d.title;
+    const fv = document.querySelectorAll('.field-value');
+    fv[0].textContent = d.who;
+    fv[1].innerHTML = '<span class="type-tag">'+d.type+'</span>';
+    document.querySelector('.content-box').textContent = d.body;
+    document.querySelector('.detail-body select').selectedIndex = d.status;
+    document.querySelector('textarea').value = d.note;
+  }
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>
