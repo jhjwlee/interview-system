@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>인터뷰 예약 · 헬프데스크 입력폼 (샘플 v2)</title>
+<title>인터뷰 예약하기 · 문의하기 (샘플)</title>
 <style>
   :root{
     --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
@@ -114,13 +114,13 @@
 <div class="wrap">
   <div class="top">
     <div class="badge">2027 서울 국제대회 · VM 자원봉사자관리부</div>
-    <h1>인터뷰 · 문의 접수</h1>
+    <h1>인터뷰 예약하기</h1>
   </div>
 
   <div class="card">
     <div class="tabs">
-      <div class="tab active" onclick="switchTab(0)">📅 인터뷰 예약 신청</div>
-      <div class="tab" onclick="switchTab(1)">💬 헬프데스크 문의</div>
+      <div class="tab active" onclick="switchTab(0)">📅 인터뷰 예약하기</div>
+      <div class="tab" onclick="switchTab(1)">💬 문의하기</div>
     </div>
 
     <!-- ============ 예약 신청 (캘린더형) ============ -->
@@ -144,14 +144,14 @@
       <div class="cal-grid" id="calDow"></div>
       <div class="cal-grid" id="calGrid"></div>
       <div class="cal-legend">
-        <span><span class="dot dot-ok"></span>여유</span>
-        <span><span class="dot dot-warn"></span>마감임박</span>
-        <span><span class="dot dot-full"></span>마감</span>
+        <span><span class="dot dot-ok"></span>자리 여유 있음</span>
+        <span><span class="dot dot-warn"></span>자리 얼마 안 남음</span>
+        <span><span class="dot dot-full"></span>신청 마감</span>
       </div>
-      <div style="font-size:10.5px; color:var(--gray-light); background:var(--light-gray); border-radius:8px; padding:8px 11px; margin:-10px 0 18px;">점이 없는 날짜는 아직 인터뷰어 배정이 확인되지 않아 신청을 받지 않는 날짜입니다. 인터뷰어 확인이 끝난 시간대만 이 달력에 표시됩니다.</div>
+      <div style="font-size:10.5px; color:var(--gray-light); background:var(--light-gray); border-radius:8px; padding:8px 11px; margin:-10px 0 18px;">표시된 날짜에서만 신청하실 수 있습니다. 인터뷰를 진행할 인터뷰어가 정해진 시간만 달력에 열립니다.</div>
 
       <div class="time-section" id="timeSection" style="display:none;">
-        <div class="lbl">🕐 <span id="timeDateLabel"></span> 시간 선택</div>
+        <div class="lbl">🕐 <span id="timeDateLabel"></span> 가능한 시간 중에서 골라 주세요</div>
         <div class="time-chips" id="timeChips"></div>
       </div>
 
@@ -163,10 +163,10 @@
 
       <div class="detail-form" id="detailForm">
         <div class="field">
-          <label>구분<span class="req">*</span></label>
+          <label>신청 유형<span class="req">*</span></label>
           <div class="radio-group">
-            <div class="radio-opt selected" onclick="selRadio(this)">개인 인터뷰</div>
-            <div class="radio-opt" onclick="selRadio(this)">부부 동반 인터뷰</div>
+            <div class="radio-opt selected" onclick="selRadio(this)">혼자 받습니다</div>
+            <div class="radio-opt" onclick="selRadio(this)">부부가 함께 받습니다</div>
           </div>
         </div>
         <div class="field">
@@ -191,34 +191,34 @@
           </div>
         </div>
         <div class="field">
-          <label>참고사항 (선택)</label>
-          <textarea placeholder="전달하고 싶은 내용이 있다면 적어주세요."></textarea>
+          <label>미리 알려주실 내용 (선택)</label>
+          <textarea placeholder="미리 알려주실 점이 있으면 적어 주세요."></textarea>
         </div>
-        <button class="btn-submit" onclick="submitForm('reserve')">신청 완료하기</button>
-        <div class="privacy">제출 정보는 인터뷰 일정 안내 목적으로만 사용됩니다.</div>
+        <button class="btn-submit" onclick="submitForm('reserve')">이 시간으로 신청하기</button>
+        <div class="privacy">적어주신 정보는 인터뷰 일정을 안내하는 데에만 씁니다.</div>
       </div>
     </div>
 
     <!-- ============ 헬프데스크 문의 ============ -->
     <div class="tab-body" id="panel-help" style="display:none;">
       <div class="field">
-        <label>문의 유형<span class="req">*</span></label>
+        <label>어떤 점이 궁금하신가요?<span class="req">*</span></label>
         <div class="type-grid">
           <div class="type-opt selected" onclick="selType(this)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-            예약/일정 문의
+            예약·일정 관련
           </div>
           <div class="type-opt" onclick="selType(this)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-            Zoom 접속 오류
+            Zoom 접속이 안 돼요
           </div>
           <div class="type-opt" onclick="selType(this)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
-            인터뷰어 배정 문의
+            인터뷰어 관련
           </div>
           <div class="type-opt" onclick="selType(this)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 1 1 5.5 1.7c-.7 1-1.6 1.3-1.6 2.8M12 17h.01"/></svg>
-            기타
+            그 밖의 문의
           </div>
         </div>
       </div>
@@ -237,11 +237,11 @@
         </div>
       </div>
       <div class="field">
-        <label>문의 내용<span class="req">*</span></label>
-        <textarea placeholder="문의하실 내용을 자세히 적어주세요." style="min-height:100px;"></textarea>
+        <label>문의하실 내용<span class="req">*</span></label>
+        <textarea placeholder="어떤 점이 궁금하신지 편하게 적어 주세요." style="min-height:100px;"></textarea>
       </div>
-      <button class="btn-submit" onclick="submitForm('help')">문의 접수하기</button>
-      <div class="privacy">영업일 기준 1일 이내 이메일로 회신드립니다.</div>
+      <button class="btn-submit" onclick="submitForm('help')">문의 보내기</button>
+      <div class="privacy">평일 기준 하루 안에 이메일로 답변드립니다.</div>
     </div>
 
     <!-- ============ 제출 완료 ============ -->
@@ -249,8 +249,8 @@
       <div class="check">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <h3 id="successTitle">접수가 완료되었습니다</h3>
-      <p id="successBody">확인 후 이메일로 안내드리겠습니다.</p>
+      <h3 id="successTitle">잘 접수되었습니다</h3>
+      <p id="successBody">확인한 뒤 이메일로 안내드리겠습니다.</p>
       <div class="ref" id="successRef">접수번호 확인 중...</div>
     </div>
   </div>
@@ -335,12 +335,12 @@
     const slots = slotData[dstr] || [];
     const chipsEl = document.getElementById('timeChips');
     if(slots.length===0){
-      chipsEl.innerHTML = '<div class="time-empty">해당 날짜는 개설된 슬롯이 없습니다.</div>';
+      chipsEl.innerHTML = '<div class="time-empty">이 날짜에는 신청하실 수 있는 시간이 없습니다.</div>';
     } else {
       chipsEl.innerHTML = slots.map(s=>{
         const remain = s.cap - s.used;
         const full = remain<=0;
-        return '<div class="time-chip'+(full?' full':'')+'" onclick="'+(full?'':'pickTime(\''+s.t+'\', this)')+'">'+s.t+'<span class="rem">'+(full?'마감':'잔여 '+remain)+'</span></div>';
+        return '<div class="time-chip'+(full?' full':'')+'" onclick="'+(full?'':'pickTime(\''+s.t+'\', this)')+'">'+s.t+'<span class="rem">'+(full?'신청 마감':'남은 자리 '+remain)+'</span></div>';
       }).join('');
     }
     document.getElementById('summaryBar').style.display = 'none';
@@ -354,7 +354,7 @@
     document.querySelectorAll('.time-chip').forEach(c=>c.classList.remove('selected'));
     el.classList.add('selected');
     const d = new Date(window.selectedDate);
-    const label = (d.getMonth()+1)+'월 '+d.getDate()+'일('+dowNames[d.getDay()]+') '+t+' 선택됨';
+    const label = (d.getMonth()+1)+'월 '+d.getDate()+'일('+dowNames[d.getDay()]+') '+t+'에 신청합니다';
     document.getElementById('summaryText').textContent = label;
     document.getElementById('summaryBar').style.display = 'flex';
     document.getElementById('detailForm').classList.add('open');
@@ -406,11 +406,11 @@
     document.getElementById('successPanel').style.display = 'block';
     const ref = 'REF-' + Math.floor(100000 + Math.random()*899999);
     if(kind === 'reserve'){
-      document.getElementById('successTitle').textContent = '인터뷰 예약 신청이 완료되었습니다';
-      document.getElementById('successBody').textContent = '신청 내용을 확인 후 확정 여부와 Zoom 링크를 이메일로 안내드립니다.';
+      document.getElementById('successTitle').textContent = '신청이 잘 접수되었습니다';
+      document.getElementById('successBody').textContent = '확인한 뒤 인터뷰 확정 여부와 Zoom 접속 링크를 이메일로 보내드립니다.';
     } else {
-      document.getElementById('successTitle').textContent = '문의가 접수되었습니다';
-      document.getElementById('successBody').textContent = '담당자가 확인 후 영업일 기준 1일 이내 이메일로 회신드립니다.';
+      document.getElementById('successTitle').textContent = '문의가 잘 접수되었습니다';
+      document.getElementById('successBody').textContent = '담당 형제가 확인한 뒤 평일 기준 하루 안에 이메일로 답변드립니다.';
     }
     document.getElementById('successRef').textContent = '접수번호 ' + ref;
   }

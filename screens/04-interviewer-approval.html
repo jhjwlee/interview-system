@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>인터뷰어 슬롯 승인 (샘플)</title>
+<title>배정받은 인터뷰 시간 확인 (샘플)</title>
 <style>
   :root{
     --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
@@ -84,8 +84,8 @@
   <div class="brand">
     <div class="badge">VM · 자원봉사자관리부</div>
     <div>
-      <h1>인터뷰어 슬롯 배정 확인</h1>
-      <div class="sub">신청자 접수를 열기 전, 배정받은 시간대를 인터뷰어가 먼저 확인 · Teams 탭 목업</div>
+      <h1>배정받은 인터뷰 시간 확인</h1>
+      <div class="sub">신청자에게 예약을 열기 전에, 인터뷰어가 먼저 확인하는 화면입니다</div>
     </div>
   </div>
   <div class="tag">샘플 · SAMPLE</div>
@@ -94,43 +94,43 @@
 <div class="wrap">
 
   <div class="teams-preview">
-    <div class="cap">💬 Teams로 이렇게 알림이 도착합니다 (Power Automate 승인 커넥터 · 슬롯 개설 전 발송)</div>
+    <div class="cap">💬 Teams로는 이렇게 도착합니다 (신청자에게 열리기 전에 먼저 보내드립니다)</div>
     <div class="teams-card">
       <div class="thead">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="4"/></svg>
-        인터뷰 슬롯 배정 확인 요청
+        인터뷰 시간 확인 요청
       </div>
       <div class="tbody">
-        <div class="ttitle">08.03(월) 10:30 슬롯 · 정원 3명(예정)</div>
-        <div class="tline">등록해주신 가용시간을 바탕으로 이 시간대에 배정되었습니다.</div>
-        <div class="tline">진행 가능하시면 [확인]을 눌러주세요. 확인 즉시 이 슬롯이 신청자 화면에 공개되어 접수가 시작됩니다.</div>
+        <div class="ttitle">08.03(월) 10:30 · 3명 예정</div>
+        <div class="tline">알려주신 가능한 시간에 맞춰 이 시간으로 배정했습니다.</div>
+        <div class="tline">진행이 가능하시면 아래 버튼을 눌러 주세요. 누르시면 이 시간이 신청자 달력에 열립니다.</div>
       </div>
       <div class="tactions">
-        <button class="ta-approve" onclick="showToast('Teams 카드에서 확인 시 목록A 상태가 곧바로 \'모집중\'으로 바뀌며 신청자 화면에 공개됩니다.')">확인</button>
-        <button class="ta-reject" onclick="showToast('Teams 카드에서 거절 시 관리자에게 재배정 알림이 전달되고, 이 슬롯은 신청자에게 공개되지 않습니다.')">배정 어려움</button>
+        <button class="ta-approve" onclick="showToast('Teams 카드에서 눌러도 이 화면과 똑같이 처리됩니다. 누르시면 이 시간이 신청자 달력에 바로 열립니다.')">진행할 수 있어요</button>
+        <button class="ta-reject" onclick="showToast('어렵다고 알려주시면 관리자에게 다시 배정해 달라는 알림이 갑니다. 이 시간은 신청자에게 열리지 않습니다.')">이 시간은 어려워요</button>
       </div>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stat-card"><div class="label">확인 대기 (미공개)</div><div class="value coral" id="pendingCount">3</div></div>
-    <div class="stat-card"><div class="label">이번 주 확인 완료</div><div class="value">11</div></div>
-    <div class="stat-card"><div class="label">배정 어려움 · 재배정 필요</div><div class="value gray">1</div></div>
+    <div class="stat-card"><div class="label">확인을 기다리는 시간</div><div class="value coral" id="pendingCount">3</div></div>
+    <div class="stat-card"><div class="label">이번 주 확인해 주신 시간</div><div class="value">11</div></div>
+    <div class="stat-card"><div class="label">어렵다고 하신 시간</div><div class="value gray">1</div></div>
   </div>
 
-  <div class="sec-title">⏳ 신청 접수 전 · 내 배정 확인 대기 <span class="cnt" id="pendingTag">3건</span></div>
-  <div class="empty-note" style="margin-bottom:16px; text-align:left; padding:14px 16px; border-style:solid; border-color:var(--border);">이 목록의 슬롯은 아직 신청자에게 공개되지 않았습니다. 확인을 눌러야 신청자 화면(달력)에 노출되고 접수가 시작됩니다.</div>
+  <div class="sec-title">⏳ 아직 열리지 않은 내 배정 시간 <span class="cnt" id="pendingTag">3건</span></div>
+  <div class="empty-note" style="margin-bottom:16px; text-align:left; padding:14px 16px; border-style:solid; border-color:var(--border);">아래 시간은 아직 신청자에게 보이지 않습니다. 확인해 주시면 그때 달력에 열려 신청을 받기 시작합니다.</div>
   <div id="pendingList"></div>
-  <div class="empty-note" id="emptyNote" style="display:none;">현재 확인 대기 중인 배정이 없습니다.</div>
+  <div class="empty-note" id="emptyNote" style="display:none;">지금은 확인하실 배정이 없습니다.</div>
 
   <div class="history">
     <div class="sec-title">📋 최근 처리 내역</div>
     <table>
-      <thead><tr><th>슬롯 일시</th><th>예정 정원</th><th>처리 결과</th></tr></thead>
+      <thead><tr><th>날짜·시간</th><th>예정 인원</th><th>결과</th></tr></thead>
       <tbody>
-        <tr><td>08.02(일) 11:00</td><td>3명</td><td><span class="status-badge approved">확인완료</span></td></tr>
-        <tr><td>08.02(일) 10:30</td><td>3명</td><td><span class="status-badge approved">확인완료</span></td></tr>
-        <tr><td>08.01(토) 14:00</td><td>2명</td><td><span class="status-badge rejected">배정어려움</span></td></tr>
+        <tr><td>08.02(일) 11:00</td><td>3명</td><td><span class="status-badge approved">진행 가능</span></td></tr>
+        <tr><td>08.02(일) 10:30</td><td>3명</td><td><span class="status-badge approved">진행 가능</span></td></tr>
+        <tr><td>08.01(토) 14:00</td><td>2명</td><td><span class="status-badge rejected">어려움</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -140,9 +140,9 @@
 
 <script>
   const slots = [
-    {id:1, date:"08.03(월)", time:"10:30", cap:3, source:"등록한 가용시간 기준 배정"},
-    {id:2, date:"08.03(월)", time:"11:00", cap:3, source:"등록한 가용시간 기준 배정"},
-    {id:3, date:"08.04(화)", time:"10:00", cap:3, source:"등록한 가용시간 기준 배정"},
+    {id:1, date:"08.03(월)", time:"10:30", cap:3, source:"알려주신 가능한 시간에 맞춤"},
+    {id:2, date:"08.03(월)", time:"11:00", cap:3, source:"알려주신 가능한 시간에 맞춤"},
+    {id:3, date:"08.04(화)", time:"10:00", cap:3, source:"알려주신 가능한 시간에 맞춤"},
   ];
 
   function renderSlots(){
@@ -156,12 +156,12 @@
       return '<div class="slot-card" id="slot-'+s.id+'">'+
         '<div class="dt"><div class="d">'+s.date+'</div><div class="t">'+s.time+'</div></div>'+
         '<div class="mid">'+
-          '<div class="cap">🔒 예정 정원 '+s.cap+'명 · 신청 접수 시작 전(미공개)</div>'+
+          '<div class="cap">🔒 '+s.cap+'명 예정 · 아직 신청자에게 열리지 않았습니다</div>'+
           '<div class="applicant-names">'+s.source+'</div>'+
         '</div>'+
         '<div class="actions">'+
-          '<button class="btn-approve" onclick="decide('+s.id+', true)">확인</button>'+
-          '<button class="btn-reject" onclick="decide('+s.id+', false)">배정 어려움</button>'+
+          '<button class="btn-approve" onclick="decide('+s.id+', true)">진행할 수 있어요</button>'+
+          '<button class="btn-reject" onclick="decide('+s.id+', false)">이 시간은 어려워요</button>'+
         '</div>'+
       '</div>';
     }).join('');
@@ -172,9 +172,9 @@
     s.done = true;
     renderSlots();
     if(approve){
-      showToast('확인 완료 — '+s.date+' '+s.time+' 슬롯이 "모집중"으로 바뀌며 신청자 화면(달력)에 즉시 공개됩니다.');
+      showToast('확인해 주셔서 감사합니다 — '+s.date+' '+s.time+' 시간이 지금 신청자 달력에 열렸습니다.');
     } else {
-      showToast('배정 어려움 처리 — 관리자에게 재배정 요청 알림이 전달됩니다. 이 슬롯은 신청자에게 공개되지 않습니다.');
+      showToast('알려주셔서 감사합니다 — 관리자에게 다시 배정해 달라고 전달했습니다. 이 시간은 신청자에게 열리지 않습니다.');
     }
   }
 

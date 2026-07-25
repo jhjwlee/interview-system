@@ -5,10 +5,10 @@
 
   var SCREENS = [
     { id: '00-workflow', t: '전체 워크플로우' },
-    { id: '01-applicant-form', t: '입력폼 (신청자)' },
-    { id: '03-interviewer-availability', t: '가용시간 등록 (인터뷰어)' },
-    { id: '04-interviewer-approval', t: '슬롯 배정 확인 (인터뷰어)' },
-    { id: '06-teams-approval', t: 'Teams 배정 확인 카드' },
+    { id: '01-applicant-form', t: '예약하기 · 문의하기 (신청자)' },
+    { id: '03-interviewer-availability', t: '가능한 시간 알려주기 (인터뷰어)' },
+    { id: '04-interviewer-approval', t: '배정 시간 확인 (인터뷰어)' },
+    { id: '06-teams-approval', t: 'Teams 확인 요청 (인터뷰어)' },
     { id: '02-admin-booking', t: '예약시스템 (관리자)' },
     { id: '09-weekly-dashboard', t: '주간 수급 현황 (관리자)' },
     { id: '05-admin-helpdesk', t: '헬프데스크 (관리자)' },

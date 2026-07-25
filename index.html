@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="2027 서울 국제대회 자원봉사자관리부(VM) 인터뷰 예약·헬프데스크 시스템 HTML 목업 모음">
-<title>인터뷰 예약 · 헬프데스크 시스템 목업 | 2027 서울 국제대회 VM</title>
+<title>인터뷰 예약 · 문의 시스템 화면 모음 | 2027 서울 국제대회 VM</title>
 <style>
   :root{
     --deep-green:#003C33; --deep-green-2:#00594C; --ink:#212121; --gray:#555; --gray-light:#9A9A9A;
@@ -106,7 +106,7 @@
 
 <div class="topbar">
   <button class="burger" id="burger" aria-label="메뉴">☰</button>
-  <div class="brand">인터뷰 예약 · 헬프데스크 시스템 목업<small>2027 서울 국제대회 · 자원봉사자관리부(VM)</small></div>
+  <div class="brand">인터뷰 예약 · 문의 시스템 화면 모음<small>2027 서울 국제대회 · 자원봉사자관리부(VM)</small></div>
   <div class="spacer"></div>
   <a class="ext" href="docs/design-background-manual.pdf" target="_blank" rel="noopener">📄 설계배경·사용메뉴얼 PDF</a>
 </div>
@@ -127,10 +127,10 @@
 <script>
 var SCREENS = [
   {grp:'개요', id:'00-workflow', icon:'🧭', title:'전체 워크플로우', sub:'9개 화면을 하나의 흐름으로', role:'개요', rc:'r-sys'},
-  {grp:'신청자 · 문의자', id:'01-applicant-form', icon:'📝', title:'입력폼', sub:'인터뷰 예약 신청 · 헬프데스크 문의', role:'신청자', rc:'r-app'},
-  {grp:'인터뷰어', id:'03-interviewer-availability', icon:'🕐', title:'가용시간 등록', sub:'가능한 날짜·시간 사전 등록', role:'인터뷰어', rc:'r-iv'},
-  {grp:'인터뷰어', id:'04-interviewer-approval', icon:'✅', title:'슬롯 배정 확인', sub:'접수 개방 전 배정 시간대 확인', role:'인터뷰어', rc:'r-iv'},
-  {grp:'인터뷰어', id:'06-teams-approval', icon:'💬', title:'Teams 배정 확인 카드', sub:'Power Automate 승인 커넥터 알림', role:'인터뷰어', rc:'r-iv'},
+  {grp:'신청자 · 문의자', id:'01-applicant-form', icon:'📝', title:'예약하기 · 문의하기', sub:'신청자가 직접 쓰는 화면', role:'신청자', rc:'r-app'},
+  {grp:'인터뷰어', id:'03-interviewer-availability', icon:'🕐', title:'가능한 시간 알려주기', sub:'인터뷰가 가능한 날짜·시간 등록', role:'인터뷰어', rc:'r-iv'},
+  {grp:'인터뷰어', id:'04-interviewer-approval', icon:'✅', title:'배정 시간 확인', sub:'신청자에게 열기 전 진행 여부 확인', role:'인터뷰어', rc:'r-iv'},
+  {grp:'인터뷰어', id:'06-teams-approval', icon:'💬', title:'Teams 확인 요청', sub:'Teams 채팅으로 받는 확인 카드', role:'인터뷰어', rc:'r-iv'},
   {grp:'VM 관리자', id:'02-admin-booking', icon:'📅', title:'예약시스템', sub:'슬롯 개설 · 예약 현황 · 인터뷰어 배정', role:'관리자', rc:'r-adm'},
   {grp:'VM 관리자', id:'09-weekly-dashboard', icon:'📊', title:'주간 수급 현황', sub:'시간대별 확보 슬롯 vs 지원자 신청', role:'관리자', rc:'r-adm'},
   {grp:'VM 관리자', id:'05-admin-helpdesk', icon:'🎧', title:'헬프데스크', sub:'문의 티켓 확인 · 배정 · 처리', role:'관리자', rc:'r-adm'},
@@ -175,7 +175,7 @@ function go(id, replace){
   curRole.textContent = s.role;
   curRole.className = 'role ' + s.rc;
   openNew.href = url;
-  document.title = s.title + ' | 인터뷰 예약 · 헬프데스크 시스템 목업';
+  document.title = s.title + ' | 인터뷰 예약 · 문의 시스템 화면 모음';
   document.querySelectorAll('.side a.nav').forEach(function(a){
     a.classList.toggle('active', a.dataset.id === s.id);
   });

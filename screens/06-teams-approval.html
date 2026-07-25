@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>Teams · 인터뷰어 배정 확인 카드 (샘플)</title>
+<title>Teams로 받는 인터뷰 시간 확인 요청 (샘플)</title>
 <link rel="stylesheet" href="../assets/teams.css">
 </head>
 <body>
 <div class="page">
   <div class="page-note">
-    <b>인터뷰어가 보는 Teams 화면입니다.</b> 관리자가 슬롯에 인터뷰어를 배정하면, 신청 접수를 열기 <b>전에</b>
-    Power Automate 승인 커넥터가 이 카드를 보냅니다. 여기서 <b>확인</b>을 누른 슬롯만 신청자 달력에 공개됩니다.
+    <b>인터뷰어 형제가 보는 Teams 화면입니다.</b> 배정이 정해지면, 신청자에게 예약이 열리기 <b>전에</b>
+    Teams로 이런 확인 요청이 먼저 도착합니다. 여기서 <b>진행할 수 있어요</b>를 눌러주신 시간만
+    신청자 달력에 열립니다.
   </div>
 
   <div class="tm-window">
@@ -34,10 +35,10 @@
         <div class="lhead">채팅</div>
         <div class="grp">최근</div>
         <div class="row active">
-          <div class="av flow">PA</div>
+          <div class="av flow">알림</div>
           <div>
             <div class="nm">인터뷰 예약 알림</div>
-            <div class="pv">배정 확인 요청: 8/3 10:30</div>
+            <div class="pv">8/3 10:30 시간 확인 부탁드립니다</div>
           </div>
           <div class="tmstamp">09:20</div>
         </div>
@@ -45,7 +46,7 @@
           <div class="av vm">VM</div>
           <div>
             <div class="nm">VM 인터뷰 TFT</div>
-            <div class="pv">차주 부족 시간대 안내드립니다</div>
+            <div class="pv">다음 주 사람이 부족한 시간 안내</div>
           </div>
           <div class="tmstamp">08:55</div>
         </div>
@@ -53,7 +54,7 @@
           <div class="av">박</div>
           <div>
             <div class="nm">박형제 (VM 관리자)</div>
-            <div class="pv">가용시간 등록 확인했습니다</div>
+            <div class="pv">알려주신 시간 잘 받았습니다</div>
           </div>
           <div class="tmstamp">어제</div>
         </div>
@@ -61,73 +62,73 @@
 
       <div class="tm-main">
         <div class="tm-chathead">
-          <div class="av">PA</div>
+          <div class="av">알림</div>
           <div>
             <div class="t">인터뷰 예약 알림</div>
-            <div class="s">Power Automate · 봇</div>
+            <div class="s">자동 알림</div>
           </div>
         </div>
 
         <div class="tm-stream">
           <div class="tm-daydiv"><span>오늘</span></div>
 
-          <!-- 배정 확인 요청 카드 1 -->
+          <!-- 확인 요청 카드 1 -->
           <div class="tm-msg">
-            <div class="av">PA</div>
+            <div class="av">알림</div>
             <div style="min-width:0;">
-              <div class="who">인터뷰 예약 알림 <span class="bot">봇</span> <span>09:20</span></div>
-              <div class="text">등록해주신 가용시간을 바탕으로 슬롯이 배정되었습니다. 진행 가능 여부를 확인해 주세요.</div>
+              <div class="who">인터뷰 예약 알림 <span class="bot">자동</span> <span>09:20</span></div>
+              <div class="text">알려주신 가능한 시간에 맞춰 인터뷰 시간을 배정했습니다. 진행이 가능하신지 확인 부탁드립니다.</div>
 
               <div class="ac" id="card1">
                 <div class="achead">
                   <div class="brand">2027 서울 국제대회 · 자원봉사자관리부(VM)</div>
-                  <div class="t">인터뷰 슬롯 배정 확인 요청</div>
+                  <div class="t">인터뷰 시간 확인 요청</div>
                 </div>
                 <div class="acbody">
-                  <div class="kv"><div class="k">일시</div><div class="v">2026년 8월 3일(월) 10:30 ~ 11:00</div></div>
-                  <div class="kv"><div class="k">방식</div><div class="v">Zoom</div></div>
-                  <div class="kv"><div class="k">예정 정원</div><div class="v">3명</div></div>
-                  <div class="kv"><div class="k">배정 근거</div><div class="v">등록한 가용시간 기준 배정</div></div>
-                  <div class="kv"><div class="k">현재 상태</div><div class="v" style="color:#4A4A4A;">배정검토중 · 신청자 미공개</div></div>
+                  <div class="kv"><div class="k">날짜·시간</div><div class="v">2026년 8월 3일(월) 10:30 ~ 11:00</div></div>
+                  <div class="kv"><div class="k">진행 방식</div><div class="v">Zoom</div></div>
+                  <div class="kv"><div class="k">예정 인원</div><div class="v">3명</div></div>
+                  <div class="kv"><div class="k">배정 이유</div><div class="v">알려주신 가능한 시간에 맞춤</div></div>
+                  <div class="kv"><div class="k">지금 상태</div><div class="v" style="color:#4A4A4A;">준비 중 · 아직 신청자에게 안 보임</div></div>
                   <div class="warn">
-                    <b>확인</b>을 누르면 이 슬롯이 즉시 <b>모집중</b>으로 바뀌어 신청자 달력에 공개되고 접수가 시작됩니다.
-                    <b>배정 어려움</b>을 누르면 공개되지 않고 관리자에게 재배정 요청이 전달됩니다.
-                    아직 신청자가 없으므로 어느 쪽을 눌러도 신청자에게 영향이 없습니다.
+                    <b>진행할 수 있어요</b>를 누르시면 이 시간이 곧바로 신청자 달력에 열려 신청을 받기 시작합니다.
+                    <b>이 시간은 어려워요</b>를 누르시면 열리지 않고, 관리자에게 다시 배정해 달라는 알림이 갑니다.
+                    아직 신청한 사람이 없으니 어느 쪽을 누르셔도 신청자에게는 아무 영향이 없습니다.
                   </div>
                 </div>
                 <div class="acfoot">
-                  <button class="primary" onclick="resolve('card1','ok')">확인 (접수 개방)</button>
-                  <button class="danger" onclick="resolve('card1','no')">배정 어려움</button>
-                  <button class="ghost" onclick="toast('웹 화면(배정 확인)에서는 내 배정 전체와 최근 처리 내역을 함께 볼 수 있습니다.')">자세히</button>
+                  <button class="primary" onclick="resolve('card1','ok')">진행할 수 있어요</button>
+                  <button class="danger" onclick="resolve('card1','no')">이 시간은 어려워요</button>
+                  <button class="ghost" onclick="toast('웹 화면에서 열면 내 배정 전체와 지난 처리 내역을 함께 보실 수 있습니다.')">자세히</button>
                 </div>
                 <div class="acresult"><div class="r" id="card1-r"></div></div>
               </div>
             </div>
           </div>
 
-          <!-- 배정 확인 요청 카드 2 -->
+          <!-- 확인 요청 카드 2 -->
           <div class="tm-msg">
-            <div class="av">PA</div>
+            <div class="av">알림</div>
             <div style="min-width:0;">
-              <div class="who">인터뷰 예약 알림 <span class="bot">봇</span> <span>09:21</span></div>
-              <div class="text">같은 날 연속 슬롯이 하나 더 배정되었습니다.</div>
+              <div class="who">인터뷰 예약 알림 <span class="bot">자동</span> <span>09:21</span></div>
+              <div class="text">같은 날 이어지는 시간이 하나 더 있습니다.</div>
 
               <div class="ac" id="card2">
                 <div class="achead">
                   <div class="brand">2027 서울 국제대회 · 자원봉사자관리부(VM)</div>
-                  <div class="t">인터뷰 슬롯 배정 확인 요청</div>
+                  <div class="t">인터뷰 시간 확인 요청</div>
                 </div>
                 <div class="acbody">
-                  <div class="kv"><div class="k">일시</div><div class="v">2026년 8월 3일(월) 11:00 ~ 11:30</div></div>
-                  <div class="kv"><div class="k">방식</div><div class="v">Zoom</div></div>
-                  <div class="kv"><div class="k">예정 정원</div><div class="v">3명</div></div>
-                  <div class="kv"><div class="k">1일 배정 현황</div><div class="v">2건 / 등록한 최대 3건</div></div>
-                  <div class="kv"><div class="k">현재 상태</div><div class="v" style="color:#4A4A4A;">배정검토중 · 신청자 미공개</div></div>
+                  <div class="kv"><div class="k">날짜·시간</div><div class="v">2026년 8월 3일(월) 11:00 ~ 11:30</div></div>
+                  <div class="kv"><div class="k">진행 방식</div><div class="v">Zoom</div></div>
+                  <div class="kv"><div class="k">예정 인원</div><div class="v">3명</div></div>
+                  <div class="kv"><div class="k">이 날 배정</div><div class="v">2번째 (알려주신 최대 3번)</div></div>
+                  <div class="kv"><div class="k">지금 상태</div><div class="v" style="color:#4A4A4A;">준비 중 · 아직 신청자에게 안 보임</div></div>
                 </div>
                 <div class="acfoot">
-                  <button class="primary" onclick="resolve('card2','ok')">확인 (접수 개방)</button>
-                  <button class="danger" onclick="resolve('card2','no')">배정 어려움</button>
-                  <button class="ghost" onclick="toast('등록한 1일 최대 소화 건수를 넘지 않는지 시스템이 함께 확인합니다.')">자세히</button>
+                  <button class="primary" onclick="resolve('card2','ok')">진행할 수 있어요</button>
+                  <button class="danger" onclick="resolve('card2','no')">이 시간은 어려워요</button>
+                  <button class="ghost" onclick="toast('알려주신 하루 최대 횟수를 넘지 않는지 함께 확인합니다.')">자세히</button>
                 </div>
                 <div class="acresult"><div class="r" id="card2-r"></div></div>
               </div>
@@ -136,12 +137,12 @@
 
           <!-- 마감 알림 -->
           <div class="tm-msg">
-            <div class="av">PA</div>
+            <div class="av">알림</div>
             <div style="min-width:0;">
-              <div class="who">인터뷰 예약 알림 <span class="bot">봇</span> <span>어제 17:40</span></div>
+              <div class="who">인터뷰 예약 알림 <span class="bot">자동</span> <span>어제 17:40</span></div>
               <div class="text">
-                🔒 <b>8월 2일(일) 11:00</b> 슬롯이 정원 3명을 모두 채워 <b>마감</b>되었습니다.
-                신청자 명단은 배정 확인 화면에서 확인하실 수 있습니다. (사후 승인 절차는 없습니다)
+                🔒 <b>8월 2일(일) 11:00</b> 시간은 3명이 모두 채워져 신청이 마감되었습니다.
+                오시는 분들 명단은 확인 화면에서 보실 수 있습니다. 따로 더 해주실 일은 없습니다.
               </div>
             </div>
           </div>
@@ -156,8 +157,8 @@
   </div>
 
   <div class="page-note" style="margin-top:16px; background:var(--pale-teal); border-color:#C7E0E8; color:#14536B;">
-    카드의 <b>확인 / 배정 어려움</b>을 눌러보세요. 실제 운영에서는 이 한 번의 클릭이
-    SharePoint 목록 A(타임슬롯 마스터)의 상태를 바꾸고, 신청자 달력 노출 여부까지 그대로 이어집니다.
+    카드의 버튼을 눌러보세요. 실제로는 이 한 번의 클릭이 예약 목록의 상태를 바꾸고,
+    신청자 달력에 이 시간이 보이는지 여부까지 그대로 이어집니다.
   </div>
 </div>
 
@@ -178,12 +179,12 @@ function resolve(id, kind){
   card.classList.add('resolved');
   if(kind === 'ok'){
     r.className = 'r ok';
-    r.innerHTML = '✓ 확인 완료 · 슬롯 상태가 <b>모집중</b>으로 바뀌었습니다.<br>신청자 달력에 공개되어 지금부터 접수가 시작됩니다.';
-    toast('확인 → 목록A 상태 "모집중" · 신청자 달력에 해당 시간대 노출 시작');
+    r.innerHTML = '✓ 확인해 주셔서 감사합니다. 이 시간이 지금 <b>신청자 달력에 열렸습니다.</b><br>신청이 들어오면 명단을 다시 안내드립니다.';
+    toast('확인 완료 → 이 시간이 신청자 달력에 열리고 신청을 받기 시작합니다');
   } else {
     r.className = 'r no';
-    r.innerHTML = '✕ 배정 어려움으로 처리 · 슬롯은 <b>배정검토중(비공개)</b>에 머물러 신청자에게 공개되지 않습니다.<br>관리자에게 재배정 요청이 전달되었습니다.';
-    toast('배정 어려움 → 슬롯 비공개 유지 · VM 관리자 채널로 재배정 알림 (신청자 무영향)');
+    r.innerHTML = '✕ 알려주셔서 감사합니다. 이 시간은 <b>신청자에게 열리지 않습니다.</b><br>관리자에게 다시 배정해 달라는 알림이 전달되었습니다.';
+    toast('어려움으로 처리 → 이 시간은 열리지 않고, 관리자에게 재배정 알림이 갑니다');
   }
 }
 </script>
