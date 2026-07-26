@@ -1,5 +1,6 @@
 /* 화면을 단독으로 열었을 때만 상단에 "전체 화면 목록" 바를 붙입니다.
-   허브(index.html)의 iframe 안에서는 아무것도 하지 않습니다. */
+   허브(index.html)의 iframe 안에서는 아무것도 하지 않습니다.
+   index.html과 동일한 Augen Pro 스타일(오프화이트·시그널 블루)을 사용합니다. */
 (function () {
   try { if (window.parent && window.parent !== window) return; } catch (e) { return; }
 
@@ -19,28 +20,37 @@
   var file = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
   var cur = decodeURIComponent(file);
 
+  var FONT = "'Pretendard Variable','Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif";
+
+  var link = document.createElement('link');
+  link.rel = 'stylesheet'; link.crossOrigin = 'anonymous';
+  link.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css';
+  document.head.appendChild(link);
+
   var bar = document.createElement('div');
   bar.setAttribute('data-shell-nav', '1');
   bar.style.cssText = [
     'position:sticky', 'top:0', 'z-index:99998',
-    'background:#00241F', 'color:#fff',
-    'font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif',
-    'font-size:12px', 'display:flex', 'align-items:center', 'gap:10px',
-    'padding:8px 14px', 'box-shadow:0 1px 6px rgba(0,0,0,0.2)'
+    'background:rgba(253,253,253,0.92)', 'backdrop-filter:saturate(180%) blur(14px)',
+    '-webkit-backdrop-filter:saturate(180%) blur(14px)',
+    'color:#0f1012', 'border-bottom:0.5px solid rgba(0,0,0,0.08)',
+    'font-family:' + FONT, 'font-weight:350', 'letter-spacing:-0.02em',
+    'font-size:12.5px', 'display:flex', 'align-items:center', 'flex-wrap:wrap', 'gap:8px',
+    'padding:10px 14px'
   ].join(';');
 
   var back = document.createElement('a');
   back.href = '../index.html#' + cur;
   back.textContent = '← 전체 화면 목록';
-  back.style.cssText = 'color:#fff;text-decoration:none;font-weight:700;background:rgba(255,255,255,0.15);border-radius:6px;padding:5px 11px;white-space:nowrap;';
+  back.style.cssText = 'color:#0f1012;text-decoration:none;font-weight:400;background:rgba(0,113,227,0.08);border-radius:9999px;padding:7px 14px;white-space:nowrap;';
 
   var sel = document.createElement('select');
-  sel.style.cssText = 'margin-left:auto;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:6px;padding:5px 8px;font-size:11.5px;font-weight:600;max-width:60vw;';
+  sel.style.cssText = 'margin-left:auto;background:#fdfdfd;color:#0f1012;border:0.5px solid rgba(0,0,0,0.14);border-radius:10px;padding:7px 10px;font-size:12px;font-weight:400;font-family:' + FONT + ';max-width:60vw;';
   SCREENS.forEach(function (s) {
     var o = document.createElement('option');
     o.value = s.id;
     o.textContent = s.t;
-    o.style.color = '#212121';
+    o.style.color = '#0f1012';
     if (s.id === cur) o.selected = true;
     sel.appendChild(o);
   });
