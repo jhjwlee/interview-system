@@ -1,0 +1,152 @@
+/* ============================================================
+   Augen Pro 공용 디자인 시스템
+   — 시각: 애플 스타일 (모노크롬 + 시그널 블루 단일 액센트, weight 350)
+   — 사용성: 토스 스타일 (또렷한 기본 버튼 1개, 넉넉한 터치 영역, 친절한 안내문)
+   2027 서울 국제대회 · VM 인터뷰 예약·헬프데스크 시스템 — 화면 10종 공용
+   ============================================================ */
+:root{
+  --ink:#0f1012;            /* 오프블랙 — 본문/타이틀 */
+  --ink-strong:#020201;     /* 퓨어블랙 — 최대 대비가 필요한 곳 */
+  --canvas:#f2f2f4;         /* 오프화이트 — 페이지 배경 */
+  --surface:#fdfdfd;        /* 퓨어화이트 — 카드/입력창 배경 */
+  --steel:#5e5e5e;          /* 스틸그레이 — 본문 보조 텍스트 */
+  --ash:#8f8f8f;            /* 애시그레이 — 캡션/비활성 */
+  --blue:#0071e3;           /* 시그널 블루 — 유일한 유채색 액센트 */
+  --blue-wash:rgba(0,113,227,0.08);
+  --blue-wash-strong:rgba(0,113,227,0.14);
+  --hair:rgba(0,0,0,0.09);
+  --hair-soft:rgba(0,0,0,0.06);
+  --ink-wash:rgba(15,16,18,0.05);
+  --ink-wash-strong:rgba(15,16,18,0.09);
+
+  --font:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',ui-sans-serif,system-ui,sans-serif;
+  --w-book:350;
+  --w-label:400;
+  --tracking:-0.02em;
+
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:28px; --r-pill:9999px;
+}
+
+*{box-sizing:border-box;}
+.ap-reset{margin:0; padding:0;}
+
+body.ap{
+  font-family:var(--font); font-weight:var(--w-book); letter-spacing:var(--tracking);
+  color:var(--ink); background:var(--canvas); line-height:1.6;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  word-break:keep-all; overflow-wrap:anywhere;
+}
+
+/* ---------- 타이포 위계: 타이틀 / 부제 / 본문 / 캡션이 한눈에 구분되도록 ---------- */
+.ap-eyebrow{
+  font-size:11px; font-weight:var(--w-label); color:var(--ash); letter-spacing:0.03em;
+  display:inline-flex; align-items:center; gap:6px; margin-bottom:8px;
+}
+.ap-title{
+  font-size:clamp(22px, 5vw, 30px); font-weight:var(--w-book); letter-spacing:var(--tracking);
+  line-height:1.24; color:var(--ink);
+}
+.ap-subtitle{
+  font-size:clamp(13.5px, 3vw, 15px); font-weight:var(--w-book); color:var(--steel);
+  line-height:1.65; margin-top:8px; max-width:56ch;
+}
+.ap-section-label{
+  font-size:12px; font-weight:var(--w-label); color:var(--ash); margin-bottom:6px;
+}
+.ap-caption{font-size:11.5px; color:var(--ash); line-height:1.7;}
+.ap-body{font-size:14.5px; color:var(--steel); line-height:1.75;}
+
+/* ---------- 카드 ---------- */
+.ap-card{
+  background:var(--surface); border-radius:var(--r-xl); border:0.5px solid var(--hair);
+  box-shadow:none;
+}
+.ap-card-pad{padding:clamp(20px,4vw,32px);}
+
+/* ---------- 뱃지 / 태그 (블루 아웃라인, 채움 없음) ---------- */
+.ap-badge{
+  display:inline-flex; align-items:center; gap:6px; border-radius:var(--r-pill);
+  border:0.5px solid var(--blue); color:var(--blue); font-size:11px; font-weight:var(--w-label);
+  padding:4px 12px; background:none;
+}
+.ap-badge-neutral{
+  display:inline-flex; align-items:center; gap:6px; border-radius:var(--r-pill);
+  border:0.5px solid var(--hair); color:var(--steel); font-size:11px; font-weight:var(--w-label);
+  padding:4px 12px; background:none;
+}
+
+/* ---------- 버튼 ----------
+   원칙: 화면당 "가장 중요한 행동" 1개만 파란 배경(=토스식 또렷한 CTA), 나머지는 모노크롬 */
+.ap-btn-primary{
+  width:100%; background:var(--blue); color:#fff; border:none; border-radius:var(--r-pill);
+  padding:16px 20px; font-size:15px; font-weight:var(--w-label); font-family:inherit;
+  display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+  transition:background .12s, transform .06s; letter-spacing:var(--tracking);
+  min-height:52px;
+}
+.ap-btn-primary:hover{background:#0064cc;}
+.ap-btn-primary:active{transform:scale(0.99);}
+.ap-btn-primary:disabled{background:#d7d7da; color:#a6a6a6; cursor:not-allowed;}
+
+.ap-btn-ghost{
+  background:var(--ink-wash); color:var(--ink); border:none; border-radius:var(--r-pill);
+  padding:13px 18px; font-size:13.5px; font-weight:var(--w-label); font-family:inherit; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:44px;
+}
+.ap-btn-ghost:hover{background:var(--ink-wash-strong);}
+
+.ap-link{color:var(--blue); font-size:13px; font-weight:var(--w-label); text-decoration:none; cursor:pointer;}
+.ap-link:hover{text-decoration:underline;}
+
+/* ---------- 입력 필드 ---------- */
+.ap-field{margin-bottom:18px;}
+.ap-field label{
+  display:flex; align-items:center; gap:5px; font-size:13.5px; font-weight:var(--w-book);
+  color:var(--ink); margin-bottom:8px;
+}
+.ap-field label .req{color:var(--blue); font-weight:var(--w-label);}
+.ap-field .ap-hint{display:block; font-size:12px; color:var(--ash); margin-top:6px; line-height:1.6;}
+
+.ap input[type=text], .ap input[type=email], .ap input[type=tel], .ap input[type=date], .ap textarea, .ap select{
+  width:100%; border:0.5px solid var(--hair); background:var(--surface); border-radius:var(--r-md);
+  padding:14px 16px; font-size:14.5px; font-family:inherit; color:var(--ink); min-height:50px;
+  transition:box-shadow .12s, border-color .12s;
+}
+.ap textarea{min-height:88px; resize:vertical; line-height:1.6;}
+.ap input:focus, .ap textarea:focus, .ap select:focus{
+  outline:none; border-color:transparent; box-shadow:0 0 0 2px var(--blue) inset;
+}
+.ap input::placeholder, .ap textarea::placeholder{color:var(--ash);}
+
+/* ---------- 선택형 옵션 (라디오/타입 카드류) ---------- */
+.ap-opt{
+  border:0.5px solid var(--hair); border-radius:var(--r-md); padding:13px; cursor:pointer;
+  font-size:13.5px; font-weight:var(--w-book); color:var(--steel); transition:.12s; background:var(--surface);
+}
+.ap-opt.sel{border-color:var(--ink); background:var(--ink-wash); color:var(--ink);}
+
+/* ---------- 스텝 인디케이터 (모노크롬 + 블루 포인트만) ---------- */
+.ap-step-dot{
+  width:26px; height:26px; border-radius:50%; background:var(--canvas); color:var(--ash);
+  font-size:12px; font-weight:var(--w-label); display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; border:0.5px solid var(--hair);
+}
+.ap-step-dot.done{background:var(--ink); color:#fff; border-color:var(--ink);}
+.ap-step-dot.now{background:var(--blue); color:#fff; border-color:var(--blue);}
+.ap-step-line{flex:1; height:1px; background:var(--hair);}
+.ap-step-line.done{background:var(--ink);}
+.ap-step-label{font-size:10.5px; color:var(--ash); text-align:center; margin-top:5px;}
+
+/* ---------- 상태 점 (달력/현황 범례) — 블루·오프블랙·애시만 사용 ---------- */
+.ap-dot-ok{background:var(--blue);}
+.ap-dot-warn{background:var(--ink);}
+.ap-dot-full{background:var(--ash);}
+
+/* ---------- 상단 헤더 블록 (타이틀 좌측 대형 + 배지) ---------- */
+.ap-header{padding:clamp(24px,5vw,40px) clamp(16px,4vw,28px) clamp(16px,3vw,22px);}
+.ap-header-inner{max-width:880px; margin:0 auto;}
+
+.ap-wrap{max-width:880px; margin:0 auto; padding:0 clamp(16px,4vw,28px) 60px;}
+.ap-wrap-narrow{max-width:640px; margin:0 auto; padding:0 clamp(16px,4vw,28px) 60px;}
+
+hr.ap-hair{border:none; border-top:0.5px solid var(--hair); margin:0;}

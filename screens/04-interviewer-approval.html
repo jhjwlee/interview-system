@@ -5,76 +5,80 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <title>배정받은 인터뷰 시간 확인 (샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<link rel="stylesheet" href="../assets/augen.css">
 <style>
   :root{
-    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
-    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
-    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+    --deep-green:var(--ink); --pale-blue:var(--blue-wash); --gray:var(--steel); --gray-light:var(--ash);
+    --coral:var(--ink); --gold:var(--ink); --teal:var(--blue); --purple:var(--ink); --pale-purple:var(--ink-wash);
+    --light-gray:var(--canvas); --border:var(--hair);
+    --pale-green:var(--ink-wash); --pale-coral:var(--ink-wash); --pale-gold:var(--ink-wash); --pale-teal:var(--blue-wash);
     --teams-purple:#464775;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
+  body{font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; min-height:100vh; word-break:keep-all; overflow-wrap:anywhere;}
   svg{display:block;}
-  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
-  .topbar .brand{display:flex; align-items:center; gap:12px;}
-  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600;}
-  .topbar h1{font-size:18px; font-weight:700;}
-  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
-  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  .topbar{background:rgba(253,253,253,0.9); backdrop-filter:saturate(180%) blur(14px); border-bottom:0.5px solid var(--hair); color:var(--ink); padding:18px clamp(16px,3vw,32px); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+  .topbar .brand{display:flex; align-items:center; gap:14px;}
+  .topbar .brand .badge{background:none; border:0.5px solid var(--blue); color:var(--blue); border-radius:9999px; padding:4px 12px; font-size:11px; font-weight:400;}
+  .topbar h1{font-size:clamp(17px,3.6vw,20px); font-weight:350; letter-spacing:-0.02em;}
+  .topbar .sub{font-size:12px; color:var(--steel); margin-top:3px;}
+  .topbar .tag{font-size:10.5px; background:none; border:0.5px solid var(--hair); color:var(--ash); padding:3px 10px; border-radius:9999px; font-weight:400;}
   .wrap{max-width:820px; margin:0 auto; padding:26px 20px 60px;}
 
   /* ---- Teams 미리보기 카드 ---- */
   .teams-preview{margin-bottom:28px;}
   .teams-preview .cap{font-size:12px; font-weight:700; color:var(--gray); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
-  .teams-card{background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; max-width:420px; box-shadow:0 2px 10px rgba(0,0,0,0.06);}
+  .teams-card{background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; max-width:420px; box-shadow:0 2px 10px rgba(0,0,0,0.06);}
   .teams-card .thead{background:var(--teams-purple); color:#fff; padding:9px 14px; font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:8px;}
   .teams-card .tbody{padding:14px;}
   .teams-card .tbody .ttitle{font-size:13.5px; font-weight:800; margin-bottom:6px;}
   .teams-card .tbody .tline{font-size:12.5px; color:var(--gray); margin-bottom:3px;}
   .teams-card .tactions{display:flex; gap:8px; padding:0 14px 14px;}
   .teams-card .tactions button{flex:1; border:none; border-radius:6px; padding:9px; font-size:12.5px; font-weight:700; cursor:pointer;}
-  .ta-approve{background:var(--deep-green); color:#fff;}
-  .ta-reject{background:#fff; color:var(--coral); border:1px solid var(--coral) !important;}
+  .ta-approve{background:var(--teams-purple); color:#fff;}
+  .ta-reject{background:#fff; color:var(--teams-purple); border:1px solid var(--teams-purple) !important;}
 
   .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px;}
-  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px;}
   .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
   .stat-card .value{font-size:24px; font-weight:800; color:var(--deep-green);}
   .stat-card .value.coral{color:var(--coral);}
   .stat-card .value.gray{color:var(--gray-light);}
 
   .sec-title{font-size:14.5px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:7px;}
-  .sec-title .cnt{background:var(--pale-coral); color:var(--coral); font-size:11px; font-weight:800; padding:2px 8px; border-radius:20px;}
+  .sec-title .cnt{background:none; border:0.5px solid var(--blue); color:var(--blue); font-size:11px; font-weight:400; padding:3px 10px; border-radius:9999px;}
 
-  .slot-card{background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .slot-card{background:var(--surface); border:0.5px solid var(--hair); border-radius:18px; padding:17px 19px; margin-bottom:12px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
   .slot-card .dt{min-width:96px;}
   .slot-card .dt .d{font-size:11.5px; color:var(--gray); font-weight:700;}
   .slot-card .dt .t{font-size:17px; font-weight:800; color:var(--ink);}
   .slot-card .mid{flex:1; min-width:180px;}
-  .slot-card .mid .cap{font-size:12.5px; font-weight:700; color:var(--gold); display:flex; align-items:center; gap:5px; margin-bottom:6px;}
+  .slot-card .mid .cap{font-size:12.5px; font-weight:400; color:var(--steel); display:flex; align-items:center; gap:5px; margin-bottom:6px;}
   .avatars{display:flex; gap:-6px;}
-  .avatar{width:26px; height:26px; border-radius:50%; background:var(--pale-teal); color:var(--teal); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid #fff; margin-left:-7px;}
+  .avatar{width:26px; height:26px; border-radius:50%; background:var(--blue-wash); color:var(--blue); font-size:10.5px; font-weight:400; display:flex; align-items:center; justify-content:center; border:2px solid #fff; margin-left:-7px;}
   .avatar:first-child{margin-left:0;}
   .avatar-row{display:flex; align-items:center;}
   .applicant-names{font-size:11.5px; color:var(--gray-light); margin-top:5px;}
   .actions{display:flex; gap:8px;}
-  .actions button{border:none; border-radius:7px; padding:9px 16px; font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap;}
-  .btn-approve{background:var(--deep-green); color:#fff;}
-  .btn-approve:hover{background:#00594c;}
-  .btn-reject{background:#fff; color:var(--coral); border:1px solid var(--coral) !important;}
-  .btn-reject:hover{background:var(--pale-coral);}
-  .status-badge{font-size:11.5px; font-weight:800; padding:6px 12px; border-radius:20px;}
-  .status-badge.approved{background:var(--pale-green); color:var(--deep-green);}
-  .status-badge.rejected{background:var(--pale-coral); color:var(--coral);}
+  .actions button{border:none; border-radius:9999px; padding:11px 18px; font-size:12.5px; font-weight:400; cursor:pointer; white-space:nowrap; font-family:inherit;}
+  .btn-approve{background:var(--blue); color:#fff;}
+  .btn-approve:hover{background:#0064cc;}
+  .btn-reject{background:var(--ink-wash); color:var(--ink); border:none !important;}
+  .btn-reject:hover{background:var(--ink-wash-strong);}
+  .status-badge{font-size:11.5px; font-weight:400; padding:5px 13px; border-radius:9999px; border:0.5px solid transparent;}
+  .status-badge.approved{background:none; border-color:var(--blue); color:var(--blue);}
+  .status-badge.rejected{background:none; border-color:var(--hair); color:var(--steel);}
 
-  .empty-note{font-size:12.5px; color:var(--gray-light); background:#fff; border:1px dashed var(--border); border-radius:10px; padding:22px; text-align:center; margin-bottom:24px;}
+  .empty-note{font-size:12.5px; color:var(--gray-light); background:#fff; border:1px dashed var(--border); border-radius:14px; padding:22px; text-align:center; margin-bottom:24px;}
 
   .history{margin-top:28px;}
-  .history table{width:100%; border-collapse:collapse; font-size:12.5px; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden;}
-  .history thead th{text-align:left; background:var(--pale-blue); color:var(--gray); font-weight:700; font-size:11px; padding:10px 14px;}
+  .history table{width:100%; border-collapse:collapse; font-size:12.5px; background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .history thead th{text-align:left; background:var(--canvas); color:var(--steel); font-weight:400; font-size:11px; padding:11px 14px;}
   .history tbody td{padding:11px 14px; border-top:1px solid #EFEFEF;}
 
-  .toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:12px 20px; border-radius:9px; font-size:13px; font-weight:600; opacity:0; transition:0.25s; pointer-events:none; box-shadow:0 6px 20px rgba(0,0,0,0.25); max-width:90%; text-align:center;}
+  .toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:12px 20px; border-radius:13px; font-size:13px; font-weight:600; opacity:0; transition:0.25s; pointer-events:none; box-shadow:0 6px 20px rgba(0,0,0,0.25); max-width:90%; text-align:center;}
   .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
 </style>
 </head>
@@ -103,10 +107,10 @@
       <div class="tbody">
         <div class="ttitle">08.03(월) 10:30 · 3명 예정</div>
         <div class="tline">알려주신 가능한 시간에 맞춰 이 시간으로 배정했습니다.</div>
-        <div class="tline">진행이 가능하시면 아래 버튼을 눌러 주세요. 누르시면 이 시간이 신청자 달력에 열립니다.</div>
+        <div class="tline">진행이 가능하시면 아래 버튼을 눌러 주세요.<br>누르시면 이 시간이 신청자 달력에 열립니다.</div>
       </div>
       <div class="tactions">
-        <button class="ta-approve" onclick="showToast('Teams 카드에서 눌러도 이 화면과 똑같이 처리됩니다. 누르시면 이 시간이 신청자 달력에 바로 열립니다.')">진행할 수 있어요</button>
+        <button class="ta-approve" onclick="showToast('Teams 카드에서 눌러도 이 화면과 똑같이 처리됩니다. 누르면 이 시간이 신청자 달력에 바로 열립니다.')">진행할 수 있어요</button>
         <button class="ta-reject" onclick="showToast('어렵다고 알려주시면 관리자에게 다시 배정해 달라는 알림이 갑니다. 이 시간은 신청자에게 열리지 않습니다.')">이 시간은 어려워요</button>
       </div>
     </div>
@@ -119,7 +123,7 @@
   </div>
 
   <div class="sec-title">⏳ 아직 열리지 않은 내 배정 시간 <span class="cnt" id="pendingTag">3건</span></div>
-  <div class="empty-note" style="margin-bottom:16px; text-align:left; padding:14px 16px; border-style:solid; border-color:var(--border);">아래 시간은 아직 신청자에게 보이지 않습니다. 확인해 주시면 그때 달력에 열려 신청을 받기 시작합니다.</div>
+  <div class="empty-note" style="margin-bottom:16px; text-align:left; padding:14px 16px; border-style:solid; border-color:var(--border);">아래 시간은 아직 신청자에게 보이지 않습니다.<br>확인해 주시면 그때 달력에 열려 신청을 받기 시작합니다.</div>
   <div id="pendingList"></div>
   <div class="empty-note" id="emptyNote" style="display:none;">지금은 확인하실 배정이 없습니다.</div>
 

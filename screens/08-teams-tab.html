@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <title>Teams 탭에 내장된 모습 (샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
 <link rel="stylesheet" href="../assets/teams.css">
 <style>
   .tm-embed{flex:1; min-height:0; background:#F7F7F8; position:relative;}
@@ -13,8 +15,9 @@
     display:none; padding:40px 24px; text-align:center; font-size:13px; color:var(--tm-gray);
   }
   .tabhint{
-    background:var(--pale-teal); border:1px solid #C7E0E8; color:#14536B; border-radius:10px;
-    padding:11px 14px; font-size:12.5px; margin-bottom:16px; line-height:1.6;
+    font-family:'Pretendard Variable','Pretendard',sans-serif; font-weight:350; letter-spacing:-0.02em;
+    background:var(--ap-hair); border:none; border-left:3px solid var(--teal); color:var(--ap-ink); border-radius:0 16px 16px 0;
+    padding:14px 16px; font-size:12.5px; margin-bottom:18px; line-height:1.75;
   }
   .tm-window{min-height:760px;}
 </style>
@@ -22,9 +25,7 @@
 <body>
 <div class="page" style="max-width:1180px;">
   <div class="tabhint">
-    <b>SharePoint 목록·양식이 Teams 탭으로 들어간 모습입니다.</b>
-    관리자와 인터뷰어는 별도 사이트에 로그인하지 않고, 늘 쓰는 Teams 안에서 같은 화면을 씁니다.
-    아래 탭(게시물 · 파일 · 예약시스템 · 수급 현황 · 헬프데스크 · 가용시간 등록 · 배정 확인)을 눌러 전환해 보세요.
+    <b>SharePoint 목록·양식이 Teams 탭으로 들어간 모습입니다.</b><br>관리자와 인터뷰어는 별도 사이트에 로그인하지 않고, 늘 쓰는 Teams 안에서 같은 화면을 씁니다.<br>아래 탭(게시물 · 파일 · 예약시스템 · 수급 현황 · 헬프데스크 · 가용시간 등록 · 배정 확인)을 눌러 전환해 보세요.
   </div>
 
   <div class="tm-window">
@@ -87,9 +88,7 @@
             <div style="min-width:0;">
               <div class="who">박형제 (VM 관리자) <span>09:12</span></div>
               <div class="text">
-                8월 첫째 주 슬롯을 배정했습니다. 배정받은 형제들은 <b>✅ 배정 확인</b> 탭 또는 Teams 카드에서
-                확인을 눌러주세요. 확인한 시간대만 신청자에게 공개됩니다.
-                아직 가용시간을 등록하지 않은 형제는 <b>🕐 가용시간 등록</b> 탭을 이용해 주세요.
+                8월 첫째 주 슬롯을 배정했습니다.<br>배정받은 형제들은 <b>✅ 배정 확인</b> 탭 또는 Teams 카드에서 확인을 눌러주세요.<br>확인한 시간대만 신청자에게 공개됩니다.<br>아직 가용시간을 등록하지 않은 형제는 <b>🕐 가용시간 등록</b> 탭을 이용해 주세요.
               </div>
             </div>
           </div>

@@ -5,81 +5,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <title>주간 인터뷰어·지원자 수급 현황 (샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<link rel="stylesheet" href="../assets/augen.css">
 <style>
   :root{
-    --deep-green:#003C33; --pale-blue:#F1F5FF; --ink:#212121; --gray:#555555; --gray-light:#9A9A9A;
-    --coral:#B5432B; --gold:#8A6D00; --teal:#1C6E8C; --light-gray:#F4F4F4;
-    --border:#D9D9D9; --pale-green:#E8F5EE; --pale-coral:#FBEAE6; --pale-gold:#FBF3DA; --pale-teal:#E4F0F4;
+    --deep-green:var(--ink); --pale-blue:var(--blue-wash); --gray:var(--steel); --gray-light:var(--ash);
+    --coral:var(--ink); --gold:var(--ink); --teal:var(--blue); --purple:var(--ink); --pale-purple:var(--ink-wash);
+    --light-gray:var(--canvas); --border:var(--hair);
+    --pale-green:var(--ink-wash); --pale-coral:var(--ink-wash); --pale-gold:var(--ink-wash); --pale-teal:var(--blue-wash);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  body{font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif; background:var(--light-gray); color:var(--ink); line-height:1.5;}
-  .topbar{background:var(--deep-green); color:#fff; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;}
-  .topbar .brand{display:flex; align-items:center; gap:12px;}
-  .topbar .brand .badge{background:rgba(255,255,255,0.15); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:600;}
-  .topbar h1{font-size:18px; font-weight:700;}
-  .topbar .sub{font-size:12px; color:#B9D8CF; margin-top:2px;}
-  .topbar .tag{font-size:11px; background:var(--coral); color:#fff; padding:3px 9px; border-radius:20px; font-weight:600;}
+  body{font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; min-height:100vh; word-break:keep-all; overflow-wrap:anywhere;}
+  .topbar{background:rgba(253,253,253,0.9); backdrop-filter:saturate(180%) blur(14px); border-bottom:0.5px solid var(--hair); color:var(--ink); padding:18px clamp(16px,3vw,32px); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+  .topbar .brand{display:flex; align-items:center; gap:14px;}
+  .topbar .brand .badge{background:none; border:0.5px solid var(--blue); color:var(--blue); border-radius:9999px; padding:4px 12px; font-size:11px; font-weight:400;}
+  .topbar h1{font-size:clamp(17px,3.6vw,20px); font-weight:350; letter-spacing:-0.02em;}
+  .topbar .sub{font-size:12px; color:var(--steel); margin-top:3px;}
+  .topbar .tag{font-size:10.5px; background:none; border:0.5px solid var(--hair); color:var(--ash); padding:3px 10px; border-radius:9999px; font-weight:400;}
   .wrap{max-width:1180px; margin:0 auto; padding:24px 22px 60px;}
 
   .week-tabs{display:flex; gap:8px; margin-bottom:20px;}
-  .week-tab{flex:1; text-align:center; padding:12px; border-radius:10px; border:1.5px solid var(--border); background:#fff; font-size:13.5px; font-weight:700; color:var(--gray); cursor:pointer; transition:0.12s;}
+  .week-tab{flex:1; text-align:center; padding:12px; border-radius:14px; border:1.5px solid var(--border); background:#fff; font-size:13.5px; font-weight:700; color:var(--gray); cursor:pointer; transition:0.12s;}
   .week-tab .wt-sub{display:block; font-size:10.5px; font-weight:600; color:var(--gray-light); margin-top:2px;}
   .week-tab.active{border-color:var(--deep-green); background:var(--pale-green); color:var(--deep-green);}
   .week-tab.active .wt-sub{color:var(--deep-green);}
 
   .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px;}
-  .stat-card{background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px 18px;}
+  .stat-card{background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px;}
   .stat-card .label{font-size:12px; color:var(--gray); font-weight:600; margin-bottom:8px;}
   .stat-card .value{font-size:24px; font-weight:800; color:var(--deep-green);}
   .stat-card .value.coral{color:var(--coral);}
   .stat-card .value.gold{color:var(--gold);}
 
-  .panel{background:#fff; border:1px solid var(--border); border-radius:12px; margin-bottom:22px; overflow:hidden;}
-  .panel-head{padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;}
-  .panel-head h2{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px;}
-  .panel-head h2 .dot{width:8px; height:8px; border-radius:50%; background:var(--teal); display:inline-block;}
-  .legend{display:flex; gap:12px; font-size:11px; color:var(--gray); flex-wrap:wrap;}
+  .panel{background:var(--surface); border:0.5px solid var(--hair); border-radius:22px; margin-bottom:22px; overflow:hidden;}
+  .panel-head{padding:17px 20px; border-bottom:0.5px solid var(--hair); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+  .panel-head h2{font-size:15px; font-weight:350; display:flex; align-items:center; gap:9px;}
+  .panel-head h2 .dot{width:7px; height:7px; border-radius:50%; background:var(--blue); display:inline-block;}
+  .legend{display:flex; gap:12px; font-size:11px; color:var(--steel); flex-wrap:wrap;}
   .legend span{display:inline-flex; align-items:center; gap:5px;}
-  .legend .sw{width:10px; height:10px; border-radius:3px;}
+  .legend .sw{width:9px; height:9px; border-radius:3px;}
 
   .matrix-wrap{overflow-x:auto; padding:18px 20px;}
   table.matrix{border-collapse:collapse; width:100%; min-width:760px;}
-  table.matrix th{font-size:11px; color:var(--gray); font-weight:700; padding:8px 4px; text-align:center; border-bottom:2px solid var(--border);}
+  table.matrix th{font-size:11px; color:var(--steel); font-weight:400; padding:9px 4px; text-align:center; border-bottom:1px solid var(--hair);}
   table.matrix th.timecol{text-align:left; padding-left:8px;}
-  table.matrix td.timecell{font-size:12px; font-weight:700; color:var(--ink); padding:6px 8px; white-space:nowrap; border-bottom:1px solid #F0F0F0;}
-  table.matrix td.timecell .per{display:block; font-size:9.5px; color:var(--gray-light); font-weight:600;}
-  table.matrix td.datacell{text-align:center; padding:4px; border-bottom:1px solid #F0F0F0;}
-  .cellbox{border-radius:7px; padding:5px 2px; font-size:11px; font-weight:700; line-height:1.35;}
+  table.matrix td.timecell{font-size:12px; font-weight:400; color:var(--ink); padding:7px 8px; white-space:nowrap; border-bottom:0.5px solid var(--hair);}
+  table.matrix td.timecell .per{display:block; font-size:9.5px; color:var(--ash); font-weight:400;}
+  table.matrix td.datacell{text-align:center; padding:4px; border-bottom:0.5px solid var(--hair);}
+  .cellbox{border-radius:10px; padding:6px 2px; font-size:11px; font-weight:400; line-height:1.4; border:0.5px solid transparent;}
   .cellbox .cap{display:block; font-size:10.5px;}
-  .cellbox .app{display:block; font-size:10px; font-weight:600; opacity:0.85;}
-  .cellbox.ok{background:var(--pale-green); color:var(--deep-green);}
-  .cellbox.warn{background:var(--pale-gold); color:var(--gold);}
-  .cellbox.short{background:var(--pale-coral); color:var(--coral);}
-  .cellbox.blank{background:#FAFAFA; color:#D0D0D0; font-weight:600;}
+  .cellbox .app{display:block; font-size:10px; font-weight:400; opacity:0.85;}
+  .cellbox.ok{background:none; border-color:var(--blue); color:var(--blue);}
+  .cellbox.warn{background:var(--ink-wash); border-color:var(--hair); color:var(--ink);}
+  .cellbox.short{background:var(--ink); color:#fff; font-weight:400;}
+  .cellbox.blank{background:var(--canvas); color:var(--ash); font-weight:400;}
 
   .trend-wrap{padding:18px 20px;}
-  .trend-row{display:flex; align-items:flex-end; gap:26px; height:150px; padding:0 6px 4px; border-bottom:1px solid var(--border);}
+  .trend-row{display:flex; align-items:flex-end; gap:26px; height:150px; padding:0 6px 4px; border-bottom:0.5px solid var(--hair);}
   .trend-col{display:flex; flex-direction:column; align-items:center; gap:6px; flex:1;}
   .trend-bars{display:flex; align-items:flex-end; gap:6px; height:120px;}
   .trend-bar{width:26px; border-radius:5px 5px 0 0; position:relative;}
-  .trend-bar.cap{background:var(--teal);}
-  .trend-bar.app{background:var(--coral);}
+  .trend-bar.cap{background:var(--blue);}
+  .trend-bar.app{background:var(--ink);}
   .trend-bar .num{position:absolute; top:-18px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; color:var(--ink); white-space:nowrap;}
-  .trend-label{font-size:11.5px; font-weight:700; color:var(--gray); margin-top:4px;}
-  .trend-legend{display:flex; justify-content:center; gap:18px; margin-top:12px; font-size:11.5px; color:var(--gray);}
+  .trend-label{font-size:11.5px; font-weight:400; color:var(--steel); margin-top:4px;}
+  .trend-legend{display:flex; justify-content:center; gap:18px; margin-top:12px; font-size:11.5px; color:var(--steel);}
   .trend-legend span{display:inline-flex; align-items:center; gap:6px;}
   .trend-legend .sw{width:11px; height:11px; border-radius:3px;}
 
   .gap-list{padding:6px 20px 18px;}
-  .gap-item{display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:9px; background:var(--pale-coral); margin-bottom:8px;}
+  .gap-item{display:flex; align-items:center; gap:14px; padding:12px 14px; border-radius:13px; background:var(--pale-coral); margin-bottom:8px;}
   .gap-item .rank{width:22px; height:22px; border-radius:50%; background:var(--coral); color:#fff; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .gap-item .info{flex:1; font-size:13px; font-weight:700; color:var(--ink);}
   .gap-item .info .detail{font-size:11.5px; font-weight:600; color:var(--gray); margin-top:2px;}
   .gap-item .action{font-size:11px; font-weight:700; color:var(--coral); background:#fff; border-radius:6px; padding:5px 10px; white-space:nowrap;}
-  .gap-empty{font-size:12.5px; color:var(--gray-light); text-align:center; padding:20px; background:var(--pale-green); border-radius:9px; color:var(--deep-green); font-weight:700;}
+  .gap-empty{font-size:12.5px; color:var(--gray-light); text-align:center; padding:20px; background:var(--pale-green); border-radius:13px; color:var(--deep-green); font-weight:700;}
 
-  .foot-note{padding:14px 20px; background:var(--pale-blue); font-size:12px; color:var(--gray); border-top:1px solid var(--border);}
-  .foot-note b{color:var(--deep-green);}
+  .foot-note{padding:14px 20px; background:var(--canvas); font-size:12px; color:var(--steel); border-top:0.5px solid var(--hair); line-height:1.7;}
+  .foot-note b{color:var(--ink); font-weight:350;}
   @media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
@@ -106,16 +110,16 @@
     <div class="panel-head">
       <h2><span class="dot"></span> 시간대별 확보·신청 매트릭스</h2>
       <div class="legend">
-        <span><span class="sw" style="background:var(--pale-green);"></span>여유</span>
-        <span><span class="sw" style="background:var(--pale-gold);"></span>근접(80%↑)</span>
-        <span><span class="sw" style="background:var(--pale-coral);"></span>부족(초과)</span>
-        <span><span class="sw" style="background:#FAFAFA; border:1px solid var(--border);"></span>미배정</span>
+        <span><span class="sw" style="background:var(--blue-wash); border:0.5px solid var(--blue);"></span>여유</span>
+        <span><span class="sw" style="background:var(--ink-wash); border:0.5px solid var(--hair);"></span>근접(80%↑)</span>
+        <span><span class="sw" style="background:var(--ink); "></span>부족(초과)</span>
+        <span><span class="sw" style="background:var(--canvas); border:0.5px solid var(--hair);"></span>미배정</span>
       </div>
     </div>
     <div class="matrix-wrap">
       <table class="matrix" id="matrixTable"></table>
     </div>
-    <div class="foot-note">셀 상단 숫자는 <b>확보 슬롯(인터뷰어 확정 기준)</b>, 하단 숫자는 <b>지원자 신청 건수</b>입니다. 07.20 정기모임 계획표(TS 체계)의 요일·시간 구조를 그대로 사용했습니다.</div>
+    <div class="foot-note">셀 상단 숫자는 <b>확보 슬롯(인터뷰어 확정 기준)</b>, 하단 숫자는 <b>지원자 신청 건수</b>입니다.<br>07.20 정기모임 계획표(TS 체계)의 요일·시간 구조를 그대로 사용했습니다.</div>
   </div>
 
   <div class="panel">
@@ -123,8 +127,8 @@
     <div class="trend-wrap">
       <div class="trend-row" id="trendRow"></div>
       <div class="trend-legend">
-        <span><span class="sw" style="background:var(--teal);"></span>확보 슬롯 합계</span>
-        <span><span class="sw" style="background:var(--coral);"></span>지원자 신청 합계</span>
+        <span><span class="sw" style="background:var(--blue);"></span>확보 슬롯 합계</span>
+        <span><span class="sw" style="background:var(--ink);"></span>지원자 신청 합계</span>
       </div>
     </div>
   </div>
