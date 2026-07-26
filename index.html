@@ -97,10 +97,13 @@
     padding:16px 14px 40px;
   }
   .side .grp{
-    font-size:11px; font-weight:var(--weight-label); color:var(--color-ash-gray);
-    letter-spacing:0.02em; padding:16px 10px 8px;
+    display:flex; align-items:center; gap:7px;
+    font-size:11.5px; font-weight:600; color:var(--color-off-black);
+    letter-spacing:0.02em; padding:18px 10px 8px;
   }
   .side .grp:first-child{padding-top:2px;}
+  .side .grp .gdot{flex:none; width:8px; height:8px; border-radius:3px;}
+  .side a.nav{border-left:2.5px solid transparent; border-radius:0 var(--radius-nav) var(--radius-nav) 0; margin-left:4px;}
   .side a.nav{
     display:flex; gap:11px; align-items:flex-start; text-decoration:none; color:var(--color-off-black);
     padding:11px 12px; margin-bottom:3px; border-radius:var(--radius-nav);
@@ -108,8 +111,8 @@
   }
   .side a.nav:hover{background:var(--color-off-white);}
   .side a.nav.active{background:var(--color-signal-blue-wash); border-color:rgba(0,113,227,0.22);}
-  .side a.nav .dot{flex:none; width:7px; height:7px; margin-top:6px; border-radius:50%; background:var(--border-hair);}
-  .side a.nav.active .dot{background:var(--color-signal-blue);}
+  .side a.nav .dot{flex:none; width:7px; height:7px; margin-top:6px; border-radius:50%; background:var(--border-hair); opacity:0.4;}
+  .side a.nav.active .dot{opacity:1;}
   .side a.nav .tx{min-width:0;}
   .side a.nav .t{display:block; font-size:14px; font-weight:var(--weight-book); line-height:1.4; color:var(--color-off-black);}
   .side a.nav.active .t{color:var(--color-signal-blue);}
@@ -209,12 +212,24 @@ var burger = document.getElementById('burger');
 var scrim = document.getElementById('scrim');
 
 // ---------- 사이드바 렌더 ----------
+// 역할 그룹별 구분 색 — 개요(회색) · 신청자(블루) · 인터뷰어(그린) · 관리자(앰버) · Teams(퍼플)
+var GRP_COLORS = {
+  '개요': '#8f8f8f',
+  '신청자 · 문의자': '#0071e3',
+  '인터뷰어': '#1c8c5e',
+  'VM 관리자': '#b25c00',
+  'Teams 통합': '#6264a7'
+};
 var html = '';
 var lastGrp = null;
 SCREENS.forEach(function(s){
-  if(s.grp !== lastGrp){ html += '<div class="grp">' + s.grp + '</div>'; lastGrp = s.grp; }
-  html += '<a class="nav" href="#' + s.id + '" data-id="' + s.id + '">' +
-            '<span class="dot"></span>' +
+  var gc = GRP_COLORS[s.grp] || '#8f8f8f';
+  if(s.grp !== lastGrp){
+    html += '<div class="grp" style="color:' + gc + ';"><span class="gdot" style="background:' + gc + ';"></span>' + s.grp + '</div>';
+    lastGrp = s.grp;
+  }
+  html += '<a class="nav" href="#' + s.id + '" data-id="' + s.id + '" style="border-left-color:' + gc + '33;">' +
+            '<span class="dot" style="background:' + gc + ';"></span>' +
             '<span class="tx"><span class="t">' + s.title + '</span>' +
             '<span class="s">' + s.sub + '</span></span></a>';
 });
