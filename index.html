@@ -166,13 +166,7 @@
     <button class="burger" id="burger" aria-label="메뉴 열기">☰</button>
     <div class="brand">
       <span class="t1">인터뷰 예약 · 문의 시스템</span>
-      <span class="t2">2027 서울 국제대회 · 자원봉사자관리부(VM)</span>
     </div>
-  </div>
-  <div class="center">
-    <a class="pill-cta" href="docs/design-background-manual.pdf" target="_blank" rel="noopener">
-      <span class="ic">↗</span><span>설계배경 · 사용메뉴얼</span>
-    </a>
   </div>
   <div class="right"></div>
 </div>
@@ -225,9 +219,6 @@ SCREENS.forEach(function(s){
             '<span class="s">' + s.sub + '</span></span></a>';
 });
 html += '<div class="sep"></div>' +
-        '<a class="nav" href="docs/design-background-manual.pdf" target="_blank" rel="noopener">' +
-        '<span class="dot"></span><span class="tx"><span class="t">설계배경 · 사용메뉴얼</span>' +
-        '<span class="s">PDF · 2026.07.25</span></span></a>' +
         '<div class="note">모든 화면은 목업입니다. 클릭 동작은 보이지만 실제 데이터는 저장되지 않고, ' +
         '새로고침하면 초기 상태로 돌아갑니다.</div>';
 side.innerHTML = html;
