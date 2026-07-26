@@ -131,7 +131,7 @@
       </div>
     </div>
     <div class="tbl-scroll">
-    <table>
+    <table class="rescard">
       <thead>
         <tr>
           <th>슬롯 ID</th><th>날짜</th><th>시작시간</th><th>정원</th><th>현재예약</th><th>잔여</th><th>배정 인터뷰어</th><th>인터뷰어 확인</th><th>상태</th><th>Zoom 링크</th>
@@ -139,39 +139,39 @@
       </thead>
       <tbody>
         <tr style="opacity:0.75;">
-          <td class="name-cell">SLOT-0804-01</td><td>08.04 (화)</td><td>10:00</td><td>3</td><td>-</td><td>-</td>
-          <td class="interviewer-cell"><span class="unassigned">미배정</span></td>
-          <td><span class="badge badge-pending">확인 대기</span></td>
-          <td><span class="badge badge-pending">배정검토중</span></td>
-          <td><span style="color:var(--ash); font-size:12px;">비공개</span></td>
+          <td class="name-cell">SLOT-0804-01</td><td data-label="날짜">08.04 (화)</td><td data-label="시작시간">10:00</td><td data-label="정원">3</td><td data-label="현재예약">-</td><td data-label="잔여">-</td>
+          <td data-label="배정 인터뷰어" class="interviewer-cell"><span class="unassigned">미배정</span></td>
+          <td data-label="인터뷰어 확인"><span class="badge badge-pending">확인 대기</span></td>
+          <td data-label="상태"><span class="badge badge-pending">배정검토중</span></td>
+          <td data-label="Zoom 링크"><span style="color:var(--ash); font-size:12px;">비공개</span></td>
         </tr>
         <tr>
-          <td class="name-cell">SLOT-0803-01</td><td>08.03 (월)</td><td>10:00</td><td>3</td><td>3</td><td>0</td>
-          <td class="interviewer-cell">김민수</td>
-          <td><span class="badge badge-active">확인완료</span></td>
-          <td><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
-          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+          <td class="name-cell">SLOT-0803-01</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">10:00</td><td data-label="정원">3</td><td data-label="현재예약">3</td><td data-label="잔여">0</td>
+          <td data-label="배정 인터뷰어" class="interviewer-cell">김민수</td>
+          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
+          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
+          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
         </tr>
         <tr>
-          <td class="name-cell">SLOT-0803-02</td><td>08.03 (월)</td><td>10:30</td><td>3</td><td>2</td><td>1</td>
-          <td class="interviewer-cell">이수진</td>
-          <td><span class="badge badge-active">확인완료</span></td>
-          <td><span class="capacity-bar"><span class="capacity-fill warn" style="width:66%"></span></span><span class="badge badge-active">마감임박</span></td>
-          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+          <td class="name-cell">SLOT-0803-02</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">10:30</td><td data-label="정원">3</td><td data-label="현재예약">2</td><td data-label="잔여">1</td>
+          <td data-label="배정 인터뷰어" class="interviewer-cell">이수진</td>
+          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
+          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill warn" style="width:66%"></span></span><span class="badge badge-active">마감임박</span></td>
+          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
         </tr>
         <tr>
-          <td class="name-cell">SLOT-0803-03</td><td>08.03 (월)</td><td>11:00</td><td>3</td><td>1</td><td>2</td>
-          <td class="interviewer-cell">이수진</td>
-          <td><span class="badge badge-active">확인완료</span></td>
-          <td><span class="capacity-bar"><span class="capacity-fill" style="width:33%"></span></span><span class="badge badge-active">모집중</span></td>
-          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+          <td class="name-cell">SLOT-0803-03</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">11:00</td><td data-label="정원">3</td><td data-label="현재예약">1</td><td data-label="잔여">2</td>
+          <td data-label="배정 인터뷰어" class="interviewer-cell">이수진</td>
+          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
+          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill" style="width:33%"></span></span><span class="badge badge-active">모집중</span></td>
+          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
         </tr>
         <tr>
-          <td class="name-cell">SLOT-0804-02</td><td>08.04 (화)</td><td>10:30</td><td>3</td><td>3</td><td>0</td>
-          <td class="interviewer-cell">박지훈</td>
-          <td><span class="badge badge-active">확인완료</span></td>
-          <td><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
-          <td><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
+          <td class="name-cell">SLOT-0804-02</td><td data-label="날짜">08.04 (화)</td><td data-label="시작시간">10:30</td><td data-label="정원">3</td><td data-label="현재예약">3</td><td data-label="잔여">0</td>
+          <td data-label="배정 인터뷰어" class="interviewer-cell">박지훈</td>
+          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
+          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
+          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
         </tr>
       </tbody>
     </table>
@@ -193,7 +193,7 @@
       </div>
     </div>
     <div class="tbl-scroll">
-    <table>
+    <table class="rescard">
       <thead>
         <tr>
           <th>신청자</th><th>구분</th><th>신청 슬롯</th><th>상태</th><th>Zoom 발송</th><th>접수일시</th><th></th>
@@ -202,30 +202,30 @@
       <tbody>
         <tr>
           <td><div class="name-cell">김OO</div><div class="sub-text">applicant01@email.com</div></td>
-          <td>개인</td><td>SLOT-0803-02 · 10:30</td>
-          <td><span class="badge badge-active">확정</span></td>
-          <td>발송완료</td><td>07.24 21:12</td>
+          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0803-02 · 10:30</td>
+          <td data-label="상태"><span class="badge badge-active">확정</span></td>
+          <td data-label="Zoom 발송">발송완료</td><td data-label="접수일시">07.24 21:12</td>
           <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
         </tr>
         <tr>
           <td><div class="name-cell">이OO · 박OO</div><div class="sub-text">couple02@email.com</div></td>
-          <td>부부</td><td>SLOT-0803-01 · 10:00</td>
-          <td><span class="badge badge-active">확정</span></td>
-          <td>발송완료</td><td>07.24 20:55</td>
+          <td data-label="구분">부부</td><td data-label="신청 슬롯">SLOT-0803-01 · 10:00</td>
+          <td data-label="상태"><span class="badge badge-active">확정</span></td>
+          <td data-label="Zoom 발송">발송완료</td><td data-label="접수일시">07.24 20:55</td>
           <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
         </tr>
         <tr>
           <td><div class="name-cell">최OO</div><div class="sub-text">applicant03@email.com</div></td>
-          <td>개인</td><td>SLOT-0804-01 · 10:00<span class="flag">중복접수</span></td>
-          <td><span class="badge badge-pending">대기</span></td>
-          <td>-</td><td>07.25 09:03</td>
+          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0804-01 · 10:00<span class="flag">중복접수</span></td>
+          <td data-label="상태"><span class="badge badge-pending">대기</span></td>
+          <td data-label="Zoom 발송">-</td><td data-label="접수일시">07.25 09:03</td>
           <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
         </tr>
         <tr>
           <td><div class="name-cell">정OO</div><div class="sub-text">applicant04@email.com</div></td>
-          <td>개인</td><td>SLOT-0803-03 · 11:00</td>
-          <td><span class="badge badge-closed">취소</span></td>
-          <td>-</td><td>07.23 14:20</td>
+          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0803-03 · 11:00</td>
+          <td data-label="상태"><span class="badge badge-closed">취소</span></td>
+          <td data-label="Zoom 발송">-</td><td data-label="접수일시">07.23 14:20</td>
           <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
         </tr>
       </tbody>

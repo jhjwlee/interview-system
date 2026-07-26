@@ -162,3 +162,31 @@ hr.ap-hair{border:none; border-top:0.5px solid var(--hair); margin:0;}
 .topbar h1{font-size:clamp(23px,6vw,30px); font-weight:400; letter-spacing:-0.02em; font-family:var(--font); line-height:1.25;}
 .topbar .sub{font-size:12px; color:var(--steel); margin-top:3px; line-height:1.55;}
 .topbar .tag{font-size:10.5px; background:none; border:0.5px solid var(--hair); color:var(--ash); padding:3px 10px; border-radius:9999px; font-weight:400; flex-shrink:0;}
+
+/* ---------- 반응형 표 → 카드 전환 (휴대폰 전용) ----------
+   PC·태블릿(iPad 포함)에서는 기존 표 그대로, 폭이 좁은 휴대폰에서만
+   가로 스크롤 대신 행 하나가 카드 하나가 되도록 세로로 쌓아줍니다.
+   각 <td>에 data-label="컬럼명"을 넣어두면 그 값이 라벨로 표시됩니다.
+   맨 앞 셀(data-label 없음)은 카드 제목처럼 굵게 표시됩니다. */
+@media (max-width:640px){
+  table.rescard{ min-width:0; width:100%; display:block; }
+  table.rescard thead{ display:none; }
+  table.rescard tbody{ display:block; }
+  table.rescard tr{
+    display:block; background:var(--surface); border:0.5px solid var(--hair);
+    border-radius:16px; margin-bottom:10px; padding:14px 16px;
+  }
+  table.rescard tr:hover{ background:var(--surface); }
+  table.rescard td{
+    display:flex; justify-content:space-between; align-items:center; gap:14px;
+    padding:7px 0 !important; border:none !important; white-space:normal !important; text-align:right;
+  }
+  table.rescard td[data-label]::before{
+    content:attr(data-label); font-size:11.5px; color:var(--ash); font-weight:400; flex-shrink:0; text-align:left;
+  }
+  table.rescard td:first-child{
+    display:block; font-size:16px; font-weight:400; color:var(--ink); text-align:left;
+    padding-bottom:11px !important; margin-bottom:7px; border-bottom:0.5px solid var(--hair) !important;
+  }
+  .tbl-scroll{ overflow-x:visible; }
+}
