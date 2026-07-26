@@ -18,10 +18,7 @@
   body{font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; min-height:100vh; word-break:keep-all; overflow-wrap:anywhere;}
   svg{display:block;}
   .wrap{max-width:720px; margin:0 auto; padding:32px 18px 70px;}
-  .top{color:var(--ink); text-align:left; margin-bottom:24px; padding:8px 4px 0;}
-  .top .badge{display:inline-flex; align-items:center; gap:6px; background:none; border:0.5px solid var(--blue); color:var(--blue); border-radius:9999px; padding:4px 12px; font-size:11px; font-weight:400; margin-bottom:12px;}
-  .top h1{font-size:clamp(22px,5vw,28px); font-weight:350; letter-spacing:-0.02em; line-height:1.25;}
-  .card{background:var(--surface); border-radius:26px; border:0.5px solid var(--hair); box-shadow:none; overflow:hidden;}
+  .card{background:var(--surface); border-radius:22px; border:0.5px solid var(--hair); box-shadow:none; overflow:hidden;}
   .tabs{display:flex; border-bottom:1px solid var(--border);}
   .tab{flex:1; text-align:center; padding:16px 10px; font-size:13.5px; font-weight:350; color:var(--gray-light); cursor:pointer; background:var(--canvas); border-bottom:2px solid transparent; transition:0.15s; display:flex; align-items:center; justify-content:center; gap:6px;}
   .tab.active{color:var(--ink); background:var(--surface); border-bottom:2px solid var(--blue); font-weight:400;}
@@ -29,7 +26,7 @@
 
   /* ---- step indicator ---- */
   .steps{display:flex; align-items:center; gap:6px; margin-bottom:22px;}
-  .step-dot{width:24px; height:24px; border-radius:50%; background:var(--light-gray); color:var(--gray-light); font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:0.2s;}
+  .step-dot{width:24px; height:24px; border-radius:50%; background:var(--light-gray); color:var(--gray-light); font-size:11.5px; font-weight:350; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:0.2s;}
   .step-dot.done{background:var(--deep-green); color:#fff;}
   .step-dot.now{background:var(--pale-green); color:var(--deep-green); box-shadow:0 0 0 3px var(--pale-green);}
   .step-line{flex:1; height:2px; background:var(--border);}
@@ -38,21 +35,21 @@
 
   /* ---- calendar ---- */
   .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
-  .cal-head .mo{font-size:15px; font-weight:800;}
+  .cal-head .mo{font-size:15px; font-weight:350;}
   .cal-nav{display:flex; gap:6px;}
   .cal-nav button{width:30px; height:30px; border-radius:12px; border:1px solid var(--border); background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--ink); transition:0.12s;}
   .cal-nav button:hover:not(:disabled){background:var(--light-gray);}
   .cal-nav button:disabled{opacity:0.3; cursor:not-allowed;}
   .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px;}
-  .cal-dow{text-align:center; font-size:10.5px; font-weight:700; color:var(--gray-light); padding:4px 0;}
-  .cal-cell{aspect-ratio:1; border-radius:13px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; font-size:13px; font-weight:700; color:var(--ink); position:relative; transition:0.12s; border:1.5px solid transparent;}
+  .cal-dow{text-align:center; font-size:10.5px; font-weight:350; color:var(--gray-light); padding:4px 0;}
+  .cal-cell{aspect-ratio:1; border-radius:13px; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; font-size:13px; font-weight:350; color:var(--ink); position:relative; transition:0.12s; border:1.5px solid transparent;}
   .cal-cell.blank{cursor:default;}
-  .cal-cell.disabled{color:#D5D5D5; cursor:not-allowed;}
+  .cal-cell.disabled{color:var(--ash); cursor:not-allowed;}
   .cal-cell.avail:hover{background:var(--pale-blue);}
   .cal-cell .dot{width:5px; height:5px; border-radius:50%; margin-top:3px;}
   .dot-ok{background:var(--teal);}
   .dot-warn{background:var(--gold);}
-  .dot-full{background:#D5D5D5;}
+  .dot-full{background:var(--ash);}
   .cal-cell.selected{background:var(--deep-green); color:#fff; border-color:var(--deep-green);}
   .cal-cell.selected .dot{background:#fff;}
   .cal-legend{display:flex; gap:14px; font-size:11px; color:var(--gray); margin:10px 2px 22px; flex-wrap:wrap;}
@@ -61,26 +58,26 @@
 
   /* ---- time slot chips ---- */
   .time-section{margin-bottom:22px;}
-  .time-section .lbl{font-size:12.5px; font-weight:700; color:var(--gray); margin-bottom:10px; display:flex; align-items:center; gap:6px;}
+  .time-section .lbl{font-size:12.5px; font-weight:350; color:var(--gray); margin-bottom:10px; display:flex; align-items:center; gap:6px;}
   .time-chips{display:flex; flex-wrap:wrap; gap:8px;}
-  .time-chip{border:1.5px solid var(--border); border-radius:13px; padding:10px 14px; font-size:13px; font-weight:700; cursor:pointer; transition:0.12s; display:flex; align-items:center; gap:7px; color:var(--ink);}
+  .time-chip{border:1.5px solid var(--border); border-radius:13px; padding:10px 14px; font-size:13px; font-weight:350; cursor:pointer; transition:0.12s; display:flex; align-items:center; gap:7px; color:var(--ink);}
   .time-chip:hover{border-color:var(--teal);}
   .time-chip.selected{background:var(--deep-green); border-color:var(--deep-green); color:#fff;}
-  .time-chip .rem{font-size:10px; font-weight:700; opacity:0.75;}
+  .time-chip .rem{font-size:10px; font-weight:350; opacity:0.75;}
   .time-chip.full{opacity:0.4; cursor:not-allowed; text-decoration:line-through;}
   .time-empty{font-size:12.5px; color:var(--gray-light); padding:14px; background:var(--light-gray); border-radius:13px; text-align:center;}
 
   /* ---- summary bar ---- */
-  .summary{display:none; align-items:center; gap:10px; background:var(--pale-green); border-radius:14px; padding:12px 14px; margin-bottom:20px; font-size:13px; font-weight:700; color:var(--deep-green);}
+  .summary{display:none; align-items:center; gap:10px; background:var(--pale-green); border-radius:14px; padding:12px 14px; margin-bottom:20px; font-size:13px; font-weight:350; color:var(--deep-green);}
   .summary .icon{width:26px; height:26px; border-radius:50%; background:var(--deep-green); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
   .summary .txt{flex:1;}
-  .summary .change{font-size:11.5px; font-weight:700; color:var(--teal); cursor:pointer; text-decoration:underline; flex-shrink:0;}
+  .summary .change{font-size:11.5px; font-weight:350; color:var(--teal); cursor:pointer; text-decoration:underline; flex-shrink:0;}
 
   /* ---- detail form (progressive reveal) ---- */
   .detail-form{max-height:0; overflow:hidden; transition:max-height 0.3s ease;}
   .detail-form.open{max-height:900px;}
   .field{margin-bottom:15px;}
-  .field label{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:7px;}
+  .field label{display:flex; align-items:center; gap:6px; font-size:12.5px; font-weight:350; color:var(--ink); margin-bottom:7px;}
   .field label .req{color:var(--coral); font-weight:400;}
   .input-icon{position:relative;}
   .input-icon svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray-light);}
@@ -91,11 +88,11 @@
   input:focus, textarea:focus{outline:none; border-color:var(--teal); box-shadow:0 0 0 3px var(--pale-teal);}
   textarea{min-height:70px; resize:vertical;}
   .radio-group{display:flex; gap:8px;}
-  .radio-opt{flex:1; border:1.5px solid var(--border); border-radius:13px; padding:11px; text-align:center; cursor:pointer; font-size:12.5px; font-weight:700; color:var(--gray); transition:0.12s;}
+  .radio-opt{flex:1; border:1.5px solid var(--border); border-radius:13px; padding:11px; text-align:center; cursor:pointer; font-size:12.5px; font-weight:350; color:var(--gray); transition:0.12s;}
   .radio-opt.selected{border-color:var(--deep-green); background:var(--pale-green); color:var(--deep-green);}
 
   .type-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
-  .type-opt{border:1.5px solid var(--border); border-radius:14px; padding:13px 12px; cursor:pointer; font-size:12.5px; font-weight:700; transition:0.12s; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; color:var(--gray);}
+  .type-opt{border:1.5px solid var(--border); border-radius:14px; padding:13px 12px; cursor:pointer; font-size:12.5px; font-weight:350; transition:0.12s; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; color:var(--gray);}
   .type-opt svg{color:var(--gray-light);}
   .type-opt.selected{border-color:var(--teal); background:var(--pale-teal); color:var(--teal);}
   .type-opt.selected svg{color:var(--teal);}
@@ -108,19 +105,26 @@
 
   .success{display:none; text-align:center; padding:46px 26px;}
   .success .check{width:54px; height:54px; border-radius:50%; background:var(--pale-green); color:var(--deep-green); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
-  .success h3{font-size:16px; font-weight:800; margin-bottom:7px;}
+  .success h3{font-size:16px; font-weight:350; margin-bottom:7px;}
   .success p{font-size:12.5px; color:var(--gray); line-height:1.6;}
   .success .ref{margin-top:14px; background:var(--light-gray); border-radius:12px; padding:9px 14px; font-size:12px; color:var(--gray); display:inline-block;}
-  .footer-tag{text-align:center; margin-top:16px; font-size:10.5px; color:#B9D8CF;}
+  .footer-tag{text-align:center; margin-top:16px; font-size:10.5px; color:var(--ash);}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div class="badge">2027 서울 국제대회 · VM 자원봉사자관리부</div>
-    <h1>인터뷰 예약하기</h1>
-  </div>
 
+<div class="topbar">
+  <div class="brand">
+    <div class="badge">VM · 자원봉사자관리부</div>
+    <div>
+      <h1>인터뷰 예약하기</h1>
+      <div class="sub">신청자가 직접 쓰는 예약·문의 화면입니다</div>
+    </div>
+  </div>
+  <div class="tag">샘플 · SAMPLE</div>
+</div>
+
+<div class="wrap">
   <div class="card">
     <div class="tabs">
       <div class="tab active" onclick="switchTab(0)">📅 인터뷰 예약하기</div>
