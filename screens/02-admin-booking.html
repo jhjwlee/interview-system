@@ -79,37 +79,20 @@
       <div class="sub">관리자 화면 · SharePoint 목록 A(타임슬롯 마스터) + 목록 B(예약접수대장) 기반 목업</div>
     </div>
   </div>
-  <div class="tag">샘플 · SAMPLE</div>
+  <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+    <div class="tag">샘플 · SAMPLE</div>
+    <div class="tag" style="border-color:var(--blue); color:var(--blue);">🔗 연동 데모</div>
+  </div>
 </div>
 
 <div class="wrap">
 
-  <div class="foot-note" style="border-radius:18px; margin-bottom:22px; border:0.5px solid var(--hair);">
-    <b>연관 화면 안내</b><br>이 화면은 관리자용입니다.<br>인터뷰어가 직접 사용하는 화면은 별도 파일로 제공됩니다: <b>인터뷰어 가용시간 입력폼</b>(가능한 날짜·시간 등록), <b>인터뷰어 슬롯 승인 화면</b>(정원 마감 슬롯 승인/거절).
+  <div class="foot-note" style="border-radius:18px; margin-bottom:22px; border:0.5px solid var(--hair); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+    <div><b>연관 화면 안내</b><br>이 화면은 관리자용입니다.<br>인터뷰어가 직접 사용하는 화면은 별도 파일로 제공됩니다: <b>인터뷰어 가용시간 입력폼</b>(가능한 날짜·시간 등록), <b>인터뷰어 슬롯 승인 화면</b>(정원 마감 슬롯 승인/거절).<br>이 데모는 브라우저에 저장되는 시뮬레이션입니다 — 실제 SharePoint·Power Automate가 아닙니다.</div>
+    <button class="btn btn-ghost" style="flex-shrink:0;" onclick="resetDemo()">데모 초기화</button>
   </div>
 
-  <div class="stats">
-    <div class="stat-card">
-      <div class="label">이번 주 개설 슬롯</div>
-      <div class="value">24</div>
-      <div class="note">1타임 3명 기준 최대 72명</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">예약 완료</div>
-      <div class="value accent">58</div>
-      <div class="note">전체 대비 80.6%</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">잔여 슬롯</div>
-      <div class="value accent">14</div>
-      <div class="note">마감 임박 슬롯 3건</div>
-    </div>
-    <div class="stat-card">
-      <div class="label">오늘 신규 접수</div>
-      <div class="value">7</div>
-      <div class="note">최근 갱신 09:41</div>
-    </div>
-  </div>
+  <div class="stats" id="statCards"></div>
 
   <div class="panel">
     <div class="panel-head">
@@ -137,43 +120,7 @@
           <th>슬롯 ID</th><th>날짜</th><th>시작시간</th><th>정원</th><th>현재예약</th><th>잔여</th><th>배정 인터뷰어</th><th>인터뷰어 확인</th><th>상태</th><th>Zoom 링크</th>
         </tr>
       </thead>
-      <tbody>
-        <tr style="opacity:0.75;">
-          <td class="name-cell">SLOT-0804-01</td><td data-label="날짜">08.04 (화)</td><td data-label="시작시간">10:00</td><td data-label="정원">3</td><td data-label="현재예약">-</td><td data-label="잔여">-</td>
-          <td data-label="배정 인터뷰어" class="interviewer-cell"><span class="unassigned">미배정</span></td>
-          <td data-label="인터뷰어 확인"><span class="badge badge-pending">확인 대기</span></td>
-          <td data-label="상태"><span class="badge badge-pending">배정검토중</span></td>
-          <td data-label="Zoom 링크"><span style="color:var(--ash); font-size:12px;">비공개</span></td>
-        </tr>
-        <tr>
-          <td class="name-cell">SLOT-0803-01</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">10:00</td><td data-label="정원">3</td><td data-label="현재예약">3</td><td data-label="잔여">0</td>
-          <td data-label="배정 인터뷰어" class="interviewer-cell">김민수</td>
-          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
-          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
-          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
-        </tr>
-        <tr>
-          <td class="name-cell">SLOT-0803-02</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">10:30</td><td data-label="정원">3</td><td data-label="현재예약">2</td><td data-label="잔여">1</td>
-          <td data-label="배정 인터뷰어" class="interviewer-cell">이수진</td>
-          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
-          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill warn" style="width:66%"></span></span><span class="badge badge-active">마감임박</span></td>
-          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
-        </tr>
-        <tr>
-          <td class="name-cell">SLOT-0803-03</td><td data-label="날짜">08.03 (월)</td><td data-label="시작시간">11:00</td><td data-label="정원">3</td><td data-label="현재예약">1</td><td data-label="잔여">2</td>
-          <td data-label="배정 인터뷰어" class="interviewer-cell">이수진</td>
-          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
-          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill" style="width:33%"></span></span><span class="badge badge-active">모집중</span></td>
-          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
-        </tr>
-        <tr>
-          <td class="name-cell">SLOT-0804-02</td><td data-label="날짜">08.04 (화)</td><td data-label="시작시간">10:30</td><td data-label="정원">3</td><td data-label="현재예약">3</td><td data-label="잔여">0</td>
-          <td data-label="배정 인터뷰어" class="interviewer-cell">박지훈</td>
-          <td data-label="인터뷰어 확인"><span class="badge badge-active">확인완료</span></td>
-          <td data-label="상태"><span class="capacity-bar"><span class="capacity-fill full" style="width:100%"></span></span><span class="badge badge-closed">마감</span></td>
-          <td data-label="Zoom 링크"><a class="zoom-link" href="#" onclick="return false;">링크 보기</a></td>
-        </tr>
-      </tbody>
+      <tbody id="slotTableBody"></tbody>
     </table>
     </div>
     <div class="foot-note"><b>흐름 변경 안내(2026.07.25 개정)</b><br>순서를 "예약 마감 후 인터뷰어 승인"에서 <b>"인터뷰어 확인 후 예약 개방"</b>으로 바꾸었습니다.<br>① 인터뷰어 가용시간 목록을 바탕으로 슬롯에 인터뷰어를 배정하면 <b>배정검토중(비공개)</b> 상태로 생성됩니다.<br>② 인터뷰어가 슬롯 배정 확인 화면(Teams 카드)에서 <b>확인</b>을 누르면 그 즉시 <b>모집중</b>으로 바뀌며 신청자 화면에 공개됩니다.<br>③ 잔여석이 0이 되면 <b>마감</b>으로 자동 전환됩니다(인터뷰어가 이미 확정되어 있으므로 별도 사후 승인 절차가 필요 없습니다).<br>신청자는 배정검토중 상태의 슬롯을 볼 수 없습니다.</div>
@@ -199,42 +146,100 @@
           <th>신청자</th><th>구분</th><th>신청 슬롯</th><th>상태</th><th>Zoom 발송</th><th>접수일시</th><th></th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td><div class="name-cell">김OO</div><div class="sub-text">applicant01@email.com</div></td>
-          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0803-02 · 10:30</td>
-          <td data-label="상태"><span class="badge badge-active">확정</span></td>
-          <td data-label="Zoom 발송">발송완료</td><td data-label="접수일시">07.24 21:12</td>
-          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
-        </tr>
-        <tr>
-          <td><div class="name-cell">이OO · 박OO</div><div class="sub-text">couple02@email.com</div></td>
-          <td data-label="구분">부부</td><td data-label="신청 슬롯">SLOT-0803-01 · 10:00</td>
-          <td data-label="상태"><span class="badge badge-active">확정</span></td>
-          <td data-label="Zoom 발송">발송완료</td><td data-label="접수일시">07.24 20:55</td>
-          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
-        </tr>
-        <tr>
-          <td><div class="name-cell">최OO</div><div class="sub-text">applicant03@email.com</div></td>
-          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0804-01 · 10:00<span class="flag">중복접수</span></td>
-          <td data-label="상태"><span class="badge badge-pending">대기</span></td>
-          <td data-label="Zoom 발송">-</td><td data-label="접수일시">07.25 09:03</td>
-          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
-        </tr>
-        <tr>
-          <td><div class="name-cell">정OO</div><div class="sub-text">applicant04@email.com</div></td>
-          <td data-label="구분">개인</td><td data-label="신청 슬롯">SLOT-0803-03 · 11:00</td>
-          <td data-label="상태"><span class="badge badge-closed">취소</span></td>
-          <td data-label="Zoom 발송">-</td><td data-label="접수일시">07.23 14:20</td>
-          <td><button class="btn btn-ghost" onclick="alert('상세 처리 화면(샘플에서는 미구현)')">상세</button></td>
-        </tr>
-      </tbody>
+      <tbody id="reservationTableBody"></tbody>
     </table>
     </div>
     <div class="foot-note">Power Automate 플로우가 Forms 제출을 감지하면 이 대장에 신규 행이 자동 생성됩니다.<br>"확정" 처리 시 Zoom 링크가 담긴 안내 메일이 자동 발송되도록 구성됩니다.</div>
   </div>
 
 </div>
+<script src="../assets/demo-store.js"></script>
+<script>
+  function badgeForStatus(status){
+    if(status==='배정검토중') return '<span class="badge badge-pending">배정검토중</span>';
+    if(status==='모집중') return '<span class="badge badge-active">모집중</span>';
+    if(status==='마감임박') return '<span class="badge badge-active">마감임박</span>';
+    return '<span class="badge badge-closed">마감</span>';
+  }
+
+  function renderStats(state){
+    const slots = state.slots;
+    const openSlots = slots.filter(s=>s.status!=='배정검토중').length;
+    const totalCap = slots.reduce((s,x)=> s + (x.status!=='배정검토중' ? x.cap : 0), 0);
+    const booked = slots.reduce((s,x)=>s+x.booked,0);
+    const remain = slots.reduce((s,x)=> s + (x.status!=='배정검토중' ? Math.max(x.cap-x.booked,0) : 0), 0);
+    const nearFull = slots.filter(s=>s.status==='마감임박').length;
+    const today = state.reservations.filter(r=>{
+      const today = DemoStore.nowLabel().split(' ')[0];
+      return (r.at||'').indexOf(today)===0;
+    }).length;
+    const pct = totalCap>0 ? Math.round(booked/totalCap*1000)/10 : 0;
+    document.getElementById('statCards').innerHTML =
+      '<div class="stat-card"><div class="label">이번 주 개설 슬롯</div><div class="value">'+openSlots+'</div><div class="note">1타임 3명 기준 최대 '+(openSlots*3)+'명</div></div>'+
+      '<div class="stat-card"><div class="label">예약 완료</div><div class="value accent">'+booked+'</div><div class="note">전체 대비 '+pct+'%</div></div>'+
+      '<div class="stat-card"><div class="label">잔여 슬롯</div><div class="value accent">'+remain+'</div><div class="note">마감 임박 슬롯 '+nearFull+'건</div></div>'+
+      '<div class="stat-card"><div class="label">오늘 신규 접수</div><div class="value">'+today+'</div><div class="note">최근 갱신 '+DemoStore.nowLabel()+'</div></div>';
+  }
+
+  function renderSlotTable(state){
+    const rows = state.slots.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+    document.getElementById('slotTableBody').innerHTML = rows.map(s=>{
+      const dateLabel = DemoStore.fmtDateShort(s.date);
+      const isReview = s.status === '배정검토중';
+      const remain = isReview ? '-' : Math.max(s.cap - s.booked, 0);
+      const capLabel = isReview ? s.plannedCap : s.cap;
+      const usedLabel = isReview ? '-' : s.booked;
+      const pctFill = (!isReview && s.cap>0) ? Math.min(100, Math.round(s.booked/s.cap*100)) : 0;
+      const fillClass = pctFill>=100 ? 'full' : (pctFill>=66 ? 'warn' : '');
+      const interviewerCell = s.interviewer
+        ? s.interviewer
+        : '<span class="unassigned">미배정</span>';
+      const confirmBadge = isReview
+        ? '<span class="badge badge-pending">확인 대기</span>'
+        : '<span class="badge badge-active">확인완료</span>';
+      const zoomCell = isReview
+        ? '<span style="color:var(--ash); font-size:12px;">비공개</span>'
+        : '<a class="zoom-link" href="#" onclick="return false;">링크 보기</a>';
+      const capBar = isReview ? '' : '<span class="capacity-bar"><span class="capacity-fill '+fillClass+'" style="width:'+pctFill+'%"></span></span>';
+      return '<tr'+(isReview?' style="opacity:0.75;"':'')+'>'+
+        '<td class="name-cell">'+s.id+'</td><td data-label="날짜">'+dateLabel+'</td><td data-label="시작시간">'+s.time+'</td>'+
+        '<td data-label="정원">'+capLabel+'</td><td data-label="현재예약">'+usedLabel+'</td><td data-label="잔여">'+remain+'</td>'+
+        '<td data-label="배정 인터뷰어" class="interviewer-cell">'+interviewerCell+'</td>'+
+        '<td data-label="인터뷰어 확인">'+confirmBadge+'</td>'+
+        '<td data-label="상태">'+capBar+badgeForStatus(s.status)+'</td>'+
+        '<td data-label="Zoom 링크">'+zoomCell+'</td>'+
+      '</tr>';
+    }).join('');
+  }
+
+  function renderReservationTable(state){
+    const statusBadge = { '확정':'badge-active', '대기':'badge-pending', '취소':'badge-closed' };
+    document.getElementById('reservationTableBody').innerHTML = state.reservations.map(r=>{
+      return '<tr>'+
+        '<td><div class="name-cell">'+r.name+'</div><div class="sub-text">'+r.email+'</div></td>'+
+        '<td data-label="구분">'+r.kind+'</td><td data-label="신청 슬롯">'+r.slotLabel+'</td>'+
+        '<td data-label="상태"><span class="badge '+(statusBadge[r.status]||'badge-pending')+'">'+r.status+'</span></td>'+
+        '<td data-label="Zoom 발송">'+(r.zoomSent?'발송완료':'-')+'</td><td data-label="접수일시">'+r.at+'</td>'+
+        '<td><button class="btn btn-ghost" onclick="alert(\'상세 처리 화면(샘플에서는 미구현)\')">상세</button></td>'+
+      '</tr>';
+    }).join('');
+  }
+
+  function renderAll(){
+    const state = DemoStore.load();
+    renderStats(state);
+    renderSlotTable(state);
+    renderReservationTable(state);
+  }
+
+  function resetDemo(){
+    if(!confirm('데모 데이터를 처음 상태로 되돌릴까요? 지금까지 등록·예약한 내용이 모두 사라집니다.')) return;
+    DemoStore.reset();
+    renderAll();
+  }
+
+  renderAll();
+</script>
 <script src="../assets/shell-nav.js"></script>
 </body>
 </html>

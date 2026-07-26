@@ -86,7 +86,10 @@
       <div class="sub">신청자에게 예약을 열기 전에, 인터뷰어가 먼저 확인하는 화면입니다</div>
     </div>
   </div>
-  <div class="tag">샘플 · SAMPLE</div>
+  <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+    <div class="tag">샘플 · SAMPLE</div>
+    <div class="tag" style="border-color:var(--blue); color:var(--blue);">🔗 연동 데모</div>
+  </div>
 </div>
 
 <div class="wrap">
@@ -126,11 +129,7 @@
     <div class="tbl-scroll">
     <table class="rescard">
       <thead><tr><th>날짜·시간</th><th>예정 인원</th><th>결과</th></tr></thead>
-      <tbody>
-        <tr><td>08.02(일) 11:00</td><td data-label="예정 인원">3명</td><td data-label="결과"><span class="status-badge approved">진행 가능</span></td></tr>
-        <tr><td>08.02(일) 10:30</td><td data-label="예정 인원">3명</td><td data-label="결과"><span class="status-badge approved">진행 가능</span></td></tr>
-        <tr><td>08.01(토) 14:00</td><td data-label="예정 인원">2명</td><td data-label="결과"><span class="status-badge rejected">어려움</span></td></tr>
-      </tbody>
+      <tbody id="historyBody"></tbody>
     </table>
     </div>
   </div>
@@ -138,42 +137,79 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="../assets/demo-store.js"></script>
 <script>
-  const slots = [
-    {id:1, date:"08.03(월)", time:"10:30", cap:3, source:"알려주신 가능한 시간에 맞춤"},
-    {id:2, date:"08.03(월)", time:"11:00", cap:3, source:"알려주신 가능한 시간에 맞춤"},
-    {id:3, date:"08.04(화)", time:"10:00", cap:3, source:"알려주신 가능한 시간에 맞춤"},
-  ];
+  let state = DemoStore.load();
+
+  function pendingSlots(){
+    return state.slots.filter(s=>s.status==='배정검토중');
+  }
+
+  function renderStats(){
+    const active = pendingSlots();
+    const approvedCount = state.approvals.filter(a=>a.result==='approved').length;
+    const rejectedCount = state.approvals.filter(a=>a.result==='rejected').length;
+    document.getElementById('pendingCount').textContent = active.length;
+    document.querySelector('.stat-card:nth-child(2) .value').textContent = approvedCount;
+    document.querySelector('.stat-card:nth-child(3) .value').textContent = rejectedCount;
+  }
 
   function renderSlots(){
     const el = document.getElementById('pendingList');
-    const active = slots.filter(s=>!s.done);
+    const active = pendingSlots();
     document.getElementById('pendingTag').textContent = active.length + '건';
-    document.getElementById('pendingCount').textContent = active.length;
     document.getElementById('emptyNote').style.display = active.length===0 ? 'block' : 'none';
 
     el.innerHTML = active.map(s=>{
+      const dateLabel = DemoStore.fmtDateShort(s.date);
       return '<div class="slot-card" id="slot-'+s.id+'">'+
-        '<div class="dt"><div class="d">'+s.date+'</div><div class="t">'+s.time+'</div></div>'+
+        '<div class="dt"><div class="d">'+dateLabel+'</div><div class="t">'+s.time+'</div></div>'+
         '<div class="mid">'+
-          '<div class="cap">🔒 '+s.cap+'명 예정 · 아직 신청자에게 열리지 않았습니다</div>'+
-          '<div class="applicant-names">'+s.source+'</div>'+
+          '<div class="cap">'+s.plannedCap+'명 예정 · 아직 신청자에게 열리지 않았습니다</div>'+
+          '<div class="applicant-names">'+(s.interviewer ? s.interviewer+' 배정 · ' : '')+'알려주신 가능한 시간에 맞춤</div>'+
         '</div>'+
         '<div class="actions">'+
-          '<button class="btn-approve" onclick="decide('+s.id+', true)">진행할 수 있어요</button>'+
-          '<button class="btn-reject" onclick="decide('+s.id+', false)">이 시간은 어려워요</button>'+
+          '<button class="btn-approve" onclick="decide(\''+s.id+'\', true)">진행할 수 있어요</button>'+
+          '<button class="btn-reject" onclick="decide(\''+s.id+'\', false)">이 시간은 어려워요</button>'+
         '</div>'+
       '</div>';
     }).join('');
   }
 
-  function decide(id, approve){
-    const s = slots.find(x=>x.id===id);
-    s.done = true;
+  function renderHistory(){
+    const el = document.getElementById('historyBody');
+    el.innerHTML = state.approvals.slice(0,8).map(a=>{
+      const badge = a.result==='approved'
+        ? '<span class="status-badge approved">진행 가능</span>'
+        : '<span class="status-badge rejected">어려움</span>';
+      return '<tr><td>'+a.date+' '+a.time+'</td><td data-label="예정 인원">'+a.cap+'</td><td data-label="결과">'+badge+'</td></tr>';
+    }).join('');
+  }
+
+  function renderAll(){
+    renderStats();
     renderSlots();
+    renderHistory();
+  }
+
+  function decide(id, approve){
+    const s = DemoStore.findSlot(state, id);
+    if(!s) return;
+    const dateLabel = DemoStore.fmtDateShort(s.date);
     if(approve){
-      showToast('확인해 주셔서 감사합니다 — '+s.date+' '+s.time+' 시간이 지금 신청자 달력에 열렸습니다.');
+      s.status = '모집중';
+      s.cap = s.plannedCap;
+      state.approvals.unshift({date: dateLabel, time: s.time, cap: s.plannedCap+'명', result:'approved'});
+      DemoStore.addLog(state, (s.interviewer||'인터뷰어')+'가 '+dateLabel+' '+s.time+' 진행을 확인했습니다 — 신청자 화면에 공개됨.');
+      DemoStore.save(state);
+      renderAll();
+      showToast('확인해 주셔서 감사합니다 — '+dateLabel+' '+s.time+' 시간이 지금 신청자 달력에 열렸습니다.');
     } else {
+      state.approvals.unshift({date: dateLabel, time: s.time, cap: s.plannedCap+'명', result:'rejected'});
+      DemoStore.addLog(state, dateLabel+' '+s.time+' 슬롯을 인터뷰어가 어렵다고 답해 재배정이 필요합니다.');
+      state.slots = state.slots.filter(x=>x.id!==id);
+      DemoStore.save(state);
+      renderAll();
       showToast('알려주셔서 감사합니다 — 관리자에게 다시 배정해 달라고 전달했습니다. 이 시간은 신청자에게 열리지 않습니다.');
     }
   }
@@ -187,7 +223,7 @@
     toastTimer = setTimeout(()=>t.classList.remove('show'), 3800);
   }
 
-  renderSlots();
+  renderAll();
 </script>
 <script src="../assets/shell-nav.js"></script>
 </body>

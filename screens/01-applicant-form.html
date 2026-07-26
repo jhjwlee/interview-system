@@ -120,7 +120,10 @@
       <div class="sub">신청자가 직접 쓰는 예약·문의 화면입니다</div>
     </div>
   </div>
-  <div class="tag">샘플 · SAMPLE</div>
+  <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+    <div class="tag">샘플 · SAMPLE</div>
+    <div class="tag" style="border-color:var(--blue); color:var(--blue);">🔗 연동 데모</div>
+  </div>
 </div>
 
 <div class="wrap">
@@ -172,29 +175,29 @@
         <div class="field">
           <label>신청 유형<span class="req">*</span></label>
           <div class="radio-group">
-            <div class="radio-opt selected" onclick="selRadio(this)">혼자 받습니다</div>
-            <div class="radio-opt" onclick="selRadio(this)">부부가 함께 받습니다</div>
+            <div class="radio-opt selected" onclick="selRadio(this, '개인')">혼자 받습니다</div>
+            <div class="radio-opt" onclick="selRadio(this, '부부')">부부가 함께 받습니다</div>
           </div>
         </div>
         <div class="field">
           <label>이름<span class="req">*</span></label>
           <div class="input-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
-            <input type="text" placeholder="홍길동">
+            <input type="text" id="rsvName" placeholder="홍길동">
           </div>
         </div>
         <div class="field">
           <label>이메일<span class="req">*</span></label>
           <div class="input-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-            <input type="email" placeholder="example@email.com">
+            <input type="email" id="rsvEmail" placeholder="example@email.com">
           </div>
         </div>
         <div class="field">
           <label>연락처<span class="req">*</span></label>
           <div class="input-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2.2z"/></svg>
-            <input type="tel" placeholder="010-0000-0000">
+            <input type="tel" id="rsvPhone" placeholder="010-0000-0000">
           </div>
         </div>
         <div class="field">
@@ -262,19 +265,25 @@
     </div>
   </div>
 
-  <div class="footer-tag">샘플 목업 · 실제 제출은 저장되지 않습니다</div>
+  <div class="footer-tag">🔗 이 화면은 브라우저에 저장되는 연동 데모입니다 · <a href="02-admin-booking.html" style="color:var(--blue);">관리자 화면에서 확인하기 →</a></div>
 </div>
 
+<script src="../assets/demo-store.js"></script>
 <script>
-  // ---------- 데이터: 날짜별 시간 슬롯 (샘플) ----------
-  const slotData = {
-    "2026-08-03": [ {t:"10:00", cap:3, used:3}, {t:"10:30", cap:3, used:2}, {t:"11:00", cap:3, used:1}, {t:"11:30", cap:3, used:0} ],
-    "2026-08-04": [ {t:"10:00", cap:3, used:0}, {t:"10:30", cap:3, used:3}, {t:"14:00", cap:3, used:1} ],
-    "2026-08-05": [ {t:"10:00", cap:3, used:1}, {t:"10:30", cap:3, used:1} ],
-    "2026-08-10": [ {t:"10:00", cap:3, used:2}, {t:"10:30", cap:3, used:0}, {t:"11:00", cap:3, used:0} ],
-    "2026-08-11": [ {t:"10:00", cap:3, used:3}, {t:"10:30", cap:3, used:3} ],
-    "2026-08-17": [ {t:"10:00", cap:3, used:0}, {t:"14:00", cap:3, used:0} ],
-  };
+  // ---------- 데이터: 날짜별 시간 슬롯 (공유 저장소에서 실시간 구성) ----------
+  // 모집중·마감임박·마감 상태 슬롯만 노출합니다 — 배정검토중(인터뷰어 미확인) 슬롯은 보이지 않습니다.
+  let slotData = {};
+  function buildSlotData(){
+    const state = DemoStore.load();
+    slotData = {};
+    state.slots.forEach(s=>{
+      if(s.status==='배정검토중') return;
+      if(!slotData[s.date]) slotData[s.date] = [];
+      slotData[s.date].push({ t:s.time, cap:s.cap||s.plannedCap, used:s.booked, slotId:s.id });
+    });
+  }
+  buildSlotData();
+
   function dateStatus(dstr){
     const slots = slotData[dstr];
     if(!slots) return null;
@@ -347,7 +356,7 @@
       chipsEl.innerHTML = slots.map(s=>{
         const remain = s.cap - s.used;
         const full = remain<=0;
-        return '<div class="time-chip'+(full?' full':'')+'" onclick="'+(full?'':'pickTime(\''+s.t+'\', this)')+'">'+s.t+'<span class="rem">'+(full?'신청 마감':'남은 자리 '+remain)+'</span></div>';
+        return '<div class="time-chip'+(full?' full':'')+'" onclick="'+(full?'':'pickTime(\''+s.t+'\', \''+s.slotId+'\', this)')+'">'+s.t+'<span class="rem">'+(full?'신청 마감':'남은 자리 '+remain)+'</span></div>';
       }).join('');
     }
     document.getElementById('summaryBar').style.display = 'none';
@@ -356,8 +365,9 @@
     document.getElementById('timeSection').scrollIntoView({behavior:'smooth', block:'nearest'});
   }
 
-  function pickTime(t, el){
+  function pickTime(t, slotId, el){
     window.selectedTime = t;
+    window.selectedSlotId = slotId;
     document.querySelectorAll('.time-chip').forEach(c=>c.classList.remove('selected'));
     el.classList.add('selected');
     const d = new Date(window.selectedDate);
@@ -389,9 +399,11 @@
     document.getElementById('line2').classList.toggle('done', n>2);
   }
 
-  function selRadio(el){
+  window.selectedKind = '개인';
+  function selRadio(el, kind){
     el.parentElement.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('selected'));
     el.classList.add('selected');
+    window.selectedKind = kind;
   }
   function selType(el){
     el.parentElement.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
@@ -407,18 +419,49 @@
   }
 
   function submitForm(kind){
-    document.getElementById('panel-reserve').style.display = 'none';
-    document.getElementById('panel-help').style.display = 'none';
-    document.querySelector('.tabs').style.display = 'none';
-    document.getElementById('successPanel').style.display = 'block';
     const ref = 'REF-' + Math.floor(100000 + Math.random()*899999);
+
     if(kind === 'reserve'){
+      const state = DemoStore.load();
+      const slot = window.selectedSlotId ? DemoStore.findSlot(state, window.selectedSlotId) : null;
+      if(!slot || (slot.cap - slot.booked) <= 0){
+        document.getElementById('summaryText').textContent = '방금 이 시간이 마감되었습니다 — 다른 시간을 골라 주세요.';
+        buildSlotData();
+        renderCalendar();
+        if(window.selectedDate) pickDate(window.selectedDate);
+        return;
+      }
+      const name = (document.getElementById('rsvName').value||'').trim() || '이름 미입력';
+      const email = (document.getElementById('rsvEmail').value||'').trim() || '이메일 미입력';
+      slot.booked += 1;
+      const remain = slot.cap - slot.booked;
+      if(remain<=0) slot.status = '마감';
+      else if(remain/slot.plannedCap <= 0.34) slot.status = '마감임박';
+
+      const resv = { id:'R-'+Date.now(), name, email, kind: window.selectedKind||'개인',
+        slotId: slot.id, slotLabel: slot.id+' · '+slot.time, status:'확정', zoomSent:false, at: DemoStore.nowLabel() };
+      state.reservations.unshift(resv);
+
+      if(slot.status === '마감'){
+        state.reservations.forEach(r=>{ if(r.slotId===slot.id) r.zoomSent = true; });
+        DemoStore.addLog(state, slot.id+' 슬롯이 마감되어 신청자 전원에게 Zoom 안내 메일이 발송되었습니다.');
+      }
+      DemoStore.addLog(state, name+'이(가) '+slot.date+' '+slot.time+' 시간에 신청했습니다.');
+      DemoStore.save(state);
+
       document.getElementById('successTitle').textContent = '신청이 잘 접수되었습니다';
-      document.getElementById('successBody').textContent = '확인한 뒤 인터뷰 확정 여부와 Zoom 접속 링크를 이메일로 보내드립니다.';
+      document.getElementById('successBody').textContent = slot.status==='마감'
+        ? '방금 신청으로 이 시간이 마감되어, 인터뷰 확정과 Zoom 접속 링크를 바로 이메일로 보내드립니다.'
+        : '확인한 뒤 인터뷰 확정 여부와 Zoom 접속 링크를 이메일로 보내드립니다.';
     } else {
       document.getElementById('successTitle').textContent = '문의가 잘 접수되었습니다';
       document.getElementById('successBody').textContent = '담당 형제가 확인한 뒤 평일 기준 하루 안에 이메일로 답변드립니다.';
     }
+
+    document.getElementById('panel-reserve').style.display = 'none';
+    document.getElementById('panel-help').style.display = 'none';
+    document.querySelector('.tabs').style.display = 'none';
+    document.getElementById('successPanel').style.display = 'block';
     document.getElementById('successRef').textContent = '접수번호 ' + ref;
   }
 
