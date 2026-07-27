@@ -30,9 +30,28 @@
   .resetbtn:hover{border-color:var(--gray);}
   .note{background:var(--pale-teal); color:var(--teal); border-radius:16px; padding:16px 18px; font-size:12.5px; display:flex; gap:10px;}
   .note svg{flex-shrink:0; margin-top:1px;}
+
+  .bubble{position:relative; background:#fff7d6; border:1.5px solid #e8cf6b; border-radius:18px; padding:14px 18px; font-size:12.5px; color:#5c4c00; line-height:1.65; margin:0 0 22px; display:flex; gap:10px; align-items:flex-start;}
+  .bubble .ic{font-size:17px; flex-shrink:0; line-height:1.3;}
+  .bubble b{color:#3d3200;}
+  .bubble ol{margin:8px 0 0 18px; padding:0;}
+  .bubble li{margin-bottom:4px;}
+
+  .demo-order{background:var(--surface); border:0.5px solid var(--hair); border-radius:20px; padding:clamp(18px,3vw,24px); margin-bottom:22px;}
+  .demo-order h3{font-size:13.5px; font-weight:400; margin-bottom:4px;}
+  .demo-order .sub2{font-size:11.5px; color:var(--gray-light); margin-bottom:14px;}
+  .demo-order ol{list-style:none; margin:0; padding:0; counter-reset:step;}
+  .demo-order li{counter-increment:step; display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border);}
+  .demo-order li:last-child{border-bottom:none;}
+  .demo-order li::before{content:counter(step); flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--ink); color:#fff; font-size:12px; display:flex; align-items:center; justify-content:center;}
+  .demo-order .step-text{font-size:12.5px; color:var(--ink); line-height:1.55;}
+  .demo-order .step-text a{color:var(--teal); text-decoration:none; font-weight:400;}
+  .demo-order .step-text a:hover{text-decoration:underline;}
+  .demo-order .step-detail{font-size:11.5px; color:var(--gray-light); margin-top:2px;}
 </style>
 </head>
 <body>
+<script src="assets/nav.js"></script>
 <div class="wrap">
   <div class="hero">
     <div class="eyebrow">
@@ -43,6 +62,55 @@
     <p>Excel + Microsoft Forms + Teams 파일 탭만으로 구성한 새 운영 방식입니다. 베델 계정 없이 JWPUB 계정으로 운영 가능한 구조로 다시 설계했습니다.</p>
     <p>모든 화면은 브라우저에 저장되는 데이터로 서로 연동되어 있어, 실제 흐름처럼 눌러보며 확인하실 수 있습니다.</p>
     <a class="backlink" href="../index.html">← 기존 예약형 데모(interview-system)로 돌아가기</a>
+  </div>
+
+  <div class="bubble">
+    <span class="ic">💬</span>
+    <div>
+      <b>이 시스템은 이렇게 움직여요</b>
+      <ol>
+        <li><b>인터뷰어</b>가 가능한 날짜·시간을 알려줍니다 (아직 아무것도 확정되지 않음)</li>
+        <li><b>지원자</b>도 가능한 시간을 여러 개 골라 알려줍니다 (역시 확정 아님, "대기" 상태로 쌓임)</li>
+        <li><b>관리자</b>가 워크북 화면에서 "배정 실행" 버튼을 누르면 — 쌓여 있던 두 데이터를 컴퓨터가 자동으로 짝지어줍니다</li>
+        <li>매칭 안 된 사람은 "수동조율필요"로 따로 표시되어, 관리자가 직접 처리합니다</li>
+        <li>관리자가 최종 확인 후 개별로 이메일 등으로 안내합니다 (자동 발송 없음)</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="demo-order">
+    <h3>🎬 시연 순서 (추천)</h3>
+    <div class="sub2">이 순서대로 눌러보시면 "가능시간 제출 → 배정 실행 → 결과 확인" 흐름이 자연스럽게 이어집니다.</div>
+    <ol>
+      <li>
+        <div class="step-text">
+          <a href="screens/02-interviewer-submit.html">🗓️ 인터뷰어 제출</a> 화면에서 이름·이메일 입력 후 날짜 하나와 시간 1~2개를 골라 제출
+          <div class="step-detail">→ 관리자 워크북 ②인터뷰어가용시간 탭에 쌓입니다 (아직 슬롯은 안 만들어짐)</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          <a href="screens/01-applicant-submit.html">📝 지원자 제출</a> 화면에서 이름·이메일 입력 후 방금 인터뷰어가 고른 것과 겹치는 날짜·시간을 골라 제출
+          <div class="step-detail">→ ③지원자접수 탭에 "배정대기" 상태로 쌓입니다</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          <a href="screens/03-admin-workbook.html">🗂️ 관리자 워크북</a>으로 이동해 상단 "배정 실행" 버튼 클릭
+          <div class="step-detail">→ ①슬롯마스터에 인터뷰어가 채워지고, ③지원자가 짝지어져 ④배정결과 탭에 나타납니다</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          (선택) <a href="screens/04-helpdesk.html">💬 문의하기</a>에서 문의를 하나 남긴 뒤, 다시 관리자 워크북으로 돌아가 ⑤헬프데스크 탭에서 확인
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          시연을 다시 처음부터 보여줘야 한다면 이 페이지의 "데모 초기화" 버튼을 눌러 리셋
+        </div>
+      </li>
+    </ol>
   </div>
 
   <div class="toolbar">

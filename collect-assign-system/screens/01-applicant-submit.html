@@ -78,9 +78,15 @@
   .success h3{font-size:16px; font-weight:350; margin-bottom:7px;}
   .success p{font-size:12.5px; color:var(--gray); line-height:1.6;}
   .footer-tag{text-align:center; margin-top:16px; font-size:10.5px; color:var(--ash);}
+
+  .bubble{position:relative; background:#fff7d6; border:1.5px solid #e8cf6b; border-radius:16px; padding:12px 16px; font-size:12px; color:#5c4c00; line-height:1.6; margin:14px 0 22px; display:flex; gap:9px; align-items:flex-start;}
+  .bubble .ic{font-size:15px; flex-shrink:0; line-height:1.3;}
+  .bubble b{color:#3d3200;}
+  .bubble::after{content:'';position:absolute;left:26px;bottom:-8px;width:14px;height:14px;background:#fff7d6;border-right:1.5px solid #e8cf6b;border-bottom:1.5px solid #e8cf6b;transform:rotate(45deg);}
 </style>
 </head>
 <body>
+<script src="../assets/nav.js"></script>
 
 <div class="topbar">
   <div class="brand">
@@ -100,6 +106,11 @@
     <div class="intro">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       <div>예약 시스템이 아니라 "가능 시간 수집 후 배정" 방식으로 운영됩니다.<br>가능한 시간을 많이 골라 주실수록 배정받을 확률이 높아집니다. 담당자가 확정한 뒤 개별로 안내드립니다.</div>
+    </div>
+
+    <div class="bubble" style="margin-top:0;">
+      <span class="ic">👋</span>
+      <div><b>이 화면에서 하는 일:</b> 지원자가 "언제언제 가능한지"만 알려줍니다. 여기서는 시간이 확정되지 않아요 — 제출하면 관리자 워크북의 <b>③지원자접수</b> 목록에 "배정대기" 상태로 쌓이고, 관리자가 <b>🗂️ 관리자 워크북</b> 화면에서 "배정 실행"을 눌러야 실제 시간이 정해집니다.<br><span style="font-size:11px; opacity:0.85;">📊 실제 Excel에서는: <b>③지원자접수</b> 시트의 이름·이메일·구분·가능시간 열에 이 내용이 한 줄씩 추가됩니다.</span></div>
     </div>
 
     <div class="field">
@@ -145,6 +156,10 @@
     <div class="summary-title">✅ 제출하실 가능 시간</div>
     <div class="summary-chips" id="summaryChips"><span class="sum-empty">아직 고른 시간이 없습니다.</span></div>
 
+    <div class="bubble" style="margin-bottom:12px;">
+      <span class="ic">💡</span>
+      <div>이 버튼을 눌러도 <b>바로 예약되지 않습니다.</b> "나는 이 시간들이 가능해요"라고 명단에 이름을 올리는 것뿐이에요.</div>
+    </div>
     <button class="btn-submit" id="submitBtn" disabled onclick="submitApplicant()">이 시간들로 제출하기</button>
     <div class="privacy">제출하신 내용은 인터뷰 배정에만 사용됩니다. 이 화면에서는 즉시 확정되지 않습니다.</div>
   </div>

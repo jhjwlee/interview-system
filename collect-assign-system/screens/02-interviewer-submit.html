@@ -65,9 +65,14 @@
   .success h3{font-size:16px; font-weight:350; margin-bottom:7px;}
   .success p{font-size:12.5px; color:var(--gray); line-height:1.6;}
   .footer-tag{text-align:center; margin-top:16px; font-size:10.5px; color:var(--ash);}
+
+  .bubble{position:relative; background:#fff7d6; border:1.5px solid #e8cf6b; border-radius:16px; padding:12px 16px; font-size:12px; color:#5c4c00; line-height:1.6; margin:14px 0 22px; display:flex; gap:9px; align-items:flex-start;}
+  .bubble .ic{font-size:15px; flex-shrink:0; line-height:1.3;}
+  .bubble b{color:#3d3200;}
 </style>
 </head>
 <body>
+<script src="../assets/nav.js"></script>
 
 <div class="topbar">
   <div class="brand">
@@ -87,6 +92,11 @@
     <div class="intro">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       <div>알려주신 시간은 담당자가 정기적으로 실행하는 배정 작업에 그대로 반영됩니다.<br>Power Automate 자동 알림은 없으며, 배정 결과는 담당자가 개별로 안내드립니다.</div>
+    </div>
+
+    <div class="bubble" style="margin-top:0;">
+      <span class="ic">👋</span>
+      <div><b>이 화면에서 하는 일:</b> 인터뷰어가 가능한 날짜·시간을 등록해두면 관리자 워크북의 <b>②인터뷰어가용시간</b> 목록에 원본 그대로 쌓입니다. 이 시점에는 아직 슬롯(시간표)이 만들어지지 않아요 — <b>🗂️ 관리자 워크북</b>에서 "배정 실행"을 눌러야 이 정보로 실제 슬롯이 채워집니다.<br><span style="font-size:11px; opacity:0.85;">📊 실제 Excel에서는: <b>②인터뷰어가용시간</b> 시트의 이름·이메일·1일최대건수·가능날짜·가능시간 열에 이 내용이 한 줄씩 추가됩니다.</span></div>
     </div>
 
     <div class="row2">
@@ -132,6 +142,10 @@
     <div class="summary-title">✅ 이렇게 알려드리면 될까요?</div>
     <div class="summary-chips" id="summaryChips"><span class="sum-empty">아직 고른 시간이 없습니다.</span></div>
 
+    <div class="bubble" style="margin-bottom:12px;">
+      <span class="ic">💡</span>
+      <div>제출한 시간은 <b>모두 슬롯이 되는 게 아니라</b>, 지원자 수요와 하루 최대건수에 맞춰 필요한 만큼만 실제 슬롯으로 채워집니다.</div>
+    </div>
     <button class="btn-submit" id="submitBtn" disabled onclick="submitAvail()">이 시간으로 알려주기</button>
     <div class="privacy">알려주신 내용은 인터뷰 배정을 짜는 데에만 씁니다.</div>
   </div>
