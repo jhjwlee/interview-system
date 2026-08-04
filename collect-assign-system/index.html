@@ -65,7 +65,6 @@
   </div>
 
   <div class="bubble">
-    <span class="ic">💬</span>
     <div>
       <b>이 시스템은 이렇게 움직여요</b>
       <ol>
@@ -79,30 +78,36 @@
   </div>
 
   <div class="demo-order">
-    <h3>🎬 시연 순서 (추천)</h3>
+    <h3>시연 순서 (추천)</h3>
     <div class="sub2">이 순서대로 눌러보시면 "가능시간 제출 → 배정 실행 → 결과 확인" 흐름이 자연스럽게 이어집니다.</div>
     <ol>
       <li>
         <div class="step-text">
-          <a href="screens/02-interviewer-submit.html">🗓️ 인터뷰어 제출</a> 화면에서 이름·이메일 입력 후 날짜 하나와 시간 1~2개를 골라 제출
+          <a href="screens/02-interviewer-submit.html">인터뷰어 제출</a> 화면에서 이름·이메일 입력 후 날짜 하나와 시간 1~2개를 골라 제출
           <div class="step-detail">→ 관리자 워크북 ②인터뷰어가용시간 탭에 쌓입니다 (아직 슬롯은 안 만들어짐)</div>
         </div>
       </li>
       <li>
         <div class="step-text">
-          <a href="screens/01-applicant-submit.html">📝 지원자 제출</a> 화면에서 이름·이메일 입력 후 방금 인터뷰어가 고른 것과 겹치는 날짜·시간을 골라 제출
+          <a href="screens/01-applicant-submit.html">지원자 제출</a> 화면에서 이름·이메일 입력 후 방금 인터뷰어가 고른 것과 겹치는 날짜·시간을 골라 제출
           <div class="step-detail">→ ③지원자접수 탭에 "배정대기" 상태로 쌓입니다</div>
         </div>
       </li>
       <li>
         <div class="step-text">
-          <a href="screens/03-admin-workbook.html">🗂️ 관리자 워크북</a>으로 이동해 상단 "배정 실행" 버튼 클릭
+          <a href="screens/03-admin-workbook.html">관리자 워크북</a>으로 이동해 상단 "배정 실행" 버튼 클릭
           <div class="step-detail">→ ①슬롯마스터에 인터뷰어가 채워지고, ③지원자가 짝지어져 ④배정결과 탭에 나타납니다</div>
         </div>
       </li>
       <li>
         <div class="step-text">
-          (선택) <a href="screens/04-helpdesk.html">💬 문의하기</a>에서 문의를 하나 남긴 뒤, 다시 관리자 워크북으로 돌아가 ⑤헬프데스크 탭에서 확인
+          (선택) <a href="screens/04-helpdesk.html">문의하기</a>에서 문의를 하나 남긴 뒤, 다시 관리자 워크북으로 돌아가 ⑤헬프데스크 탭에서 확인
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          (선택) <a href="screens/05-faq.html">FAQ</a> 화면에서 자주 묻는 질문을 확인하고, "관리자 모드"에서 새 질문·답변을 직접 등록해보기
+          <div class="step-detail">→ 프로그램을 몰라도 담당자가 텍스트만 입력하면 바로 게시되는 방식입니다</div>
         </div>
       </li>
       <li>
@@ -146,6 +151,12 @@
       <div class="role" style="color:#b25c00;">VM 관리자</div>
       <h3>배정 관리 워크북</h3>
       <p>Excel 워크북 5개 시트를 흉내 낸 화면 · "배정 실행" 버튼으로 매칭 실행</p>
+      <div class="go">보기 →</div>
+    </a>
+    <a class="card" href="screens/05-faq.html">
+      <div class="role" style="color:var(--teal);">신청자 · 문의자</div>
+      <h3>자주 묻는 질문(FAQ)</h3>
+      <p>담당자가 코드 없이 직접 질문·답변을 등록·삭제할 수 있는 화면</p>
       <div class="go">보기 →</div>
     </a>
   </div>

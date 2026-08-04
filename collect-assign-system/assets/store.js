@@ -10,7 +10,7 @@ window.CAStore = (function () {
   var DOW = ["일", "월", "화", "수", "목", "금", "토"];
 
   function seedSlots() {
-    var days = ["2026-08-03", "2026-08-04", "2026-08-05"];
+    var days = ["2026-10-06", "2026-10-07", "2026-10-08"];
     var times = ["10:00", "10:30", "11:00", "14:00"];
     var slots = [];
     days.forEach(function (d) {
@@ -22,12 +22,24 @@ window.CAStore = (function () {
     return slots;
   }
 
+  function seedFaq() {
+    return [
+      { id: "F-1", q: "희망 부서와 다른 부서를 추천받을 수 있습니까?", a: "네. 인터뷰 중 형제자매의 은사와 필요를 함께 살펴보고, 더 적합한 부서가 있다면 담당자가 제안드릴 수 있습니다. 최종 배치는 본인과의 상의를 거쳐 결정됩니다.", at: nowLabel() },
+      { id: "F-2", q: "1순위 희망만 기록해도 됩니까?", a: "가능합니다. 다만 2~3순위까지 함께 알려주시면 일정 조율이 더 수월합니다.", at: nowLabel() },
+      { id: "F-3", q: "제출한 가능 시간이 왜 바로 확정되지 않나요?", a: "이 시스템은 예약형이 아니라 수집·배정형입니다. 여러 사람이 제출한 가능 시간을 담당자가 모아서 한 번에 배정하기 때문에, 제출 즉시가 아니라 배정 실행 이후에 결과가 정해집니다.", at: nowLabel() },
+      { id: "F-4", q: "언제 배정 결과를 알 수 있나요?", a: "담당자가 배정을 실행하고 최종 확인을 마친 뒤 개별 연락(이메일 또는 JW Hub 공식 채널)으로 안내드립니다. 자동 발송은 사용하지 않습니다.", at: nowLabel() },
+      { id: "F-5", q: "가족(부부)이 함께 인터뷰를 받고 싶습니다.", a: "제출 화면에서 \"부부가 함께 받습니다\"를 선택해 주세요. 담당자가 배정 시 함께 진행되도록 조율합니다.", at: nowLabel() },
+      { id: "F-6", q: "제출 후 내용을 수정하고 싶습니다.", a: "이 화면에서는 직접 수정할 수 없습니다. 문의하기 화면으로 변경 내용을 남겨 주시면 담당자가 반영해 드립니다.", at: nowLabel() }
+    ];
+  }
+
   function seed() {
     return {
       slots: seedSlots(),
       availability: [], // 인터뷰어 제출 원본 (②시트)
       applicants: [],   // 지원자 제출 원본 (③시트)
       helpdesk: [],     // ⑤시트
+      faq: seedFaq(),   // 자주 묻는 질문 (수작업 등록/삭제 가능)
       log: [],
       lastRun: null
     };
@@ -36,7 +48,11 @@ window.CAStore = (function () {
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
-      if (raw) return JSON.parse(raw);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (!parsed.faq) parsed.faq = seedFaq(); // 이전 버전 데모 데이터와의 호환
+        return parsed;
+      }
     } catch (e) {}
     var s = seed();
     save(s);
