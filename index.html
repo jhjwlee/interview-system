@@ -220,7 +220,11 @@ var GRP_COLORS = {
   'VM 관리자': '#b25c00',
   'Teams 통합': '#6264a7'
 };
-var html = '';
+var html = '<a class="nav" href="app.html" style="border-left-color:#0071e333; margin-bottom:10px; background:var(--color-off-black);">' +
+        '<span class="dot" style="background:#fff;"></span>' +
+        '<span class="tx"><span class="t" style="color:#fff;">앱 형태로 한 화면에서 보기</span>' +
+        '<span class="s" style="color:rgba(255,255,255,0.65);">홈·신청자·인터뷰어·관리자·Teams 하단 탭 모바일 앱 데모</span></span></a>' +
+        '<div class="sep"></div>';
 var lastGrp = null;
 SCREENS.forEach(function(s){
   var gc = GRP_COLORS[s.grp] || '#8f8f8f';
