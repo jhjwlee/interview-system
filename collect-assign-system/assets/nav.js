@@ -3,6 +3,7 @@
    collect-assign-system/index.html(허브)과 collect-assign-system/screens/*.html
    양쪽에서 모두 동작하도록 현재 위치를 스스로 판단해 상대경로를 계산합니다. */
 (function () {
+  if (window.self !== window.top) return; // app.html 앱 셔에 iframe으로 임베드될 때는 중복 네비를 숨김
   var inScreens = /\/collect-assign-system\/screens\//.test(location.pathname);
   var base = inScreens ? '' : 'screens/'; // 화면 파일들끼리는 같은 폴더, 허브에서는 screens/ 로 들어가야 함
   var home = inScreens ? '../index.html' : 'index.html';
