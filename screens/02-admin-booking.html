@@ -12,8 +12,13 @@
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:var(--font); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; word-break:keep-all; overflow-wrap:anywhere;}
 
-
   .wrap{max-width:1180px; margin:0 auto; padding:28px 24px 60px;}
+
+  .who-bar{display:flex; align-items:center; gap:10px; background:var(--surface); border:0.5px solid var(--hair); border-radius:16px; padding:12px 16px; margin-bottom:22px;}
+  .who-bar .av{width:30px; height:30px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:500; flex-shrink:0;}
+  .who-bar .nm{font-size:13px; font-weight:400;}
+  .who-bar .em{font-size:11px; color:var(--ash);}
+  .who-bar .logout{margin-left:auto; font-size:11.5px; color:var(--blue); cursor:pointer; flex-shrink:0;}
 
   .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px;}
   .stat-card{background:var(--surface); border:0.5px solid var(--hair); border-radius:18px; padding:18px 20px;}
@@ -31,10 +36,12 @@
   .btn{border:none; border-radius:9999px; padding:10px 18px; font-size:12.5px; font-weight:400; cursor:pointer; transition:0.15s; font-family:inherit;}
   .btn-primary{background:var(--blue); color:#fff;}
   .btn-primary:hover{background:#0064cc;}
+  .btn-primary:disabled{background:#d7d7da; color:#a6a6a6; cursor:not-allowed;}
   .btn-ghost{background:var(--ink-wash); color:var(--ink);}
   .btn-ghost:hover{background:var(--ink-wash-strong);}
+  .btn-sm{padding:7px 13px; font-size:11.5px;}
 
-  select, input[type=text]{border:0.5px solid var(--hair); background:var(--surface); border-radius:10px; padding:9px 12px; font-size:12.5px; font-family:inherit; color:var(--ink);}
+  select, input[type=text], input[type=time]{border:0.5px solid var(--hair); background:var(--surface); border-radius:10px; padding:9px 12px; font-size:12.5px; font-family:inherit; color:var(--ink);}
   select:focus, input:focus{outline:none; box-shadow:0 0 0 2px var(--blue) inset; border-color:transparent;}
 
   .tbl-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
@@ -44,7 +51,6 @@
   tbody tr:hover{background:var(--blue-wash);}
   tbody tr:last-child td{border-bottom:none;}
 
-  /* ---- 상태 뱃지: 3단계로 단순화 (활성=블루, 대기=중립, 종료=오프블랙) ---- */
   .badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:400; padding:4px 11px; border-radius:9999px; border:0.5px solid transparent; background:none;}
   .badge-active{border-color:var(--blue); color:var(--blue);}
   .badge-pending{border-color:var(--hair); color:var(--steel);}
@@ -66,7 +72,6 @@
   .foot-note{padding:14px 22px; background:var(--canvas); font-size:12px; color:var(--steel); border-top:0.5px solid var(--hair); line-height:1.7;}
   .foot-note b{color:var(--ink); font-weight:350;}
   .empty-tag{color:var(--ash); font-size:12px;}
-  .flag{font-size:10.5px; background:none; border:0.5px solid var(--ink); color:var(--ink); padding:2px 8px; border-radius:9999px; font-weight:400; margin-left:6px;}
   @media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
@@ -76,7 +81,7 @@
   <div class="brand">
     <div>
       <h1>인터뷰 예약 시스템</h1>
-      <div class="sub">관리자 화면 · SharePoint 목록 A(타임슬롯 마스터) + 목록 B(예약접수대장) 기반 목업</div>
+      <div class="sub">관리자 화면 · 인터뷰어 가용 횟수 기반 슬롯 관리 목업</div>
     </div>
   </div>
   <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
@@ -87,8 +92,14 @@
 
 <div class="wrap">
 
+  <div class="who-bar">
+    <div class="av" id="avInit">-</div>
+    <div><div class="nm" id="whoName">-</div><div class="em" id="whoEmail">-</div></div>
+    <div class="logout" onclick="doLogout()">로그아웃</div>
+  </div>
+
   <div class="foot-note" style="border-radius:18px; margin-bottom:22px; border:0.5px solid var(--hair); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;">
-    <div><b>연관 화면 안내</b><br>이 화면은 관리자용입니다.<br>인터뷰어가 직접 사용하는 화면은 별도 파일로 제공됩니다: <b>인터뷰어 가용시간 입력폼</b>(가능한 날짜·시간 등록), <b>인터뷰어 슬롯 승인 화면</b>(정원 마감 슬롯 승인/거절).<br>이 데모는 브라우저에 저장되는 시뮬레이션입니다 — 실제 SharePoint·Power Automate가 아닙니다.</div>
+    <div><b>연관 화면 안내</b><br>인터뷰어는 별도 화면에서 가능한 날짜와 하루 최대 가능 횟수만 알려주고(시간은 고르지 않습니다), 관리자가 그 한도 안에서 아래 목록 C를 보고 실제 시간대(목록 A)를 만듭니다.<br>이 데모는 브라우저에 저장되는 시뮬레이션입니다.</div>
     <button class="btn btn-ghost" style="flex-shrink:0;" onclick="resetDemo()">데모 초기화</button>
   </div>
 
@@ -96,67 +107,76 @@
 
   <div class="panel">
     <div class="panel-head">
+      <h2><span class="dot"></span> 목록 C · 인터뷰어 가용 횟수</h2>
+    </div>
+    <div class="tbl-scroll">
+    <table class="rescard">
+      <thead>
+        <tr><th>날짜</th><th>인터뷰어</th><th>최대 횟수</th><th>배정됨</th><th>잔여</th><th>시간 지정 후 슬롯 만들기</th></tr>
+      </thead>
+      <tbody id="capTableBody"></tbody>
+    </table>
+    </div>
+    <div class="foot-note">시간을 지정하고 &quot;슬롯 만들기&quot;를 누르면 그 시간이 바로 <b>모집중</b> 상태로 만들어져 신청자 화면에 공개됩니다. 인터뷰어가 이미 그 날짜를 알려준 시점에 동의한 것으로 보아 별도 재확인 절차는 두지 않았습니다.</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
       <h2><span class="dot"></span> 목록 A · 타임슬롯 마스터</h2>
       <div class="tools">
-        <select>
-          <option>전체 날짜</option>
-          <option>08.03 (월)</option>
-          <option>08.04 (화)</option>
+        <select id="fDate">
+          <option value="">전체 날짜</option>
         </select>
-        <select>
-          <option>전체 상태</option>
-          <option>배정검토중(비공개)</option>
+        <select id="fStatus">
+          <option value="">전체 상태</option>
           <option>모집중</option>
           <option>마감임박</option>
           <option>마감</option>
         </select>
-        <button class="btn btn-primary" onclick="alert('실제 구현 시 SharePoint 목록 A에 새 슬롯 항목이 생성됩니다.')">+ 슬롯 추가</button>
       </div>
     </div>
     <div class="tbl-scroll">
     <table class="rescard">
       <thead>
         <tr>
-          <th>슬롯 ID</th><th>날짜</th><th>시작시간</th><th>정원</th><th>현재예약</th><th>잔여</th><th>배정 인터뷰어</th><th>인터뷰어 확인</th><th>상태</th><th>Zoom 링크</th>
+          <th>슬롯 ID</th><th>날짜</th><th>시작시간</th><th>정원</th><th>현재예약</th><th>잔여</th><th>배정 인터뷰어</th><th>상태</th><th>Zoom 링크</th>
         </tr>
       </thead>
       <tbody id="slotTableBody"></tbody>
     </table>
     </div>
-    <div class="foot-note"><b>흐름 변경 안내(2026.07.25 개정)</b><br>순서를 "예약 마감 후 인터뷰어 승인"에서 <b>"인터뷰어 확인 후 예약 개방"</b>으로 바꾸었습니다.<br>① 인터뷰어 가용시간 목록을 바탕으로 슬롯에 인터뷰어를 배정하면 <b>배정검토중(비공개)</b> 상태로 생성됩니다.<br>② 인터뷰어가 슬롯 배정 확인 화면(Teams 카드)에서 <b>확인</b>을 누르면 그 즉시 <b>모집중</b>으로 바뀌며 신청자 화면에 공개됩니다.<br>③ 잔여석이 0이 되면 <b>마감</b>으로 자동 전환됩니다(인터뷰어가 이미 확정되어 있으므로 별도 사후 승인 절차가 필요 없습니다).<br>신청자는 배정검토중 상태의 슬롯을 볼 수 없습니다.</div>
   </div>
 
   <div class="panel">
     <div class="panel-head">
       <h2><span class="dot"></span> 목록 B · 예약 접수대장</h2>
       <div class="tools">
-        <input type="text" placeholder="이름·이메일 검색" style="width:180px;">
-        <select>
-          <option>전체 상태</option>
-          <option>확정</option>
-          <option>대기</option>
-          <option>취소</option>
-        </select>
+        <input type="text" id="searchBox" placeholder="이름·이메일 검색" style="width:180px;" oninput="renderReservationTable(DemoStore.load())">
       </div>
     </div>
     <div class="tbl-scroll">
     <table class="rescard">
       <thead>
         <tr>
-          <th>신청자</th><th>구분</th><th>신청 슬롯</th><th>상태</th><th>Zoom 발송</th><th>접수일시</th><th></th>
+          <th>신청자</th><th>구분</th><th>신청 슬롯</th><th>상태</th><th>확정 메일</th><th>접수일시</th><th></th>
         </tr>
       </thead>
       <tbody id="reservationTableBody"></tbody>
     </table>
     </div>
-    <div class="foot-note">Power Automate 플로우가 Forms 제출을 감지하면 이 대장에 신규 행이 자동 생성됩니다.<br>"확정" 처리 시 Zoom 링크가 담긴 안내 메일이 자동 발송되도록 구성됩니다.</div>
+    <div class="foot-note">신청자가 예약을 마치면 이 대장에 신규 행이 자동 생성되고, &quot;확정&quot; 처리 시 확정 안내 메일이 신청자 이메일로 발송됩니다.</div>
   </div>
 
 </div>
 <script src="../assets/demo-store.js"></script>
+<script src="../assets/auth.js"></script>
 <script>
+  const session = DemoAuth.requireRole(['admin']);
+</script>
+<script>
+  function doLogout(){ DemoAuth.logout(); location.href = 'login.html'; }
+
   function badgeForStatus(status){
-    if(status==='배정검토중') return '<span class="badge badge-pending">배정검토중</span>';
     if(status==='모집중') return '<span class="badge badge-active">모집중</span>';
     if(status==='마감임박') return '<span class="badge badge-active">마감임박</span>';
     return '<span class="badge badge-closed">마감</span>';
@@ -164,70 +184,109 @@
 
   function renderStats(state){
     const slots = state.slots;
-    const openSlots = slots.filter(s=>s.status!=='배정검토중').length;
-    const totalCap = slots.reduce((s,x)=> s + (x.status!=='배정검토중' ? x.cap : 0), 0);
+    const openSlots = slots.length;
+    const totalCap = slots.reduce((s,x)=> s + x.cap, 0);
     const booked = slots.reduce((s,x)=>s+x.booked,0);
-    const remain = slots.reduce((s,x)=> s + (x.status!=='배정검토중' ? Math.max(x.cap-x.booked,0) : 0), 0);
+    const remain = slots.reduce((s,x)=> s + Math.max(x.cap-x.booked,0), 0);
     const nearFull = slots.filter(s=>s.status==='마감임박').length;
     const today = state.reservations.filter(r=>{
-      const today = DemoStore.nowLabel().split(' ')[0];
-      return (r.at||'').indexOf(today)===0;
+      const t = DemoStore.nowLabel().split(' ')[0];
+      return (r.at||'').indexOf(t)===0;
     }).length;
     const pct = totalCap>0 ? Math.round(booked/totalCap*1000)/10 : 0;
     document.getElementById('statCards').innerHTML =
-      '<div class="stat-card"><div class="label">이번 주 개설 슬롯</div><div class="value">'+openSlots+'</div><div class="note">1타임 3명 기준 최대 '+(openSlots*3)+'명</div></div>'+
+      '<div class="stat-card"><div class="label">개설 슬롯</div><div class="value">'+openSlots+'</div><div class="note">1타임 최대 3명 기준 최대 '+(openSlots*3)+'명</div></div>'+
       '<div class="stat-card"><div class="label">예약 완료</div><div class="value accent">'+booked+'</div><div class="note">전체 대비 '+pct+'%</div></div>'+
       '<div class="stat-card"><div class="label">잔여 슬롯</div><div class="value accent">'+remain+'</div><div class="note">마감 임박 슬롯 '+nearFull+'건</div></div>'+
       '<div class="stat-card"><div class="label">오늘 신규 접수</div><div class="value">'+today+'</div><div class="note">최근 갱신 '+DemoStore.nowLabel()+'</div></div>';
   }
 
+  function renderCapTable(state){
+    const rows = state.capacity.slice().sort((a,b)=> a.date.localeCompare(b.date));
+    document.getElementById('capTableBody').innerHTML = rows.map(c=>{
+      const used = state.slots.filter(s=>s.interviewer===c.interviewer && s.date===c.date).length;
+      const remain = Math.max(c.maxCount - used, 0);
+      const disabled = remain <= 0 ? 'disabled' : '';
+      return '<tr>'+
+        '<td class="name-cell">'+DemoStore.fmtDateShort(c.date)+'</td>'+
+        '<td>'+c.interviewer+'<div class="sub-text">'+c.email+'</div></td>'+
+        '<td>'+c.maxCount+'회</td><td>'+used+'회</td><td>'+remain+'회</td>'+
+        '<td><input type="time" id="time-'+c.id+'" step="1800" value="10:00" style="width:110px;"> '+
+        '<button class="btn btn-primary btn-sm" '+disabled+' onclick="createSlotFromCap(\''+c.id+'\')">슬롯 만들기</button></td>'+
+      '</tr>';
+    }).join('') || '<tr><td colspan="6" class="empty-tag">아직 등록된 인터뷰어 가용 횟수가 없습니다.</td></tr>';
+  }
+
+  function createSlotFromCap(capId){
+    const state = DemoStore.load();
+    const cap = state.capacity.find(c=>c.id===capId);
+    if(!cap) return;
+    const timeInput = document.getElementById('time-'+capId);
+    const t = timeInput.value;
+    if(!t){ alert('시간을 먼저 입력해 주세요.'); return; }
+    const used = state.slots.filter(s=>s.interviewer===cap.interviewer && s.date===cap.date).length;
+    if(used >= cap.maxCount){ alert('이 인터뷰어의 그날 최대 횟수를 이미 다 썼습니다.'); return; }
+    const id = DemoStore.slotIdFor(cap.date, t);
+    if(DemoStore.findSlot(state, id)){ alert('이미 같은 날짜·시간에 슬롯이 있습니다. 다른 시간을 골라 주세요.'); return; }
+    state.slots.push({ id, date: cap.date, time: t, status:'모집중', plannedCap:3, cap:3, booked:0, interviewer: cap.interviewer });
+    DemoStore.addLog(state, cap.interviewer+' 인터뷰어의 '+DemoStore.fmtDateShort(cap.date)+' '+t+' 슬롯이 만들어져 신청자에게 공개되었습니다.');
+    DemoStore.save(state);
+    renderAll();
+  }
+
   function renderSlotTable(state){
-    const rows = state.slots.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+    let rows = state.slots.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+    const fDate = document.getElementById('fDate').value;
+    const fStatus = document.getElementById('fStatus').value;
+    if(fDate) rows = rows.filter(s=>s.date===fDate);
+    if(fStatus) rows = rows.filter(s=>s.status===fStatus);
     document.getElementById('slotTableBody').innerHTML = rows.map(s=>{
       const dateLabel = DemoStore.fmtDateShort(s.date);
-      const isReview = s.status === '배정검토중';
-      const remain = isReview ? '-' : Math.max(s.cap - s.booked, 0);
-      const capLabel = isReview ? s.plannedCap : s.cap;
-      const usedLabel = isReview ? '-' : s.booked;
-      const pctFill = (!isReview && s.cap>0) ? Math.min(100, Math.round(s.booked/s.cap*100)) : 0;
+      const remain = Math.max(s.cap - s.booked, 0);
+      const pctFill = s.cap>0 ? Math.min(100, Math.round(s.booked/s.cap*100)) : 0;
       const fillClass = pctFill>=100 ? 'full' : (pctFill>=66 ? 'warn' : '');
-      const interviewerCell = s.interviewer
-        ? s.interviewer
-        : '<span class="unassigned">미배정</span>';
-      const confirmBadge = isReview
-        ? '<span class="badge badge-pending">확인 대기</span>'
-        : '<span class="badge badge-active">확인완료</span>';
-      const zoomCell = isReview
-        ? '<span style="color:var(--ash); font-size:12px;">비공개</span>'
-        : '<a class="zoom-link" href="#" onclick="return false;">링크 보기</a>';
-      const capBar = isReview ? '' : '<span class="capacity-bar"><span class="capacity-fill '+fillClass+'" style="width:'+pctFill+'%"></span></span>';
-      return '<tr'+(isReview?' style="opacity:0.75;"':'')+'>'+
+      const interviewerCell = s.interviewer ? s.interviewer : '<span class="unassigned">미배정</span>';
+      const zoomCell = '<a class="zoom-link" href="#" onclick="return false;">링크 보기</a>';
+      const capBar = '<span class="capacity-bar"><span class="capacity-fill '+fillClass+'" style="width:'+pctFill+'%"></span></span>';
+      return '<tr>'+
         '<td class="name-cell">'+s.id+'</td><td data-label="날짜">'+dateLabel+'</td><td data-label="시작시간">'+s.time+'</td>'+
-        '<td data-label="정원">'+capLabel+'</td><td data-label="현재예약">'+usedLabel+'</td><td data-label="잔여">'+remain+'</td>'+
+        '<td data-label="정원">'+s.cap+'</td><td data-label="현재예약">'+s.booked+'</td><td data-label="잔여">'+remain+'</td>'+
         '<td data-label="배정 인터뷰어" class="interviewer-cell">'+interviewerCell+'</td>'+
-        '<td data-label="인터뷰어 확인">'+confirmBadge+'</td>'+
         '<td data-label="상태">'+capBar+badgeForStatus(s.status)+'</td>'+
         '<td data-label="Zoom 링크">'+zoomCell+'</td>'+
       '</tr>';
-    }).join('');
+    }).join('') || '<tr><td colspan="9" class="empty-tag">조건에 맞는 슬롯이 없습니다.</td></tr>';
   }
 
   function renderReservationTable(state){
     const statusBadge = { '확정':'badge-active', '대기':'badge-pending', '취소':'badge-closed' };
-    document.getElementById('reservationTableBody').innerHTML = state.reservations.map(r=>{
+    const kw = (document.getElementById('searchBox').value||'').trim().toLowerCase();
+    let rows = state.reservations;
+    if(kw) rows = rows.filter(r=> (r.name+r.email).toLowerCase().indexOf(kw)!==-1);
+    document.getElementById('reservationTableBody').innerHTML = rows.map(r=>{
       return '<tr>'+
         '<td><div class="name-cell">'+r.name+'</div><div class="sub-text">'+r.email+'</div></td>'+
         '<td data-label="구분">'+r.kind+'</td><td data-label="신청 슬롯">'+r.slotLabel+'</td>'+
         '<td data-label="상태"><span class="badge '+(statusBadge[r.status]||'badge-pending')+'">'+r.status+'</span></td>'+
-        '<td data-label="Zoom 발송">'+(r.zoomSent?'발송완료':'-')+'</td><td data-label="접수일시">'+r.at+'</td>'+
+        '<td data-label="확정 메일">'+(r.zoomSent?'발송완료':'-')+'</td><td data-label="접수일시">'+r.at+'</td>'+
         '<td><button class="btn btn-ghost" onclick="alert(\'상세 처리 화면(샘플에서는 미구현)\')">상세</button></td>'+
       '</tr>';
-    }).join('');
+    }).join('') || '<tr><td colspan="7" class="empty-tag">조건에 맞는 예약이 없습니다.</td></tr>';
+  }
+
+  function fillDateFilter(state){
+    const dates = Array.from(new Set(state.slots.map(s=>s.date))).sort();
+    const sel = document.getElementById('fDate');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">전체 날짜</option>' + dates.map(d=>'<option value="'+d+'">'+DemoStore.fmtDateShort(d)+'</option>').join('');
+    sel.value = cur;
   }
 
   function renderAll(){
     const state = DemoStore.load();
     renderStats(state);
+    renderCapTable(state);
+    fillDateFilter(state);
     renderSlotTable(state);
     renderReservationTable(state);
   }
@@ -238,7 +297,14 @@
     renderAll();
   }
 
-  renderAll();
+  if (session) {
+    document.getElementById('avInit').textContent = session.name.slice(0,1);
+    document.getElementById('whoName').textContent = session.name + ' (관리자)';
+    document.getElementById('whoEmail').textContent = session.email;
+    document.getElementById('fDate').addEventListener('change', ()=>renderSlotTable(DemoStore.load()));
+    document.getElementById('fStatus').addEventListener('change', ()=>renderSlotTable(DemoStore.load()));
+    renderAll();
+  }
 </script>
 <script src="../assets/shell-nav.js"></script>
 </body>

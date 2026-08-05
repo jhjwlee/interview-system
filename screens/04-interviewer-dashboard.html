@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>내 배정 확인 (샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<link rel="stylesheet" href="../assets/augen.css">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  svg{display:block;}
+  body{font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; min-height:100vh; word-break:keep-all; overflow-wrap:anywhere;}
+  .wrap{max-width:720px; margin:0 auto; padding:30px 18px 70px;}
+  .card{background:var(--surface); border-radius:22px; border:0.5px solid var(--hair); padding:clamp(20px,4vw,26px); margin-bottom:16px;}
+  .who-bar{display:flex; align-items:center; gap:10px; background:var(--canvas); border-radius:14px; padding:10px 14px; margin-bottom:18px;}
+  .who-bar .av{width:32px; height:32px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:500; flex-shrink:0;}
+  .who-bar .nm{font-size:13px; font-weight:400;}
+  .who-bar .em{font-size:11px; color:var(--ash);}
+  .who-bar .logout{margin-left:auto; font-size:11.5px; color:var(--blue); cursor:pointer; flex-shrink:0;}
+  .sec-title{font-size:14px; font-weight:400; margin-bottom:4px;}
+  .sec-note{font-size:11.5px; color:var(--ash); margin-bottom:14px;}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 0; border-top:0.5px solid var(--hair);}
+  .row:first-of-type{border-top:none;}
+  .row .d{font-size:13px; font-weight:400;}
+  .row .meta{font-size:11.5px; color:var(--ash); margin-top:2px;}
+  .cap-bar{width:80px; height:6px; border-radius:9999px; background:var(--hair); overflow:hidden; flex-shrink:0;}
+  .cap-fill{height:100%; background:var(--blue);}
+  .badge{font-size:10px; font-weight:500; padding:3px 9px; border-radius:9999px; flex-shrink:0;}
+  .b-open{background:var(--blue-wash); color:var(--blue);}
+  .b-closed{background:var(--ink-wash); color:var(--steel);}
+  .empty{font-size:12px; color:var(--ash); text-align:center; padding:20px 0;}
+  .footer-tag{text-align:center; margin-top:6px; font-size:10.5px; color:var(--ash);}
+  .footer-tag a{color:var(--blue);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div>
+      <h1>내 배정 확인</h1>
+      <div class="sub">알려주신 가능 날짜와, 관리자가 그 안에서 실제로 배정한 인터뷰 시간을 확인합니다</div>
+    </div>
+  </div>
+  <div class="tag" style="border-color:var(--blue); color:var(--blue);">연동 데모</div>
+</div>
+
+<div class="wrap">
+  <div class="who-bar">
+    <div class="av" id="avInit">-</div>
+    <div><div class="nm" id="whoName">-</div><div class="em" id="whoEmail">-</div></div>
+    <div class="logout" onclick="doLogout()">로그아웃</div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">내가 알려준 가능 날짜</div>
+    <div class="sec-note">막대는 알려주신 최대 횟수 중 관리자가 실제로 배정한 비율입니다.</div>
+    <div id="capList"></div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">배정된 인터뷰 시간</div>
+    <div class="sec-note">관리자가 만든 실제 시간대입니다. &quot;모집중&quot;은 지금 신청자에게 열려 있는 시간입니다.</div>
+    <div id="slotList"></div>
+  </div>
+
+  <div class="footer-tag"><a href="03-interviewer-availability.html">가능한 날짜 더 알려주기 →</a></div>
+</div>
+
+<script src="../assets/demo-store.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+  const session = DemoAuth.requireRole(['interviewer', 'admin']);
+</script>
+<script>
+  function renderAll(){
+    const state = DemoStore.load();
+    const myCap = state.capacity.filter(c => c.interviewer === session.name).sort((a,b)=>a.date.localeCompare(b.date));
+    const mySlots = state.slots.filter(s => s.interviewer === session.name).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+
+    const capEl = document.getElementById('capList');
+    if(myCap.length === 0){
+      capEl.innerHTML = '<div class="empty">아직 알려준 가능 날짜가 없습니다.</div>';
+    } else {
+      capEl.innerHTML = myCap.map(c=>{
+        const used = mySlots.filter(s=>s.date===c.date).length;
+        const pct = c.maxCount > 0 ? Math.min(100, Math.round(used/c.maxCount*100)) : 0;
+        return '<div class="row"><div><div class="d">'+DemoStore.fmtDateShort(c.date)+'</div>'+
+          '<div class="meta">최대 '+c.maxCount+'회 중 '+used+'회 배정됨</div></div>'+
+          '<div class="cap-bar"><div class="cap-fill" style="width:'+pct+'%"></div></div></div>';
+      }).join('');
+    }
+
+    const slotEl = document.getElementById('slotList');
+    if(mySlots.length === 0){
+      slotEl.innerHTML = '<div class="empty">아직 배정된 시간이 없습니다.</div>';
+    } else {
+      slotEl.innerHTML = mySlots.map(s=>{
+        const badge = s.status === '모집중' || s.status === '마감임박'
+          ? '<span class="badge b-open">모집중</span>'
+          : '<span class="badge b-closed">'+s.status+'</span>';
+        return '<div class="row"><div><div class="d">'+DemoStore.fmtDateShort(s.date)+' '+s.time+'</div>'+
+          '<div class="meta">신청 '+s.booked+'/'+s.cap+'명</div></div>'+badge+'</div>';
+      }).join('');
+    }
+  }
+
+  function doLogout(){ DemoAuth.logout(); location.href = 'login.html'; }
+
+  if (session) {
+    document.getElementById('avInit').textContent = session.name.slice(0,1);
+    document.getElementById('whoName').textContent = session.name + (session.role === 'admin' ? ' (관리자)' : ' (인터뷰어)');
+    document.getElementById('whoEmail').textContent = session.email;
+    renderAll();
+  }
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

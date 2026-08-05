@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>자주 묻는 질문 FAQ (샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<link rel="stylesheet" href="../assets/augen.css">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  svg{display:block;}
+  body{font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif); font-weight:350; letter-spacing:-0.02em; background:var(--canvas); color:var(--ink); line-height:1.6; min-height:100vh; word-break:keep-all;}
+  .wrap{max-width:720px; margin:0 auto; padding:30px 18px 70px;}
+
+  .toolbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px;}
+  .search{flex:1;}
+  .search input{width:100%; border:1.5px solid var(--hair); border-radius:9999px; padding:10px 16px; font-size:13px; font-family:inherit; color:var(--ink); background:var(--surface);}
+  .search input:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-wash);}
+  .modebtn{flex-shrink:0; background:transparent; color:var(--steel); border:1.5px solid var(--hair); border-radius:9999px; padding:10px 16px; font-size:12.5px; font-weight:350; cursor:pointer; white-space:nowrap;}
+  .modebtn.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+
+  .acc-list{display:flex; flex-direction:column; gap:8px; margin-bottom:20px;}
+  .acc-item{background:var(--surface); border-radius:16px; border:0.5px solid var(--hair); overflow:hidden;}
+  .acc-q{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; cursor:pointer; font-size:13.5px; font-weight:400; color:var(--ink);}
+  .acc-q .arrow{flex-shrink:0; transition:transform .15s; color:var(--ash);}
+  .acc-item.open .acc-q .arrow{transform:rotate(180deg);}
+  .acc-a{display:none; padding:0 16px 16px; font-size:12.5px; color:var(--steel); line-height:1.65;}
+  .acc-item.open .acc-a{display:block;}
+  .acc-a .del{display:inline-block; margin-top:10px; font-size:11px; color:#b5432b; cursor:pointer;}
+  .empty-note{font-size:12px; color:var(--ash); background:var(--canvas); border-radius:13px; padding:18px; text-align:center;}
+
+  .admin-panel{display:none; background:var(--surface); border:1.5px solid var(--blue); border-radius:20px; padding:clamp(18px,3vw,24px); margin-bottom:22px;}
+  .admin-panel.show{display:block;}
+  .admin-panel h3{font-size:13.5px; font-weight:400; margin-bottom:4px;}
+  .admin-panel .sub2{font-size:11.5px; color:var(--ash); margin-bottom:14px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block; font-size:12px; font-weight:350; margin-bottom:6px; color:var(--steel);}
+  input[type=text], textarea{width:100%; border:1.5px solid var(--hair); border-radius:12px; padding:10px 13px; font-size:13.5px; font-family:inherit; color:var(--ink); background:#fff;}
+  textarea{resize:vertical; min-height:80px;}
+  input:focus, textarea:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-wash);}
+  .btn-add{background:var(--blue); color:#fff; border:none; border-radius:9999px; padding:12px 20px; font-size:13px; font-weight:400; cursor:pointer;}
+  .btn-add:hover{background:#0064cc;}
+  .footer-tag{text-align:center; margin-top:16px; font-size:10.5px; color:var(--ash);}
+  .footer-tag a{color:var(--blue);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div>
+      <h1>자주 묻는 질문 (FAQ)</h1>
+      <div class="sub">예약·인터뷰와 관련해 자주 나오는 질문을 모아두었습니다</div>
+    </div>
+  </div>
+  <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+    <div class="tag">샘플 · SAMPLE</div>
+    <div class="tag" style="border-color:var(--blue); color:var(--blue);">연동 데모</div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="search"><input type="text" id="searchBox" placeholder="궁금한 내용을 검색해보세요 (예: 기간, 확정, 수정)" oninput="renderList()"></div>
+    <button class="modebtn" id="modeBtn" onclick="toggleAdmin()">관리자 모드</button>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>새 질문·답변 등록</h3>
+    <div class="sub2">여기에 입력하고 "등록하기"를 누르면 위 목록 맨 위에 바로 나타납니다.</div>
+    <div class="field">
+      <label>질문</label>
+      <input type="text" id="faqQ" placeholder="예: 인터뷰는 어디에서 진행되나요?">
+    </div>
+    <div class="field">
+      <label>답변</label>
+      <textarea id="faqA" placeholder="답변 내용을 자세히 적어 주세요"></textarea>
+    </div>
+    <button class="btn-add" onclick="addFaq()">등록하기</button>
+  </div>
+
+  <div class="acc-list" id="accList"></div>
+
+  <div class="footer-tag">이 화면은 브라우저에 저장되는 연동 데모입니다 · <a href="01-applicant-form.html">예약하기로 돌아가기 →</a></div>
+</div>
+
+<script src="../assets/demo-store.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+  var session = DemoAuth.getSession();
+  var adminOn = false;
+  var openId = null;
+
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+  function toggleAdmin(){
+    if(!adminOn && (!session || session.role !== 'admin')){
+      location.href = 'login.html?next=06-faq';
+      return;
+    }
+    adminOn = !adminOn;
+    document.getElementById('modeBtn').classList.toggle('on', adminOn);
+    document.getElementById('adminPanel').classList.toggle('show', adminOn);
+    renderList();
+  }
+
+  function toggleItem(id){
+    openId = (openId === id) ? null : id;
+    renderList();
+  }
+
+  function addFaq(){
+    var q = (document.getElementById('faqQ').value||'').trim();
+    var a = (document.getElementById('faqA').value||'').trim();
+    if(!q || !a){ alert('질문과 답변을 모두 입력해 주세요.'); return; }
+    var state = DemoStore.load();
+    if(!state.faq) state.faq = [];
+    var id = 'F-' + Date.now();
+    state.faq.unshift({ id: id, q: q, a: a, at: DemoStore.nowLabel() });
+    DemoStore.addLog(state, '관리자가 FAQ "'+q+'"를 등록했습니다.');
+    DemoStore.save(state);
+    document.getElementById('faqQ').value = '';
+    document.getElementById('faqA').value = '';
+    openId = id;
+    renderList();
+  }
+
+  function removeFaq(id, q){
+    if(!confirm('"'+q+'" 질문을 삭제할까요?')) return;
+    var state = DemoStore.load();
+    state.faq = (state.faq||[]).filter(function(f){ return f.id !== id; });
+    DemoStore.addLog(state, '관리자가 FAQ "'+q+'"를 삭제했습니다.');
+    DemoStore.save(state);
+    renderList();
+  }
+
+  function renderList(){
+    var state = DemoStore.load();
+    var list = state.faq || [];
+    var kw = (document.getElementById('searchBox').value||'').trim().toLowerCase();
+    if(kw){
+      list = list.filter(function(f){
+        return (f.q+f.a).toLowerCase().indexOf(kw) !== -1;
+      });
+    }
+    var el = document.getElementById('accList');
+    if(list.length === 0){
+      el.innerHTML = '<div class="empty-note">검색 결과가 없습니다. 다른 검색어로 다시 시도해보세요.</div>';
+      return;
+    }
+    el.innerHTML = list.map(function(f){
+      var open = (f.id === openId);
+      var delLink = adminOn ? '<span class="del" onclick="event.stopPropagation(); removeFaq(\''+f.id+'\', \''+esc(f.q).replace(/'/g,"&#39;")+'\')">이 질문 삭제</span>' : '';
+      return '<div class="acc-item'+(open?' open':'')+'">'+
+        '<div class="acc-q" onclick="toggleItem(\''+f.id+'\')"><span>'+esc(f.q)+'</span>'+
+        '<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>'+
+        '<div class="acc-a">'+esc(f.a)+delLink+'</div></div>';
+    }).join('');
+  }
+
+  renderList();
+</script>
+<script src="../assets/shell-nav.js"></script>
+</body>
+</html>

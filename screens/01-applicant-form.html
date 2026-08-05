@@ -166,7 +166,7 @@
       </div>
 
       <div class="summary" id="summaryBar">
-        <div class="icon">✓</div>
+        <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="txt" id="summaryText"></div>
         <div class="change" onclick="resetSelection()">변경</div>
       </div>
@@ -294,10 +294,15 @@
     return 'ok';
   }
 
-  let viewYear = 2026, viewMonth = 7; // 0-indexed: 7 = August
-  const minYM = 2026*12+7, maxYM = 2026*12+8; // Aug~Sep 2026 이동 가능
+  const _range = DemoStore.monthRange(2);
+  let viewYear = _range.todayYear, viewMonth = _range.todayMonth;
+  const minYM = _range.minYM, maxYM = _range.maxYM;
 
   function pad(n){ return n<10 ? '0'+n : ''+n; }
+  function isPastDay(dstr){
+    const today = new Date(); today.setHours(0,0,0,0);
+    return new Date(dstr+'T00:00:00') < today;
+  }
 
   function renderCalendar(){
     document.getElementById('calMonthLabel').textContent = viewYear + '년 ' + (viewMonth+1) + '월';
@@ -314,7 +319,7 @@
       const dstr = viewYear+'-'+pad(viewMonth+1)+'-'+pad(d);
       const status = dateStatus(dstr);
       const sel = (window.selectedDate===dstr) ? ' selected' : '';
-      if(!status){
+      if(!status || isPastDay(dstr)){
         html += '<div class="cal-cell disabled">'+d+'</div>';
       } else {
         const dotClass = status==='ok' ? 'dot-ok' : status==='warn' ? 'dot-warn' : 'dot-full';
@@ -451,8 +456,8 @@
 
       document.getElementById('successTitle').textContent = '신청이 잘 접수되었습니다';
       document.getElementById('successBody').textContent = slot.status==='마감'
-        ? '방금 신청으로 이 시간이 마감되어, 인터뷰 확정과 Zoom 접속 링크를 바로 이메일로 보내드립니다.'
-        : '확인한 뒤 인터뷰 확정 여부와 Zoom 접속 링크를 이메일로 보내드립니다.';
+        ? '방금 신청으로 이 시간이 마감되어, 인터뷰 확정 안내와 접속 링크를 '+email+'(으)로 바로 보내드립니다.'
+        : '확인한 뒤 인터뷰 확정 여부와 접속 링크를 '+email+'(으)로 보내드립니다.';
     } else {
       document.getElementById('successTitle').textContent = '문의가 잘 접수되었습니다';
       document.getElementById('successBody').textContent = '담당 형제가 확인한 뒤 평일 기준 하루 안에 이메일로 답변드립니다.';

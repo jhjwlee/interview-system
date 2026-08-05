@@ -252,7 +252,7 @@
     }
     el.innerHTML = entries.map(e=>{
       const short = fmtDate(e.d).replace(/\([^)]+\)/,'');
-      return '<span class="sum-chip">'+short+' '+e.t+'<span class="x" onclick="toggleTime(\''+e.d+'\',\''+e.t+'\')">✕</span></span>';
+      return '<span class="sum-chip">'+short+' '+e.t+'<span class="x" onclick="toggleTime(\''+e.d+'\',\''+e.t+'\')"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>';
     }).join('');
     document.getElementById('submitBtn').disabled = false;
   }

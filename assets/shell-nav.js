@@ -5,16 +5,14 @@
   try { if (window.parent && window.parent !== window) return; } catch (e) { return; }
 
   var SCREENS = [
-    { id: '00-workflow', t: '전체 워크플로우' },
     { id: '01-applicant-form', t: '예약하기 · 문의하기 (신청자)' },
-    { id: '03-interviewer-availability', t: '가능한 시간 알려주기 (인터뷰어)' },
-    { id: '04-interviewer-approval', t: '배정 시간 확인 (인터뷰어)' },
-    { id: '06-teams-approval', t: 'Teams 확인 요청 (인터뷰어)' },
+    { id: '06-faq', t: '자주 묻는 질문 (신청자)' },
+    { id: 'login', t: '로그인 (인터뷰어·관리자)' },
+    { id: '03-interviewer-availability', t: '가능한 날짜 알려주기 (인터뷰어)' },
+    { id: '04-interviewer-dashboard', t: '내 배정 확인 (인터뷰어)' },
     { id: '02-admin-booking', t: '예약시스템 (관리자)' },
     { id: '09-weekly-dashboard', t: '주간 수급 현황 (관리자)' },
-    { id: '05-admin-helpdesk', t: '헬프데스크 (관리자)' },
-    { id: '07-teams-reassign', t: 'Teams 재배정 알림' },
-    { id: '08-teams-tab', t: 'Teams 탭 내장 화면' }
+    { id: '05-admin-helpdesk', t: '헬프데스크 (관리자)' }
   ];
 
   var file = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
@@ -40,7 +38,7 @@
   ].join(';');
 
   var back = document.createElement('a');
-  back.href = '../index.html#' + cur;
+  back.href = '../hub.html#' + cur;
   back.textContent = '← 전체 화면 목록';
   back.style.cssText = 'color:#0f1012;text-decoration:none;font-weight:400;background:rgba(0,113,227,0.08);border-radius:9999px;padding:7px 14px;white-space:nowrap;';
 
