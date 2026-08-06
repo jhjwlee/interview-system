@@ -91,7 +91,7 @@
   <div class="card" id="formCard">
     <div class="intro">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <div>알려주신 시간은 담당자가 정기적으로 실행하는 배정 작업에 그대로 반영됩니다.<br>Power Automate 자동 알림은 없으며, 배정 결과는 담당자가 개별로 안내드립니다.</div>
+      <div>알려주신 시간은 담당자가 인터뷰이와 시간을 매칭하는데 사용됩니다.<br>적극적인 참여를 부탁드립니다.<br>배정결과는 이메일로 알려드립니다.</div>
     </div>
 
     
@@ -112,7 +112,7 @@
       </div>
     </div>
     <div class="field">
-      <label>이메일<span class="req">*</span></label>
+      <label>대표이메일<span class="req">*</span></label>
       <div class="input-icon">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
         <input type="email" id="ivEmail" placeholder="example@email.com">
@@ -138,7 +138,8 @@
     <div class="summary-title">이렇게 알려드리면 될까요?</div>
     <div class="summary-chips" id="summaryChips"><span class="sum-empty">아직 고른 시간이 없습니다.</span></div>
 
-        <button class="btn-submit" id="submitBtn" disabled onclick="submitAvail()">이 시간으로 알려주기</button>
+        <div class="privacy" style="margin-bottom:12px;">선택하신 시간은 인터뷰 배정을 매칭하는데만 사용됩니다.</div>
+    <button class="btn-submit" id="submitBtn" disabled onclick="submitAvail()">이 시간으로 알려주기</button>
     <div class="privacy">알려주신 내용은 인터뷰 배정을 짜는 데에만 씁니다.</div>
   </div>
 
@@ -155,7 +156,14 @@
 
 <script src="../assets/store.js"></script>
 <script>
-  const TIME_OPTIONS = ["10:00","10:30","11:00","14:00"];
+  const TIME_OPTIONS = (function(){
+    const arr = [];
+    for(let h=10; h<24; h++){
+      arr.push(String(h).padStart(2,'0')+':00');
+      arr.push(String(h).padStart(2,'0')+':30');
+    }
+    return arr;
+  })();
   let viewYear = 2026, viewMonth = 9;
   const minYM = 2026*12+7, maxYM = 2026*12+10;
   const chosenDates = new Set();

@@ -22,7 +22,7 @@
   var ITEMS = [
     { id: 'index', href: home, label: '메인으로' },
     { id: '00-overview', href: base + '00-overview.html', label: '개요' },
-    { id: '01-applicant-submit', href: base + '01-applicant-submit.html', label: '지원자 제출' },
+    { id: '01-applicant-submit', href: base + '01-applicant-submit.html', label: '자원봉사자 제출' },
     { id: '02-interviewer-submit', href: base + '02-interviewer-submit.html', label: '인터뷰어 제출' },
     { id: '03-admin-workbook', href: base + '03-admin-workbook.html', label: '관리자 워크북' },
     { id: '04-helpdesk', href: base + '04-helpdesk.html', label: '문의하기' },

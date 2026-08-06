@@ -125,7 +125,7 @@
         </div>
       </div>
       <div class="field">
-        <label>이메일<span class="req">*</span></label>
+        <label>대표이메일<span class="req">*</span></label>
         <div class="input-icon">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
           <input type="email" id="apEmail" placeholder="example@email.com">
@@ -153,7 +153,7 @@
     <div class="summary-chips" id="summaryChips"><span class="sum-empty">아직 고른 시간이 없습니다.</span></div>
 
         <button class="btn-submit" id="submitBtn" disabled onclick="submitApplicant()">이 시간들로 제출하기</button>
-    <div class="privacy">제출하신 내용은 인터뷰 배정에만 사용됩니다. 이 화면에서는 즉시 확정되지 않습니다.</div>
+    <div class="privacy">제출하신 내용은 인터뷰 배정에만 사용됩니다.<br>이 화면에서는 즉시 확정되지 않습니다.</div>
   </div>
 
   <div class="card success" id="successPanel">
@@ -169,7 +169,14 @@
 
 <script src="../assets/store.js"></script>
 <script>
-  const TIME_OPTIONS = ["10:00","10:30","11:00","14:00"];
+  const TIME_OPTIONS = (function(){
+    const arr = [];
+    for(let h=10; h<24; h++){
+      arr.push(String(h).padStart(2,'0')+':00');
+      arr.push(String(h).padStart(2,'0')+':30');
+    }
+    return arr;
+  })();
   let viewYear = 2026, viewMonth = 9;
   const minYM = 2026*12+7, maxYM = 2026*12+10;
   const chosenDates = new Set();
