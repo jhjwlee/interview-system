@@ -19,16 +19,18 @@
   .wrap{max-width:1080px; margin:0 auto; padding:26px 18px 70px;}
   .toolbar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:18px;}
   .toolbar-left{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-  .runbtn{background:var(--ink); color:#fff; border:none; border-radius:9999px; padding:12px 22px; font-size:13.5px; font-weight:400; cursor:pointer; display:flex; align-items:center; gap:8px;}
-  .runbtn:hover{background:#000;}
+  .runbtn{background:var(--blue); color:#fff; border:none; border-radius:9999px; padding:13px 24px; font-size:14px; font-weight:400; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 2px 10px rgba(0,113,227,0.28);}
+  .runbtn:hover{background:#0064cc;}
   .resetbtn{background:transparent; color:var(--gray); border:1.5px solid var(--border); border-radius:9999px; padding:11px 18px; font-size:12.5px; font-weight:350; cursor:pointer;}
   .resetbtn:hover{border-color:var(--gray);}
   .lastrun{font-size:11.5px; color:var(--gray-light);}
   .runresult{display:none; background:var(--pale-teal); color:var(--teal); border-radius:13px; padding:10px 16px; font-size:12.5px; margin-bottom:16px; align-items:center; gap:8px;}
-  .tabs{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; border-bottom:1px solid var(--border); padding-bottom:0;}
-  .tab-btn{background:transparent; border:none; padding:10px 16px; font-size:13px; font-weight:350; color:var(--gray-light); cursor:pointer; border-bottom:2.5px solid transparent; margin-bottom:-1px;}
-  .tab-btn.active{color:var(--ink); border-bottom-color:var(--ink); font-weight:400;}
-  .tab-btn .cnt{font-size:10.5px; background:var(--light-gray); color:var(--gray); border-radius:9999px; padding:1px 7px; margin-left:5px;}
+  .tabs{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+  .tab-btn{background:var(--surface); border:1.5px solid var(--border); border-radius:9999px; padding:10px 16px; font-size:12.5px; font-weight:400; color:var(--gray); cursor:pointer; transition:0.12s;}
+  .tab-btn:hover{border-color:var(--gray-light);}
+  .tab-btn.active{color:#fff; background:var(--ink); border-color:var(--ink); font-weight:400;}
+  .tab-btn .cnt{font-size:10.5px; background:rgba(255,255,255,0.16); color:inherit; border-radius:9999px; padding:1px 7px; margin-left:6px;}
+  .tab-btn:not(.active) .cnt{background:var(--light-gray); color:var(--gray);}
   .sheet{display:none; background:var(--surface); border-radius:18px; border:0.5px solid var(--hair); padding:6px; overflow-x:auto;}
   .sheet.active{display:block;}
   table{width:100%; border-collapse:collapse; font-size:12.5px; min-width:600px;}
@@ -75,29 +77,8 @@
 </div>
 
 <div class="wrap">
-  <div class="bubble">
-    <div>
-      <b>이 화면은 실제 Excel 워크북 하나를 그대로 흉내 낸 거예요.</b> 아래 탭 5개가 워크북 시트 5개와 같습니다. 지원자·인터뷰어 화면에서 제출된 내용이 ②③ 탭에 자동으로 쌓이고, 아래 <b>"배정 실행"</b> 버튼을 누르면:
-      <ol>
-        <li>②인터뷰어가용시간을 보고 ①슬롯마스터의 빈 시간칸을 채우고</li>
-        <li>③지원자접수를 "가능시간이 적은 사람부터" 순서로 빈 슬롯에 짝지어주고</li>
-        <li>결과를 ④배정결과 탭에 정리합니다 (끝내 못 맞춘 사람은 "수동조율필요"로 표시)</li>
-      </ol>
-      <span style="font-size:11px; opacity:0.85;">실제 Excel에서는: <b>VM_인터뷰_배정관리.xlsx</b> 워크북 상단 "자동화" 탭에 미리 등록해둔 배정 스크립트(Office Script)를 클릭 한 번으로 실행하는 것과 똑같습니다. 예약된 자동 실행이 아니라 담당자가 필요할 때 직접 누르는 방식입니다.</span>
-    </div>
-  </div>
-
-  <div class="bubble small" style="border-color:var(--blue);">
-    <div>
-      <b>실제 실행 시 주의사항 (테크팀 답변, 2026.07.27 확인)</b>
-      <ul style="margin:6px 0 0; padding-left:18px; line-height:1.6;">
-        <li>처리 속도: 약 20행에 30초 정도 걸립니다. 한 번에 몰아서 돌리기보다, 자주(예: 하루 여러 번) 소량씩 실행하는 것을 권장합니다.</li>
-        <li>동시 접근: 스크립트 실행 중 다른 사람이 워크북을 "보는" 것은 안전하지만, 같은 시간에 데이터를 "수정·추가"하면 예기치 않은 문제가 생길 수 있습니다. 실행 직전에는 다른 담당자에게 잠시 편집을 멈춰 달라고 안내하세요.</li>
-        <li>실행 권한: 베델 계정 보유자는 워크북 화면에서 스크립트를 바로 실행할 수 있습니다. 그 외 계정은 Power Automate와 연결된 목록(List)에 항목을 추가하는 방식으로 실행을 트리거할 수 있습니다(별도 설정 필요 — 워크북 담당자 확정 후 결정).</li>
-      </ul>
-    </div>
-  </div>
-
+  
+  
   <div class="toolbar">
     <div class="toolbar-left">
       <button class="runbtn" onclick="runAssignment()">
@@ -109,10 +90,7 @@
     <button class="resetbtn" onclick="resetDemo()">데모 초기화</button>
   </div>
 
-  <div class="bubble small">
-    <div>위 버튼을 눌러보세요 — 지원자·인터뷰어 화면에서 제출한 내용이 있다면 바로 아래 탭들에 배정 결과가 반영됩니다.</div>
-  </div>
-
+  
   <div class="runresult" id="runResult"></div>
 
   <div class="tabs" id="tabs">
