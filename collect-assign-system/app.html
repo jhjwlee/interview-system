@@ -60,6 +60,19 @@
     padding:4px 9px; border-radius:9999px; flex-shrink:0; white-space:nowrap;
   }
 
+  /* ---- 로그인 상태 표시줄 (로그인했을 때만 노출) ---- */
+  .sessionbar{
+    display:none; align-items:center; justify-content:space-between; gap:10px;
+    padding:8px 18px; background:var(--blue-wash); border-bottom:0.5px solid var(--hair);
+    font-size:11px; color:var(--ink); flex-shrink:0; position:relative; z-index:19;
+  }
+  .sessionbar.show{ display:flex; }
+  .sessionbar b{ font-weight:500; }
+  .sessionbar button{
+    border:none; background:none; color:var(--blue); font-family:inherit; font-size:11px;
+    font-weight:500; cursor:pointer; padding:2px 0;
+  }
+
   /* ---- 문의 탭 전용 세그먼트 컨트롤 ---- */
   .segrow{ display:none; padding:10px 14px 0; gap:8px; background:var(--canvas); flex-shrink:0; }
   .segrow.show{ display:flex; }
@@ -113,6 +126,11 @@
     <div class="tag">DEMO</div>
   </div>
 
+  <div class="sessionbar" id="sessionbar">
+    <span id="sessionLabel"></span>
+    <button onclick="doLogout()">로그아웃</button>
+  </div>
+
   <div class="segrow" id="inquirySeg">
     <div class="seg on" id="segHelpdesk" onclick="setInquiry('helpdesk')">헬프데스크</div>
     <div class="seg" id="segFaq" onclick="setInquiry('faq')">FAQ</div>
@@ -151,6 +169,7 @@
   </div>
 </div>
 
+<script src="assets/auth.js"></script>
 <script>
   var SCREENS = {
     home:        { title: '홈', src: 'screens/00-home.html' },
@@ -159,8 +178,77 @@
     admin:       { title: '관리자 배정 워크북', src: 'screens/03-admin-workbook.html' },
     inquiry:     { title: '문의 · 헬프데스크', src: 'screens/04-helpdesk.html' }
   };
+  var LOGIN_SRC = 'screens/00-login.html';
+
   var curTab = 'home';
   var curInquiry = 'helpdesk';
+  var session = null;          // 현재 로그인 세션 (CAAuth 세션과 동기화)
+  var pendingAuthTab = null;   // 로그인 화면을 띄우게 만든 원래 목적 탭
+
+  /* ---------------------------------------------------------------
+     접근 권한 규칙
+     - 자원봉사자(비로그인): 홈 · 자원봉사자 · 문의(헬프데스크/FAQ) 이용.
+       인터뷰어·관리자 탭을 눌러도 실제 화면 대신 로그인 화면이 뜨고,
+       로그인 전에는 인터뷰어·관리자 화면 내용을 볼 수 없습니다.
+     - 인터뷰어(로그인): 인터뷰어 · FAQ 탭만 이용 (다른 탭은 숨김, 문의는 FAQ만).
+     - VM 관리자(로그인): 모든 탭 이용 가능.
+  --------------------------------------------------------------- */
+  function isAuthorizedFor(id){
+    if (id === 'interviewer') return !!session && (session.role === 'interviewer' || session.role === 'admin');
+    if (id === 'admin') return !!session && session.role === 'admin';
+    return true;
+  }
+
+  function allowedTabIds(){
+    if (session && session.role === 'interviewer') return ['interviewer', 'inquiry'];
+    // 관리자 로그인 상태이거나 비로그인(자원봉사자) 상태에서는 모든 탭 버튼이 보입니다.
+    // 비로그인 상태에서 인터뷰어·관리자 탭을 누르면 로그인 화면으로 안내됩니다.
+    return ['home', 'applicant', 'interviewer', 'admin', 'inquiry'];
+  }
+
+  function updateTabVisibility(){
+    var allowed = allowedTabIds();
+    document.querySelectorAll('.tab').forEach(function(t){
+      var id = t.dataset.tab;
+      t.style.display = allowed.indexOf(id) === -1 ? 'none' : '';
+    });
+  }
+
+  function updateSessionBar(){
+    var bar = document.getElementById('sessionbar');
+    if (session) {
+      bar.classList.add('show');
+      var roleLabel = session.role === 'admin' ? 'VM 관리자' : '인터뷰어';
+      document.getElementById('sessionLabel').innerHTML = '<b>' + session.name + '</b>님 · ' + roleLabel + '로 접속 중';
+    } else {
+      bar.classList.remove('show');
+    }
+  }
+
+  function loadSessionFromStorage(){
+    try { session = (window.CAAuth && CAAuth.getSession()) || null; } catch (e) { session = null; }
+  }
+
+  function doLogout(){
+    try { if (window.CAAuth) CAAuth.logout(); } catch (e) {}
+    session = null;
+    updateTabVisibility();
+    updateSessionBar();
+    setTab('home');
+  }
+
+  // 로그인 화면(iframe 안)에서 로그인에 성공하면 이 함수를 호출합니다.
+  window.CA_afterLogin = function (s) {
+    session = s;
+    updateTabVisibility();
+    updateSessionBar();
+    var land = pendingAuthTab;
+    pendingAuthTab = null;
+    if (!land || !isAuthorizedFor(land)) {
+      land = (session.role === 'interviewer') ? 'interviewer' : 'home';
+    }
+    setTab(land);
+  };
 
   function showLoading(){
     var l = document.getElementById('loading');
@@ -170,15 +258,34 @@
   }
 
   function setTab(id){
+    // 방어적 재확인: 인터뷰어로 로그인한 상태에서는 인터뷰어·문의 외 다른 탭으로 갈 수 없습니다.
+    if (session && session.role === 'interviewer' && allowedTabIds().indexOf(id) === -1) {
+      id = 'interviewer';
+    }
+
     curTab = id;
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('on', t.dataset.tab === id); });
-    document.getElementById('inquirySeg').classList.toggle('show', id === 'inquiry');
+
+    var interviewerOnly = session && session.role === 'interviewer';
+    document.getElementById('inquirySeg').classList.toggle('show', id === 'inquiry' && !interviewerOnly);
+
     document.getElementById('screenTitle').textContent = SCREENS[id].title.split(' · ')[0];
-    var src = id === 'inquiry' ? (curInquiry === 'faq' ? 'screens/05-faq.html' : 'screens/04-helpdesk.html') : SCREENS[id].src;
+
+    var src;
+    if ((id === 'interviewer' || id === 'admin') && !isAuthorizedFor(id)) {
+      pendingAuthTab = id;
+      src = LOGIN_SRC;
+    } else if (id === 'inquiry') {
+      if (interviewerOnly) curInquiry = 'faq'; // 인터뷰어는 FAQ만 이용
+      src = curInquiry === 'faq' ? 'screens/05-faq.html' : 'screens/04-helpdesk.html';
+    } else {
+      src = SCREENS[id].src;
+    }
     loadFrame(src);
   }
 
   function setInquiry(which){
+    if (session && session.role === 'interviewer') return; // 인터뷰어는 FAQ 고정
     curInquiry = which;
     document.getElementById('segHelpdesk').classList.toggle('on', which === 'helpdesk');
     document.getElementById('segFaq').classList.toggle('on', which === 'faq');
@@ -198,6 +305,14 @@
     var f = document.getElementById('frame');
     try { f.contentWindow.location.reload(); } catch (e) { location.reload(); }
   }
+
+  (function init(){
+    loadSessionFromStorage();
+    updateTabVisibility();
+    updateSessionBar();
+    var start = (session && session.role === 'interviewer') ? 'interviewer' : 'home';
+    setTab(start);
+  })();
 </script>
 
 </body>

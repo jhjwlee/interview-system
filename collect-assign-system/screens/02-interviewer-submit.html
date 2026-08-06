@@ -73,6 +73,7 @@
 </head>
 <body>
 <script src="../assets/nav.js"></script>
+<script src="../assets/auth.js"></script>
 
 <div class="topbar">
   <div class="brand">
@@ -155,6 +156,19 @@
 </div>
 
 <script src="../assets/store.js"></script>
+<script>
+  // 접근 권한 가드 (독립 실행/직접 링크 접속 시 대비) — 앱 셸(app.html) 안에서는
+  // 이미 로그인 여부를 확인한 뒤에만 이 화면을 불러오므로 정상적으로는 걸리지 않습니다.
+  (function () {
+    try {
+      if (window.top === window.self) {
+        var s = window.CAAuth && CAAuth.getSession();
+        var ok = s && (s.role === 'interviewer' || s.role === 'admin');
+        if (!ok) { location.href = '00-login.html'; }
+      }
+    } catch (e) {}
+  })();
+</script>
 <script>
   const TIME_OPTIONS = (function(){
     const arr = [];

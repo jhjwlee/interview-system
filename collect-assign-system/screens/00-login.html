@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>인터뷰어·관리자 로그인 (수집·배정형 샘플)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+<link rel="stylesheet" href="../assets/augen.css">
+<style>
+  *{box-sizing:border-box; margin:0; padding:0;}
+  svg{display:block;}
+  body.ap2{
+    font-family:var(--font,'Pretendard Variable','Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif);
+    font-weight:350; letter-spacing:-0.02em; color:var(--ink); background:var(--canvas);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 18px 40px;
+  }
+  .card{width:100%; max-width:360px; background:var(--surface); border-radius:24px; border:0.5px solid var(--hair); padding:clamp(22px,5vw,30px);}
+  .mark{width:42px; height:42px; border-radius:12px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:500; margin-bottom:16px;}
+  h1{font-size:17px; font-weight:400; margin-bottom:6px;}
+  .sub{font-size:12px; color:var(--steel); line-height:1.6; margin-bottom:22px;}
+  label{display:block; font-size:11.5px; color:var(--steel); margin-bottom:6px;}
+  input[type=email]{width:100%; border:1.5px solid var(--hair); border-radius:12px; padding:11px 13px; font-size:13.5px; font-family:inherit; color:var(--ink); background:#fff; margin-bottom:8px;}
+  input[type=email]:focus{outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-wash);}
+  .err{font-size:11.5px; color:#b5432b; min-height:15px; margin-bottom:10px;}
+  .btn{width:100%; background:var(--ink); color:#fff; border:none; border-radius:9999px; padding:12px; font-size:13.5px; font-weight:400; cursor:pointer; font-family:inherit;}
+  .btn:hover{background:#000;}
+  .note{margin-top:14px; font-size:10.5px; color:var(--ash); line-height:1.6; background:var(--canvas); border-radius:12px; padding:10px 12px;}
+  .foot{margin-top:18px; padding-top:14px; border-top:0.5px solid var(--hair); font-size:11.5px; color:var(--ash); text-align:center; line-height:1.7;}
+  .foot a{color:var(--blue); text-decoration:none;}
+</style>
+</head>
+<body class="ap2">
+<script src="../assets/nav.js"></script>
+
+<div class="card">
+  <div class="mark">SIC</div>
+  <h1>인터뷰어 · 관리자 로그인</h1>
+  <div class="sub">VM부가 미리 등록해 둔 이메일로만 접속할 수 있습니다. 등록이 안 되어 있다면 VM부에 문의해 주세요.</div>
+
+  <label for="emailInput">이메일 주소</label>
+  <input type="email" id="emailInput" placeholder="name@jw.org" autocomplete="email">
+  <div class="err" id="errMsg"></div>
+  <button class="btn" onclick="doLogin()">로그인</button>
+
+  <div class="note">샘플 계정 — 인터뷰어: interviewer1@jw.org · 관리자: vm.admin@jw.org</div>
+
+  <div class="foot">자원봉사자는 로그인이 필요 없습니다<br><a href="01-applicant-submit.html" onclick="return goHome()">자원봉사자 화면으로 바로 가기</a></div>
+</div>
+
+<script src="../assets/store.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+  function embedded(){
+    try { return window.parent && window.parent !== window; } catch (e) { return false; }
+  }
+
+  function goHome(){
+    if (embedded() && typeof window.parent.setTab === 'function') {
+      window.parent.setTab('applicant');
+      return false;
+    }
+    return true;
+  }
+
+  function doLogin(){
+    var email = document.getElementById('emailInput').value;
+    var session = CAAuth.login(email);
+    if (!session) {
+      document.getElementById('errMsg').textContent = '등록되지 않은 이메일입니다. 다시 확인해 주세요.';
+      return;
+    }
+    if (embedded() && typeof window.parent.CA_afterLogin === 'function') {
+      window.parent.CA_afterLogin(session);
+    } else {
+      location.href = '../app.html';
+    }
+  }
+
+  document.getElementById('emailInput').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') doLogin();
+  });
+
+  (function(){
+    var existing = CAAuth.getSession();
+    if (existing) {
+      document.getElementById('errMsg').style.color = 'var(--steel)';
+      document.getElementById('errMsg').textContent = existing.name + '님으로 이미 로그인되어 있습니다.';
+    }
+  })();
+</script>
+
+</body>
+</html>
