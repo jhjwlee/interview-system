@@ -32,16 +32,8 @@
   .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   .sec-title{font-size:13px; font-weight:350; margin:22px 0 4px; display:flex; align-items:center; gap:6px;}
   .sec-note{font-size:11.5px; color:var(--gray-light); margin-bottom:12px;}
-  .schedule-notice{background:var(--surface); border:0.5px solid var(--hair); border-radius:14px; padding:14px 16px; margin-bottom:16px;}
-  .sn-row{display:flex; justify-content:space-between; align-items:baseline; gap:14px; padding:7px 0; font-size:12.5px; border-bottom:1px solid var(--border);}
-  .sn-row:last-of-type{border-bottom:none;}
-  .sn-day{color:var(--ink); font-weight:400; flex-shrink:0;}
-  .sn-time{color:var(--gray); text-align:right;}
-  .sn-foot{margin-top:9px; padding-top:9px; border-top:1px solid var(--border); font-size:11px; color:var(--gray-light); line-height:1.6;}
-
   .cal-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;}
   .cal-head .mo{font-size:14.5px; font-weight:500;}
-  .cal-head .cal-sub{font-size:11px; color:var(--gray-light);}
   .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px;}
   .cal-dow{text-align:center; font-size:10.5px; font-weight:350; color:var(--gray-light); padding:3px 0;}
   .cal-cell{aspect-ratio:1; border-radius:13px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12.5px; font-weight:350; color:var(--ink); border:1.5px solid transparent; transition:0.12s;}
@@ -52,9 +44,7 @@
   .date-block .dh{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
   .date-block .dh .dlabel{font-size:13px; font-weight:350; color:var(--ink);}
   .date-block .dh .remove{font-size:11px; color:var(--gray-light); cursor:pointer; font-weight:350;}
-  .time-check-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:7px;}
-  .time-check{border:1.5px solid var(--border); border-radius:12px; padding:9px 6px; text-align:center; font-size:12px; font-weight:350; cursor:pointer; color:var(--gray); transition:0.12s;}
-  .time-check.on{background:var(--ink-wash); border-color:var(--ink); color:var(--ink);}
+  .date-block .dtime{font-size:12.5px; color:var(--teal); font-weight:400; line-height:1.6;}
   .empty-note{font-size:12px; color:var(--gray-light); background:var(--light-gray); border-radius:13px; padding:14px; text-align:center;}
   .summary-title{font-size:12.5px; font-weight:350; margin:20px 0 8px;}
   .summary-chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;}
@@ -126,18 +116,10 @@
     </div>
 
     <div class="sec-title">가능한 날짜 고르기 (여러 날 고르실 수 있습니다)</div>
-    <div class="sec-note">1차 인터뷰어 활동 기간(2026년 10월 1일 ~ 10월 31일) 안에서 날짜를 고르시면, 그 요일에 정해진 시간대가 아래에 나타납니다.</div>
-
-    <div class="schedule-notice">
-      <div class="sn-row"><span class="sn-day">평일 (월~금)</span><span class="sn-time">19:00~21:30</span></div>
-      <div class="sn-row"><span class="sn-day">토요일</span><span class="sn-time">09:00~11:30 · 13:00~15:30 · 16:00~18:30 · 19:30~22:00</span></div>
-      <div class="sn-row"><span class="sn-day">일요일</span><span class="sn-time">09:00~11:30 · 13:00~15:30 · 16:00~18:30 · 19:30~22:00</span></div>
-      <div class="sn-foot">1차 인터뷰어 활동 기간은 10월 초부터 10월 말까지로 예상되오니 참고하실 수 있습니다.</div>
-    </div>
+    <div class="sec-note">인터뷰가 가능한 날짜를 모두 눌러주십시오. 날짜를 누르면 그 날 진행 가능한 시간이 아래에 안내됩니다.</div>
 
     <div class="cal-head">
       <div class="mo" id="calMonthLabel">2026년 10월</div>
-      <div class="cal-sub">1차 인터뷰어 활동 기간</div>
     </div>
     <div class="cal-grid" id="calDow"></div>
     <div class="cal-grid" id="calGrid"></div>
@@ -208,7 +190,8 @@
       delete availability[dstr];
     } else {
       chosenDates.add(dstr);
-      availability[dstr] = new Set();
+      // 날짜를 고르면 그 요일에 정해진 시간대를 자동으로 모두 가능시간에 포함
+      availability[dstr] = new Set(CAStore.blockRangeForDate(dstr).map(b=>b.start));
     }
     renderCalendar();
     renderDateBlocks();
@@ -229,13 +212,10 @@
     }
     el.innerHTML = dates.map(dstr=>{
       const blocks = CAStore.blockRangeForDate(dstr);
-      const chips = blocks.map(b=>{
-        const on = availability[dstr].has(b.start);
-        return '<div class="time-check'+(on?' on':'')+'" onclick="toggleTime(\''+dstr+'\',\''+b.start+'\')">'+b.range+'</div>';
-      }).join('');
+      const rangeText = blocks.map(b=>b.range).join(' · ');
       return '<div class="date-block">'+
         '<div class="dh"><div class="dlabel">'+fmtDate(dstr)+'</div><div class="remove" onclick="toggleDate(\''+dstr+'\')">이 날 빼기</div></div>'+
-        '<div class="time-check-grid">'+chips+'</div></div>';
+        '<div class="dtime">'+rangeText+' 사이 인터뷰가 진행됩니다.</div></div>';
     }).join('');
   }
 
