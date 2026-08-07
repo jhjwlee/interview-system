@@ -201,7 +201,13 @@
       tA.innerHTML = '<tr class="empty-row"><td colspan="6">아직 제출된 인터뷰어 가용시간이 없습니다.</td></tr>';
     } else {
       tA.innerHTML = state.availability.map(function(a){
-        var blockLabels = (a.blockIds||[]).map(CAStore.blockLabel).join(', ') || '-';
+        var seen = {};
+        (a.times||[]).forEach(function(w){
+          var sp = w.indexOf(' ');
+          if(sp===-1) return;
+          seen[CAStore.blockLabelForDateTime(w.slice(0,sp), w.slice(sp+1))] = true;
+        });
+        var blockLabels = Object.keys(seen).join(', ') || '-';
         return '<tr><td>'+esc(a.name)+'</td><td>'+esc(a.email)+'</td><td>'+esc(a.maxDay)+'</td>'+
           '<td>'+esc(blockLabels)+'</td><td>'+esc((a.times||[]).length)+'회</td><td>'+esc(a.at)+'</td></tr>';
       }).join('');

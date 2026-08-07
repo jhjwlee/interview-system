@@ -65,6 +65,17 @@ window.CAStore = (function () {
     });
     return out;
   }
+  // 특정 날짜(dstr)의 요일에 해당하는 고정 시간대 블록 목록 (달력에서 날짜를 고르면 이걸로 보여줌)
+  function blockRangeForDate(dstr) {
+    var dow = new Date(dstr + "T00:00:00").getDay();
+    return WEEKLY_BLOCKS.filter(function (b) { return b.dow === dow; });
+  }
+  // 날짜+시작시간으로 사람이 읽을 블록 라벨 찾기 (예: "월요일 19:00-21:30")
+  function blockLabelForDateTime(dstr, t) {
+    var blocks = blockRangeForDate(dstr);
+    for (var i = 0; i < blocks.length; i++) if (blocks[i].start === t) return blocks[i].label + " " + blocks[i].range;
+    return t;
+  }
 
   function seedSlots() {
     var slots = [];
@@ -196,6 +207,7 @@ window.CAStore = (function () {
     load: load, save: save, reset: reset, seed: seed, addLog: addLog, nowLabel: nowLabel, fmtDateShort: fmtDateShort,
     runAssignment: runAssignment, DOW: DOW,
     WEEKLY_BLOCKS: WEEKLY_BLOCKS, PERIOD_START: PERIOD_START, PERIOD_END: PERIOD_END,
-    blockById: blockById, blockLabel: blockLabel, blockOccurrenceDates: blockOccurrenceDates, expandBlockIds: expandBlockIds
+    blockById: blockById, blockLabel: blockLabel, blockOccurrenceDates: blockOccurrenceDates, expandBlockIds: expandBlockIds,
+    blockRangeForDate: blockRangeForDate, blockLabelForDateTime: blockLabelForDateTime
   };
 })();

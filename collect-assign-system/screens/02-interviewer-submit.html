@@ -32,14 +32,22 @@
   .row2{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
   .sec-title{font-size:13px; font-weight:350; margin:22px 0 4px; display:flex; align-items:center; gap:6px;}
   .sec-note{font-size:11.5px; color:var(--gray-light); margin-bottom:12px;}
-  .block-group{margin-bottom:16px;}
-  .block-group-title{font-size:12px; font-weight:500; color:var(--gray); margin-bottom:8px;}
-  .block-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px;}
-  .block-check{border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer; transition:0.12s;}
-  .block-check .bt{font-size:13px; font-weight:400; color:var(--ink);}
-  .block-check .bd{font-size:11px; color:var(--gray-light); margin-top:3px;}
-  .block-check.on{background:var(--ink-wash); border-color:var(--ink);}
-  .block-check.on .bd{color:var(--teal);}
+  .cal-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;}
+  .cal-head .mo{font-size:14.5px; font-weight:500;}
+  .cal-head .cal-sub{font-size:11px; color:var(--gray-light);}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px;}
+  .cal-dow{text-align:center; font-size:10.5px; font-weight:350; color:var(--gray-light); padding:3px 0;}
+  .cal-cell{aspect-ratio:1; border-radius:13px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:12.5px; font-weight:350; color:var(--ink); border:1.5px solid transparent; transition:0.12s;}
+  .cal-cell.blank{cursor:default;}
+  .cal-cell:not(.blank):hover{background:var(--blue-wash);}
+  .cal-cell.chosen{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .date-block{border:1.5px solid var(--border); border-radius:14px; padding:13px 14px; margin-bottom:10px;}
+  .date-block .dh{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .date-block .dh .dlabel{font-size:13px; font-weight:350; color:var(--ink);}
+  .date-block .dh .remove{font-size:11px; color:var(--gray-light); cursor:pointer; font-weight:350;}
+  .time-check-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:7px;}
+  .time-check{border:1.5px solid var(--border); border-radius:12px; padding:9px 6px; text-align:center; font-size:12px; font-weight:350; cursor:pointer; color:var(--gray); transition:0.12s;}
+  .time-check.on{background:var(--ink-wash); border-color:var(--ink); color:var(--ink);}
   .empty-note{font-size:12px; color:var(--gray-light); background:var(--light-gray); border-radius:13px; padding:14px; text-align:center;}
   .summary-title{font-size:12.5px; font-weight:350; margin:20px 0 8px;}
   .summary-chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px;}
@@ -110,21 +118,18 @@
       </div>
     </div>
 
-    <div class="sec-title">가능한 요일·시간대 고르기 (여러 개 고르실 수 있습니다)</div>
-    <div class="sec-note">1차 인터뷰어 활동 기간(2026년 10월 1일 ~ 10월 31일) 동안 매주 반복되는 고정 시간대입니다. 가능한 시간대를 최대한 많이 골라 주세요.</div>
+    <div class="sec-title">가능한 날짜 고르기 (여러 날 고르실 수 있습니다)</div>
+    <div class="sec-note">1차 인터뷰어 활동 기간(2026년 10월 1일 ~ 10월 31일) 안에서 날짜를 고르시면, 그 요일에 정해진 시간대가 아래에 나타납니다.</div>
 
-    <div class="block-group">
-      <div class="block-group-title">평일 (월~금)</div>
-      <div class="block-grid" id="blockGridWeekday"></div>
+    <div class="cal-head">
+      <div class="mo" id="calMonthLabel">2026년 10월</div>
+      <div class="cal-sub">1차 인터뷰어 활동 기간</div>
     </div>
-    <div class="block-group">
-      <div class="block-group-title">토요일</div>
-      <div class="block-grid" id="blockGridSat"></div>
-    </div>
-    <div class="block-group">
-      <div class="block-group-title">일요일</div>
-      <div class="block-grid" id="blockGridSun"></div>
-    </div>
+    <div class="cal-grid" id="calDow"></div>
+    <div class="cal-grid" id="calGrid"></div>
+
+    <div class="sec-title" style="margin-top:22px;">날짜별로 가능한 시간</div>
+    <div id="dateBlocks"><div class="empty-note">먼저 위 달력에서 날짜를 골라 주세요.</div></div>
 
     <div class="summary-title">이렇게 알려드리면 될까요?</div>
     <div class="summary-chips" id="summaryChips"><span class="sum-empty">아직 고른 시간이 없습니다.</span></div>
@@ -160,51 +165,89 @@
   })();
 </script>
 <script>
-  const selectedBlocks = new Set();
+  const viewYear = 2026, viewMonth = 9; // 2026년 10월 (1차 인터뷰어 활동 기간 고정)
+  const chosenDates = new Set();
+  const availability = {};
+  const dowNames = ['일','월','화','수','목','금','토'];
 
-  function fmtBlockDates(blockId){
-    return CAStore.blockOccurrenceDates(blockId).map(function(d){
-      const dd = new Date(d+'T00:00:00');
-      return (dd.getMonth()+1)+'/'+dd.getDate();
-    }).join(', ');
-  }
+  function pad(n){ return n<10 ? '0'+n : ''+n; }
 
-  function renderBlocks(){
-    const groups = { weekday: [], sat: [], sun: [] };
-    CAStore.WEEKLY_BLOCKS.forEach(function(b){
-      if(b.dow>=1 && b.dow<=5) groups.weekday.push(b);
-      else if(b.dow===6) groups.sat.push(b);
-      else groups.sun.push(b);
-    });
-    function cardHtml(b){
-      const on = selectedBlocks.has(b.id);
-      return '<div class="block-check'+(on?' on':'')+'" onclick="toggleBlock(\''+b.id+'\')">'+
-        '<div class="bt">'+b.label+' '+b.range+'</div>'+
-        '<div class="bd">'+fmtBlockDates(b.id)+'</div></div>';
+  function renderCalendar(){
+    document.getElementById('calMonthLabel').textContent = viewYear + '년 ' + (viewMonth+1) + '월';
+    document.getElementById('calDow').innerHTML = dowNames.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
+    const first = new Date(viewYear, viewMonth, 1);
+    const startDow = first.getDay();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    let html = '';
+    for(let i=0;i<startDow;i++) html += '<div class="cal-cell blank"></div>';
+    for(let d=1; d<=daysInMonth; d++){
+      const dstr = viewYear+'-'+pad(viewMonth+1)+'-'+pad(d);
+      const cls = chosenDates.has(dstr) ? ' chosen' : '';
+      html += '<div class="cal-cell'+cls+'" onclick="toggleDate(\''+dstr+'\')">'+d+'</div>';
     }
-    document.getElementById('blockGridWeekday').innerHTML = groups.weekday.map(cardHtml).join('');
-    document.getElementById('blockGridSat').innerHTML = groups.sat.map(cardHtml).join('');
-    document.getElementById('blockGridSun').innerHTML = groups.sun.map(cardHtml).join('');
+    document.getElementById('calGrid').innerHTML = html;
   }
 
-  function toggleBlock(id){
-    if(selectedBlocks.has(id)) selectedBlocks.delete(id);
-    else selectedBlocks.add(id);
-    renderBlocks();
+  function toggleDate(dstr){
+    if(chosenDates.has(dstr)){
+      chosenDates.delete(dstr);
+      delete availability[dstr];
+    } else {
+      chosenDates.add(dstr);
+      availability[dstr] = new Set();
+    }
+    renderCalendar();
+    renderDateBlocks();
+    renderSummary();
+  }
+
+  function fmtDate(dstr){
+    const d = new Date(dstr+'T00:00:00');
+    return (d.getMonth()+1)+'월 '+d.getDate()+'일('+dowNames[d.getDay()]+')';
+  }
+
+  function renderDateBlocks(){
+    const el = document.getElementById('dateBlocks');
+    const dates = Array.from(chosenDates).sort();
+    if(dates.length===0){
+      el.innerHTML = '<div class="empty-note">먼저 위 달력에서 날짜를 골라 주세요.</div>';
+      return;
+    }
+    el.innerHTML = dates.map(dstr=>{
+      const blocks = CAStore.blockRangeForDate(dstr);
+      const chips = blocks.map(b=>{
+        const on = availability[dstr].has(b.start);
+        return '<div class="time-check'+(on?' on':'')+'" onclick="toggleTime(\''+dstr+'\',\''+b.start+'\')">'+b.range+'</div>';
+      }).join('');
+      return '<div class="date-block">'+
+        '<div class="dh"><div class="dlabel">'+fmtDate(dstr)+'</div><div class="remove" onclick="toggleDate(\''+dstr+'\')">이 날 빼기</div></div>'+
+        '<div class="time-check-grid">'+chips+'</div></div>';
+    }).join('');
+  }
+
+  function toggleTime(dstr, t){
+    if(availability[dstr].has(t)) availability[dstr].delete(t);
+    else availability[dstr].add(t);
+    renderDateBlocks();
     renderSummary();
   }
 
   function renderSummary(){
     const el = document.getElementById('summaryChips');
-    const ids = Array.from(selectedBlocks);
-    if(ids.length===0){
-      el.innerHTML = '<span class="sum-empty">아직 고른 시간대가 없습니다.</span>';
+    let entries = [];
+    Object.keys(availability).sort().forEach(dstr=>{
+      Array.from(availability[dstr]).sort().forEach(t=>{ entries.push({d:dstr, t:t}); });
+    });
+    if(entries.length===0){
+      el.innerHTML = '<span class="sum-empty">아직 고른 시간이 없습니다.</span>';
       document.getElementById('submitBtn').disabled = true;
       return;
     }
-    el.innerHTML = ids.map(function(id){
-      const b = CAStore.blockById(id);
-      return '<span class="sum-chip">'+b.label+' '+b.range+'<span class="x" onclick="toggleBlock(\''+id+'\')"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>';
+    el.innerHTML = entries.map(e=>{
+      const short = fmtDate(e.d).replace(/\([^)]+\)/,'');
+      const blk = CAStore.blockRangeForDate(e.d).find(b=>b.start===e.t);
+      const rangeLabel = blk ? blk.range : e.t;
+      return '<span class="sum-chip">'+short+' '+rangeLabel+'<span class="x" onclick="toggleTime(\''+e.d+'\',\''+e.t+'\')"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>';
     }).join('');
     document.getElementById('submitBtn').disabled = false;
   }
@@ -214,21 +257,22 @@
     const email = (document.getElementById('ivEmail').value || '').trim() || '이메일 미입력';
     const maxDay = Number(document.getElementById('ivMaxDay').value) || 99;
 
-    const blockIds = Array.from(selectedBlocks);
-    const times = CAStore.expandBlockIds(blockIds);
+    const dates = Object.keys(availability).sort();
+    const times = [];
+    dates.forEach(function(d){ Array.from(availability[d]).sort().forEach(function(t){ times.push(d+' '+t); }); });
 
     const state = CAStore.load();
-    state.availability.push({ name, email, maxDay, blockIds, times, at: CAStore.nowLabel() });
-    CAStore.addLog(state, name+' 인터뷰어가 요일·시간대 '+blockIds.length+'개(총 '+times.length+'회)를 알려주었습니다.');
+    state.availability.push({ name, email, maxDay, times, at: CAStore.nowLabel() });
+    CAStore.addLog(state, name+' 인터뷰어가 '+dates.length+'개 날짜 · '+times.length+'개 시간대를 알려주었습니다.');
     CAStore.save(state);
 
     document.getElementById('successBody').innerHTML =
-      blockIds.length+'개 시간대(총 '+times.length+'회)가 등록되었습니다.<br>다음 배정 실행 때 슬롯에 반영됩니다.';
+      dates.length+'개 날짜, '+times.length+'개 시간대가 등록되었습니다.<br>다음 배정 실행 때 슬롯에 반영됩니다.';
     document.getElementById('formCard').style.display = 'none';
     document.getElementById('successPanel').style.display = 'block';
   }
 
-  renderBlocks();
+  renderCalendar();
 </script>
 </body>
 </html>
