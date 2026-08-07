@@ -9,14 +9,73 @@ window.CAStore = (function () {
   var KEY = "vm2027_collectassign_demo_v1";
   var DOW = ["일", "월", "화", "수", "목", "금", "토"];
 
+  /* ---------- 요일별 고정 인터뷰 가능 블록 (1차 인터뷰어 활동 기간 기준) ----------
+     월~금 19:00-21:30, 토/일요일 각 4개 블록. 이 블록들이 활동 기간(PERIOD_START~PERIOD_END)
+     동안 해당 요일마다 반복되며, 반복되는 매 날짜가 각각 하나의 배정 슬롯이 됩니다. */
+  var PERIOD_START = "2026-10-01";
+  var PERIOD_END = "2026-10-31";
+  var WEEKLY_BLOCKS = [
+    { id: "mon", dow: 1, label: "월요일", range: "19:00-21:30", start: "19:00" },
+    { id: "tue", dow: 2, label: "화요일", range: "19:00-21:30", start: "19:00" },
+    { id: "wed", dow: 3, label: "수요일", range: "19:00-21:30", start: "19:00" },
+    { id: "thu", dow: 4, label: "목요일", range: "19:00-21:30", start: "19:00" },
+    { id: "fri", dow: 5, label: "금요일", range: "19:00-21:30", start: "19:00" },
+    { id: "sat1", dow: 6, label: "토요일", range: "09:00-11:30", start: "09:00" },
+    { id: "sat2", dow: 6, label: "토요일", range: "13:00-15:30", start: "13:00" },
+    { id: "sat3", dow: 6, label: "토요일", range: "16:00-18:30", start: "16:00" },
+    { id: "sat4", dow: 6, label: "토요일", range: "19:30-22:00", start: "19:30" },
+    { id: "sun1", dow: 0, label: "일요일", range: "09:00-11:30", start: "09:00" },
+    { id: "sun2", dow: 0, label: "일요일", range: "13:00-15:30", start: "13:00" },
+    { id: "sun3", dow: 0, label: "일요일", range: "16:00-18:30", start: "16:00" },
+    { id: "sun4", dow: 0, label: "일요일", range: "19:30-22:00", start: "19:30" }
+  ];
+  function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+  function blockById(id) {
+    for (var i = 0; i < WEEKLY_BLOCKS.length; i++) if (WEEKLY_BLOCKS[i].id === id) return WEEKLY_BLOCKS[i];
+    return null;
+  }
+  function blockLabel(id) {
+    var b = blockById(id);
+    return b ? (b.label + " " + b.range) : id;
+  }
+  function periodDates() {
+    var out = [];
+    var d = new Date(PERIOD_START + "T00:00:00");
+    var end = new Date(PERIOD_END + "T00:00:00");
+    while (d <= end) {
+      out.push(d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()));
+      d.setDate(d.getDate() + 1);
+    }
+    return out;
+  }
+  function blockOccurrenceDates(blockId) {
+    var b = blockById(blockId);
+    if (!b) return [];
+    return periodDates().filter(function (dstr) {
+      return new Date(dstr + "T00:00:00").getDay() === b.dow;
+    });
+  }
+  // 선택한 블록ID들을 "그 블록이 활동 기간 동안 반복되는 모든 날짜 + 시작시간" 목록으로 펼침
+  function expandBlockIds(blockIds) {
+    var out = [];
+    (blockIds || []).forEach(function (id) {
+      var b = blockById(id);
+      if (!b) return;
+      blockOccurrenceDates(id).forEach(function (dstr) { out.push(dstr + " " + b.start); });
+    });
+    return out;
+  }
+
   function seedSlots() {
-    var days = ["2026-10-06", "2026-10-07", "2026-10-08"];
-    var times = ["10:00", "10:30", "11:00", "14:00"];
     var slots = [];
-    days.forEach(function (d) {
-      times.forEach(function (t) {
-        var mmdd = d.slice(0, 4) + d.slice(5, 7) + d.slice(8, 10);
-        slots.push({ id: mmdd + "_" + t.replace(":", ""), date: d, time: t, cap: 3, booked: 0, interviewer: "", status: "배정검토중" });
+    WEEKLY_BLOCKS.forEach(function (b) {
+      blockOccurrenceDates(b.id).forEach(function (dstr) {
+        var mmdd = dstr.slice(0, 4) + dstr.slice(5, 7) + dstr.slice(8, 10);
+        slots.push({
+          id: mmdd + "_" + b.start.replace(":", ""),
+          date: dstr, time: b.start, blockId: b.id, blockLabel: b.label + " " + b.range,
+          cap: 3, booked: 0, interviewer: "", status: "배정검토중"
+        });
       });
     });
     return slots;
@@ -80,21 +139,21 @@ window.CAStore = (function () {
     var slotByKey = {};
     state.slots.forEach(function (s) { slotByKey[s.date + "_" + s.time] = s; });
 
-    // 1) 인터뷰어 가용시간 -> 슬롯 배정
-    var dailyCount = {};
+    // 1) 인터뷰어 가용시간(요일별 블록이 활동 기간 동안 펼쳐진 날짜/시간 목록) -> 슬롯 배정
     state.availability.forEach(function (a) {
-      a.dates.forEach(function (d) {
-        var dayKey = a.email + "|" + d;
-        a.times.forEach(function (t) {
-          var already = dailyCount[dayKey] || 0;
-          if (already >= (a.maxDay || 99)) return;
-          var slot = slotByKey[d + "_" + t];
-          if (!slot) return;
-          if (slot.interviewer) return;
-          slot.interviewer = a.name;
-          slot.status = "모집중";
-          dailyCount[dayKey] = already + 1;
-        });
+      var dailyCount = {}; // 같은 인터뷰어의 "하루 최대 가능횟수" 제한용 (날짜 기준)
+      (a.times || []).forEach(function (w) {
+        var spaceIdx = w.indexOf(" ");
+        if (spaceIdx === -1) return;
+        var d = w.slice(0, spaceIdx), t = w.slice(spaceIdx + 1);
+        var already = dailyCount[d] || 0;
+        if (already >= (a.maxDay || 99)) return;
+        var slot = slotByKey[d + "_" + t];
+        if (!slot) return;
+        if (slot.interviewer) return;
+        slot.interviewer = a.name;
+        slot.status = "모집중";
+        dailyCount[d] = already + 1;
       });
     });
 
@@ -133,5 +192,10 @@ window.CAStore = (function () {
     return { successCount: successCount, manualCount: manualCount };
   }
 
-  return { load: load, save: save, reset: reset, seed: seed, addLog: addLog, nowLabel: nowLabel, fmtDateShort: fmtDateShort, runAssignment: runAssignment, DOW: DOW };
+  return {
+    load: load, save: save, reset: reset, seed: seed, addLog: addLog, nowLabel: nowLabel, fmtDateShort: fmtDateShort,
+    runAssignment: runAssignment, DOW: DOW,
+    WEEKLY_BLOCKS: WEEKLY_BLOCKS, PERIOD_START: PERIOD_START, PERIOD_END: PERIOD_END,
+    blockById: blockById, blockLabel: blockLabel, blockOccurrenceDates: blockOccurrenceDates, expandBlockIds: expandBlockIds
+  };
 })();

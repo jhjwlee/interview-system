@@ -104,13 +104,13 @@
 
   <div class="sheet active" id="sheet-slots">
     <table>
-      <thead><tr><th>슬롯ID</th><th>날짜</th><th>시간</th><th>정원</th><th>현재예약</th><th>배정인터뷰어</th><th>상태</th></tr></thead>
+      <thead><tr><th>슬롯ID</th><th>요일·시간대</th><th>날짜</th><th>시간</th><th>정원</th><th>현재예약</th><th>배정인터뷰어</th><th>상태</th></tr></thead>
       <tbody id="tbodySlots"></tbody>
     </table>
   </div>
   <div class="sheet" id="sheet-avail">
     <table>
-      <thead><tr><th>이름</th><th>이메일</th><th>1일최대건수</th><th>가능날짜</th><th>가능시간</th><th>제출시각</th></tr></thead>
+      <thead><tr><th>이름</th><th>이메일</th><th>1일최대건수</th><th>선택한 요일·시간대</th><th>생성된 가능시간</th><th>제출시각</th></tr></thead>
       <tbody id="tbodyAvail"></tbody>
     </table>
   </div>
@@ -190,7 +190,7 @@
     // 슬롯마스터
     var tS = document.getElementById('tbodySlots');
     tS.innerHTML = state.slots.map(function(s){
-      return '<tr><td>'+esc(s.id)+'</td><td>'+CAStore.fmtDateShort(s.date)+'</td><td>'+esc(s.time)+'</td>'+
+      return '<tr><td>'+esc(s.id)+'</td><td>'+esc(s.blockLabel||'-')+'</td><td>'+CAStore.fmtDateShort(s.date)+'</td><td>'+esc(s.time)+'</td>'+
         '<td>'+s.cap+'</td><td>'+s.booked+'</td><td>'+(s.interviewer?esc(s.interviewer):'<span style="color:var(--gray-light)">미배정</span>')+'</td>'+
         '<td>'+statusPill(s.status)+'</td></tr>';
     }).join('');
@@ -201,8 +201,9 @@
       tA.innerHTML = '<tr class="empty-row"><td colspan="6">아직 제출된 인터뷰어 가용시간이 없습니다.</td></tr>';
     } else {
       tA.innerHTML = state.availability.map(function(a){
+        var blockLabels = (a.blockIds||[]).map(CAStore.blockLabel).join(', ') || '-';
         return '<tr><td>'+esc(a.name)+'</td><td>'+esc(a.email)+'</td><td>'+esc(a.maxDay)+'</td>'+
-          '<td>'+a.dates.map(CAStore.fmtDateShort).join(', ')+'</td><td>'+esc(a.times.join(', '))+'</td><td>'+esc(a.at)+'</td></tr>';
+          '<td>'+esc(blockLabels)+'</td><td>'+esc((a.times||[]).length)+'회</td><td>'+esc(a.at)+'</td></tr>';
       }).join('');
     }
 
